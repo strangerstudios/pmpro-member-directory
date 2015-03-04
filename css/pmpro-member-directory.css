@@ -1,0 +1,21 @@
+@charset "UTF-8";
+/* CSS Document */
+
+h3#pmpro_member_directory_subheading {margin-top: 0; }
+form.pmpro_member_directory_search {float: right; margin-bottom: 1rem; clear: both; }
+form.pmpro_member_directory_search input[type=text] {float: left; }
+form.pmpro_member_directory_search input[type=submit] {float: left; }
+div.pmpro_member_directory { }
+div.pmpro_member_directory_row {clear: both; margin: 0; padding: 1rem 0; border-top: 1px solid #CCC; }
+div.pmpro_member_directory_heading {font-weight: bold; }
+div.pmpro_member_directory_heading div.pmpro_member_directory_avatar {text-indent: -9999px; }
+div.pmpro_member_directory_row div {display: inline-block; margin: 0 1% 0 0; }
+div.pmpro_member_directory_row div.pmpro_member_directory_avatar {width: 8%; }
+div.pmpro_member_directory_row div.pmpro_member_directory_avatar img {margin: 0; max-width: 100%; }
+
+div.pmpro_member_directory_row div.pmpro_member_directory_display-name {width: 42%; }
+div.pmpro_member_directory_row div.pmpro_member_directory_level {width: 22%; }
+div.pmpro_member_directory_row div.pmpro_member_directory_date {width: 22%; }
+
+div.pmpro_member_directory_row div.pmpro_clear {display: block; clear:both; width: 100%; margin: 0; }
+div.pmpro_member_directory_message {clear: both; }
