@@ -19,3 +19,7 @@ div.pmpro_member_directory_row div.pmpro_member_directory_date {width: 22%; }
 
 div.pmpro_member_directory_row div.pmpro_clear {display: block; clear:both; width: 100%; margin: 0; }
 div.pmpro_member_directory_message {clear: both; }
+
+.pmpro_pagination {margin-bottom: 1em;}
+.pmpro_pagination .pmpro_prev {float: left; width: 250px;}
+.pmpro_pagination .pmpro_next {float: right; width: 250px; text-align: right;}

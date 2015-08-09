@@ -16,9 +16,10 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_level' => NULL,
 		'show_search' => NULL,
 		'start_date' => NULL,
+		'limit' => NULL,
 	), $atts));
 	
-	global $wpdb;
+	global $wpdb, $post;
 	
 	//turn 0's into falses
 	if($avatar === "0" || $avatar === "false" || $avatar === "no")
@@ -58,18 +59,26 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$key = "";
 		
 	if(isset($_REQUEST['pn']))
-		$pn = $_REQUEST['pn'];
+		$pn = intval($_REQUEST['pn']);
 	else
 		$pn = 1;
+
+	if(isset($_REQUEST['limit']))
+		$limit = intval($_REQUEST['limit']);
+	elseif(empty($limit))
+		$limit = 15;
+	
+	$end = $pn * $limit;
+	$start = $end - $limit;	
 		
 	if($s)
 	{
 		$sqlQuery = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership FROM $wpdb->users u LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id WHERE mu.status = 'active' AND mu.membership_id > 0 AND ";
 		
 		if(empty($key))
-			$sqlQuery .= "(u.user_login LIKE '%$s%' OR u.user_email LIKE '%$s%' OR u.display_name LIKE '%$s%' OR um.meta_value LIKE '%$s%') ";
+			$sqlQuery .= "(u.user_login LIKE '%" . esc_sql($s) . "%' OR u.user_email LIKE '%" . esc_sql($s) . "%' OR u.display_name LIKE '%" . esc_sql($s) . "%' OR um.meta_value LIKE '%" . esc_sql($s) . "s%') ";
 		else
-			$sqlQuery .= "(um.meta_key = '" . $wpdb->escape($key) . "' AND um.meta_value LIKE '%$s%') ";
+			$sqlQuery .= "(um.meta_key = '" . esc_sql($key) . "' AND um.meta_value LIKE '%" . esc_sql($s) . "%') ";
 	
 		if($levels)
 			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";					
@@ -84,6 +93,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";
 		$sqlQuery .= "ORDER BY user_registered DESC";
 	}
+
+	$sqlQuery .= " LIMIT $start, $limit";
 			
 	$theusers = $wpdb->get_results($sqlQuery);
 	$totalrows = $wpdb->get_var("SELECT FOUND_ROWS() as found_rows");
@@ -100,6 +111,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	<?php if(!empty($show_search)) { ?>	
 	<form class="pmpro_member_directory_search">
 		<input type="text" name="ps" size="25" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" />
+		<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		<input type="submit" value="Search Members" />
 	</form>
 	<?php } ?>
@@ -173,6 +185,28 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 			<div class="pmpro_member_directory_message pmpro_message pmpro_error">No matching profiles found<?php if($s) { ?> within <em><?php echo ucwords(esc_html($s)); ?></em>. <a href="<?php echo get_permalink(); ?>">View All Members</a><?php } else { ?>.<?php } ?></div>
 			<?php					
 		}
+
+		//prev/next
+		?>
+		<div class="pmpro_pagination">
+			<?php
+			//prev
+			if($pn > 1)
+			{			
+			?>
+				<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; Previous</a></span>
+			<?php
+			}				
+			//next
+			if($totalrows > $end)
+			{				
+			?>
+				<span class="pmpro_next"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>">Next &raquo;</a></span>
+			<?php
+			}
+			?>
+		</div>
+		<?php
 	?>
 	<?php
 	$temp_content = ob_get_contents();

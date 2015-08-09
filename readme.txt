@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: .1
+Tested up to: 4.2.4
+Stable tag: .2
 
 Add a Simple Member Directory to Your Site - with attributes to customize the display.
 
@@ -55,5 +55,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .2 =
+* SECURITY: Protecting against SQL injections and XSS on the directory search form/etc.
+* ENHANCEMENT: Added pagination to the directory page with a 15 members per page limit. You can override the limit by setting a limit parameter on the shortcode or by passing &limit=... to the URL.
+
 = .1 =
 * Initial committ.
