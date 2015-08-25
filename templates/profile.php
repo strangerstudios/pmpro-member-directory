@@ -233,8 +233,21 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							{
 								?>
 								<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
-									<strong><?php echo $field[0]; ?></strong>
-									<?php echo make_clickable($pu->$field[1]); ?>
+								<?php
+									if($field[1] == 'user_url')
+									{
+										?>
+										<a href="<?php echo $pu->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
+										<?php
+									}
+									else
+									{
+										?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo make_clickable($pu->$field[1]); ?>
+										<?php
+									}
+								?>
 								</p>
 								<?php
 							}

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 
-h3#pmpro_member_directory_subheading {margin-top: 0; }
+h3#pmpro_member_directory_subheading {clear: none; margin-top: 0; }
 form.pmpro_member_directory_search {float: right; margin-bottom: 1rem; clear: both; }
 form.pmpro_member_directory_search input[type=text] { }
 form.pmpro_member_directory_search input[type=submit] {background: none; border: none; padding: 0; position: absolute; text-indent: -9999em; }
@@ -19,7 +19,8 @@ div.pmpro_member_profile strong{ display: block; }
 
 /* table type layous */
 .pmpro_member_directory table h3.pmpro_member_directory_display-name {margin-top: 0; }
-.pmpro_member_directory table td p {margin: .5rem 0; }
+.pmpro_member_directory table tbody td {vertical-align: top; }
+.pmpro_member_directory table tbody td p {margin: 0 0 .5rem 0; }
 
 /* Columns - based on Foundation 5 Grid v5.5.2 by ZURB: http://foundation.zurb.com/docs/components/grid.html */
 .pmpro_member_directory .row {
@@ -56,6 +57,10 @@ div.pmpro_member_profile strong{ display: block; }
     padding-left: 1em;
     padding-right: 1em;
     float: left; }
+  .pmpro_member_directory .column.end,
+  .pmpro_member_directory .columns.end {
+	float: left !important;
+  }
 }
 @media only screen and (min-width: 40.063em) {
   .pmpro_member_directory .column,

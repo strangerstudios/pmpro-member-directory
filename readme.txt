@@ -20,6 +20,8 @@ Shortcode attributes for `[pmpro_member_directory]` include:
 1. levels: The level ID or a comma-separated list of level IDs to include in the directory. default: all levels (accepts a single level ID or a comma-separated list of IDs).
 1. limit: the number of members to display per page
 1. link: Optionally link the member directory item to the single member profile page. default: true (accepts 'true' or 'false').
+1. order: Sort the results based on the order_by attribute in ascending or descending order. default: ASC (accepts 'DESC' or 'ASC'). 
+1. order_by: The sort order for the results. default: 'u.display_name' (accepts 'u.user_email', 'u.user_email', 'u.display_name', 'u.user_login', 'u.user_registered', 'mu.membership_id', 'mu.startdate', 'joindate')
 1. show_avatar: Display the user's avatar generated via Gravatar (https://en.gravatar.com) or user-submitted using a plugin like Simple Local Avatars (https://wordpress.org/plugins/simple-local-avatars/); default: true (accepts 'true' or 'false').
 1. show_email: Display the user's email address; default: true (accepts 'true' or 'false').
 1. show_level: Display the user's membership level; default: true  (accepts 'true' or 'false').

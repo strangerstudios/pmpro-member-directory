@@ -16,6 +16,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'levels' => NULL,
 		'limit' => NULL,
 		'link' => NULL,
+		'order_by' => 'u.display_name',
+		'order' => 'ASC',
 		'show_avatar' => NULL,
 		'show_email' => NULL,
 		'show_level' => NULL,
@@ -32,6 +34,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$profile_url = get_permalink($pmpro_pages['profile']);
 	
 	//turn 0's into falses
+	if($link === "0" || $link === "false" || $link === "no")
+		$link = false;
+	else
+		$link = true;
+
 	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
 		$show_avatar = false;
 	else
@@ -41,11 +48,6 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$show_email = false;
 	else
 		$show_email = true;
-	
-	if($link === "0" || $link === "false" || $link === "no")
-		$link = false;
-	else
-		$link = true;
 
 	if($show_level === "0" || $show_level === "false" || $show_level === "no")
 		$show_level = false;
@@ -98,7 +100,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		if($levels)
 			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";					
 			
-		$sqlQuery .= "GROUP BY u.ID ORDER BY user_registered DESC";
+		$sqlQuery .= "GROUP BY u.ID ORDER BY ". $order_by . " " . $order;
 	}
 	else
 	{
@@ -106,7 +108,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$sqlQuery .= " WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
 		if($levels)
 			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";
-		$sqlQuery .= "ORDER BY user_registered DESC";
+		$sqlQuery .= "ORDER BY ". $order_by . " " . $order;
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
@@ -255,8 +257,21 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 												{
 													?>
 													<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
-														<strong><?php echo $field[0]; ?>:</strong>
-														<?php echo make_clickable($auser->$field[1]); ?>
+													<?php
+														if($field[1] == 'user_url')
+														{
+															?>
+															<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
+															<?php
+														}
+														else
+														{
+															?>
+															<strong><?php echo $field[0]; ?>:</strong>
+															<?php echo make_clickable($auser->$field[1]); ?>
+															<?php
+														}
+													?>
 													</p>
 													<?php
 												}
@@ -278,7 +293,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 								<?php } ?>
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
 									<td class="pmpro_member_directory_link">
-										<a class="pmpro_btn" href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
 									</td>
 								<?php } ?>
 							</tr>
@@ -291,11 +306,13 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 				}
 				else
 				{
+					$count = 0;
 					foreach($theusers_chunks as $row): ?>
 						<div class="row">
 						<?php 
 							foreach($row as $auser)
 							{
+								$count++;
 								$auser = get_userdata($auser->ID);
 								$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
 								?>
@@ -303,7 +320,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									if($layout == '2col')
 									{
 										$avatar_align = "alignright";
-										echo '6';
+										echo '6 ';
 									}
 									elseif($layout == '3col')
 									{
@@ -320,6 +337,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 										$avatar_align = "alignright";
 										echo '12 '; 
 									}
+									if($count == $end)
+										echo 'end ';
 								?>
 								columns">
 									<div id="pmpro_member-<?php echo $auser->ID; ?>">
@@ -366,8 +385,21 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 													{
 														?>
 														<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
-															<strong><?php echo $field[0]; ?>:</strong>
-															<?php echo make_clickable($auser->$field[1]); ?>
+														<?php
+															if($field[1] == 'user_url')
+															{
+																?>
+																<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
+																<?php
+															}
+															else
+															{
+																?>
+																<strong><?php echo $field[0]; ?>:</strong>
+																<?php echo make_clickable($auser->$field[1]); ?>
+																<?php
+															}
+														?>
 														</p>
 														<?php
 													}
@@ -381,7 +413,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 										<?php } ?>
 										</div> <!-- end pmpro_addon_package-->
 									</div>
-									<?php 
+									<?php
 								}
 							?>
 							</div> <!-- end row -->
