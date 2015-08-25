@@ -3,23 +3,109 @@
 
 h3#pmpro_member_directory_subheading {margin-top: 0; }
 form.pmpro_member_directory_search {float: right; margin-bottom: 1rem; clear: both; }
-form.pmpro_member_directory_search input[type=text] {float: left; }
-form.pmpro_member_directory_search input[type=submit] {float: left; }
-div.pmpro_member_directory { }
-div.pmpro_member_directory_row {clear: both; margin: 0; padding: 1rem 0; border-top: 1px solid #CCC; }
-div.pmpro_member_directory_heading {font-weight: bold; }
-div.pmpro_member_directory_heading div.pmpro_member_directory_avatar {text-indent: -9999px; }
-div.pmpro_member_directory_row div {display: inline-block; margin: 0 1% 0 0; }
-div.pmpro_member_directory_row div.pmpro_member_directory_avatar {width: 8%; }
-div.pmpro_member_directory_row div.pmpro_member_directory_avatar img {margin: 0; max-width: 100%; }
+form.pmpro_member_directory_search input[type=text] { }
+form.pmpro_member_directory_search input[type=submit] {background: none; border: none; padding: 0; position: absolute; text-indent: -9999em; }
 
-div.pmpro_member_directory_row div.pmpro_member_directory_display-name {width: 42%; }
-div.pmpro_member_directory_row div.pmpro_member_directory_level {width: 22%; }
-div.pmpro_member_directory_row div.pmpro_member_directory_date {width: 22%; }
-
-div.pmpro_member_directory_row div.pmpro_clear {display: block; clear:both; width: 100%; margin: 0; }
-div.pmpro_member_directory_message {clear: both; }
-
+.pmpro_member_directory {clear: both; }
+.pmpro_member_directory hr {margin: 3rem 0; }
 .pmpro_pagination {margin-bottom: 1em;}
 .pmpro_pagination .pmpro_prev {float: left; width: 250px;}
 .pmpro_pagination .pmpro_next {float: right; width: 250px; text-align: right;}
+
+/* div/column type layous */
+div.pmpro_member_directory div h3 {clear: none; }
+div.pmpro_member_directory div p {margin: .5rem 0 0 0; } 
+div.pmpro_member_profile strong{ display: block; }
+
+/* table type layous */
+.pmpro_member_directory table h3.pmpro_member_directory_display-name {margin-top: 0; }
+.pmpro_member_directory table td p {margin: .5rem 0; }
+
+/* Columns - based on Foundation 5 Grid v5.5.2 by ZURB: http://foundation.zurb.com/docs/components/grid.html */
+.pmpro_member_directory .row {
+  width: auto;
+  margin-left: -1em;
+  margin-right: -1em;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: none; }
+  .pmpro_member_directory .row:before, .pmpro_member_directory .row:after {
+    content: " ";
+    display: table; }
+  .pmpro_member_directory .row:after {
+    clear: both; }
+	
+.pmpro_member_directory .column,
+.pmpro_member_directory .columns {
+  box-sizing: border-box;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 100%;
+  float: left; }
+
+[class*="column"] + [class*="column"]:last-child {
+  float: right; }
+
+[class*="column"] + [class*="column"].pmpro_member_directory .end {
+  float: left; }
+
+@media only screen {
+  .pmpro_member_directory .column,
+  .pmpro_member_directory .columns {
+    position: relative;
+    padding-left: 1em;
+    padding-right: 1em;
+    float: left; }
+}
+@media only screen and (min-width: 40.063em) {
+  .pmpro_member_directory .column,
+  .pmpro_member_directory .columns {
+    position: relative;
+    padding-left: 1em;
+    padding-right: 1em;
+    float: left; }
+
+  .pmpro_member_directory .medium-1 {
+    width: 8.33333%; }
+
+  .pmpro_member_directory .medium-2 {
+    width: 16.66667%; }
+
+  .pmpro_member_directory .medium-3 {
+    width: 25%; }
+
+  .pmpro_member_directory .medium-4 {
+    width: 33.33333%; }
+
+  .pmpro_member_directory .medium-5 {
+    width: 41.66667%; }
+
+  .pmpro_member_directory .medium-6 {
+    width: 50%; }
+
+  .pmpro_member_directory .medium-7 {
+    width: 58.33333%; }
+
+  .pmpro_member_directory .medium-8 {
+    width: 66.66667%; }
+
+  .pmpro_member_directory .medium-9 {
+    width: 75%; }
+
+  .pmpro_member_directory .medium-10 {
+    width: 83.33333%; }
+
+  .pmpro_member_directory .medium-11 {
+    width: 91.66667%; }
+
+  .pmpro_member_directory .medium-12 {
+    width: 100%; }
+}
+@media only screen and (min-width: 64.063em) {
+  .pmpro_member_directory .column,
+  .pmpro_member_directory .columns {
+    position: relative;
+    padding-left: 1em;
+    padding-right: 1em;
+    float: left; }
+}

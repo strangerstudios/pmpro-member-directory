@@ -8,8 +8,22 @@ Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
 
+global $pmpromd_options;
+
 $path = dirname(__FILE__);
-require_once($path . "/templates/directory.php");
+$custom_dir = get_stylesheet_directory()."/paid-memberships-pro/pmpro-member-directory/";
+$custom_directory_file = $custom_dir."directory.php";
+$custom_profile_file = $custom_dir."profile.php";
+
+//load custom or default templates
+if(file_exists($custom_directory_file))
+	require_once($custom_directory_file);	
+else
+	require_once($path . "/templates/directory.php");
+if(file_exists($custom_profile_file))
+	require_once($custom_profile_file);	
+else
+	require_once($path . "/templates/profile.php");
 
 function pmpromd_register_styles() {
 	wp_register_style( 'pmpro-member-directory-styles', plugins_url( 'css/pmpro-member-directory.css', __FILE__ ) );
@@ -17,6 +31,46 @@ function pmpromd_register_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'pmpromd_register_styles' );
 
+function pmpromd_extra_page_settings($pages) {
+   $pages['directory'] = array('title'=>'Directory', 'content'=>'[pmpro_member_directory]', 'hint'=>'Include the shortcode [pmpro_member_directory].');
+   $pages['profile'] = array('title'=>'Profile', 'content'=>'[pmpro_member_profile]', 'hint'=>'Include the shortcode [pmpro_member_profile].');
+   return $pages;
+}
+add_action('pmpro_extra_page_settings', 'pmpromd_extra_page_settings');
+
+//show the option to hide from directory on edit user profile
+function pmpromd_show_extra_profile_fields($user)
+{
+	global $pmpro_pages;	
+?>
+	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
+	<table class="form-table"> 
+		<tbody>
+			<tr class="user-hide-directory-wrap">
+				<th scope="row"></th>
+				<td>
+					<label for="hide_directory">
+						<input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), get_the_title($pmpro_pages['directory']) ); ?>
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+<?php
+}
+add_action( 'show_user_profile', 'pmpromd_show_extra_profile_fields' );
+add_action( 'edit_user_profile', 'pmpromd_show_extra_profile_fields' );
+ 
+function pmpromd_save_extra_profile_fields( $user_id ) 
+{
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return false;
+ 
+	update_usermeta( $user_id, 'pmpromd_hide_directory', $_POST['hide_directory'] );
+}
+add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
+add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
+ 
 /*
 Function to add links to the plugin row meta
 */
