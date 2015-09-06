@@ -253,25 +253,51 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 										<?php
 											foreach($fields_array as $field)
 											{
-												if(!empty($auser->$field[1]))
-												{
+												$meta_field = get_user_meta($auser->ID,$field[1],true);
+												if(!empty($meta_field))
+												{	
 													?>
 													<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
 													<?php
-														if($field[1] == 'user_url')
+														if(is_array($meta_field) && !empty($meta_field['filename']) )
 														{
+															//this is a file field
 															?>
-															<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
-															<?php
+															<strong><?php echo $field[0]; ?></strong>
+															<?php echo pmpromd_display_file_field($meta_field); ?>
+															<?php															
 														}
+														elseif(is_array($meta_field))
+														{
+															//this is a general array, just show as comma-separated
+															?>
+															<strong><?php echo $field[0]; ?></strong>
+															<?php echo implode(", ",$meta_field); ?>
+															<?php
+														}								
 														else
 														{
-															?>
-															<strong><?php echo $field[0]; ?>:</strong>
-															<?php echo make_clickable($auser->$field[1]); ?>
-															<?php
+															if($field[1] == 'user_url')
+															{
+																?>
+																<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo $field[0]; ?></a>
+																<?php
+															}
+															else
+															{
+																?>
+																<strong><?php echo $field[0]; ?></strong>
+																<?php
+																	$meta_field_embed = wp_oembed_get($meta_field);
+																	if(!empty($meta_field_embed))
+																		echo $meta_field_embed;
+																	else
+																		echo make_clickable($meta_field); 
+																?>
+																<?php
+															}
 														}
-													?>
+													?>													
 													</p>
 													<?php
 												}

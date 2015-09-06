@@ -71,6 +71,25 @@ function pmpromd_save_extra_profile_fields( $user_id )
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
  
+ 
+function pmpromd_display_file_field($meta_field) {
+	$meta_field_file_type = wp_check_filetype($meta_field['fullurl']);
+	switch ($meta_field_file_type['type']) {
+		case 'image/jpeg':
+		case 'image/png':
+		case 'image/gif':
+			return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . $meta_field['fullurl'] . '"><br />' . $meta_field['filename'] . '</a>'; break;
+	case 'video/mpeg':
+	case 'video/mp4': 
+		return do_shortcode('[video src="' . $meta_field['fullurl'] . '"]'); break;
+	case 'audio/mpeg':
+	case 'audio/wav': 
+		return do_shortcode('[audio src="' . $meta_field['fullurl'] . '"]'); break;		
+	default:
+		return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . wp_mime_type_icon($meta_field_file_type['type']) . '"><br />' . $meta_field['filename'] . '</a>'; break;
+	}
+}
+
 /*
 Function to add links to the plugin row meta
 */
