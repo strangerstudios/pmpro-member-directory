@@ -5,7 +5,7 @@
 function pmpromd_profile_preheader()
 {
 	global $post, $pmpro_pages;
-	if($post->ID == $pmpro_pages['profile'])
+	if(!empty($post->ID) && $post->ID == $pmpro_pages['profile'])
 	{
 		/*
 			Preheader operations here.
@@ -180,10 +180,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						<?php echo get_avatar($pu->ID, $avatar_size, NULL, $pu->display_name, array("class"=>"alignright")); ?>
 					</p>
 				<?php } ?>
-				<?php if(!empty($show_bio) && !empty($pu->bio) ) { ?>										
+				<?php if(!empty($pu->display_name) ) { ?>										
+					<h2 class="pmpro_member_directory_name">
+						<?php echo $pu->display_name; ?>
+					</h2>
+				<?php } ?>
+				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>										
 					<p class="pmpro_member_directory_bio">
 						<strong><?php _e('Biographical Info', 'wp'); ?></strong>
-						<?php echo $pu->bio; ?>
+						<?php echo $pu->description; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_email)) { ?>										
@@ -258,7 +263,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			</div>
 			<hr />
 			<?php if(!empty($directory_url)) { ?>
-				<a class="more-link" href="<?php echo $directory_url;?>">View All Members</a>
+				<div align="center"><a class="more-link" href="<?php echo $directory_url;?>">View All Members</a></div>
 			<?php } ?>
 			<?php
 		}	
