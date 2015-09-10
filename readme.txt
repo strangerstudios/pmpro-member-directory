@@ -2,7 +2,7 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
-Tested up to: 4.2.4
+Tested up to: 4.3
 Stable tag: .3
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
@@ -91,7 +91,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 
 == Changelog ==
 = .3 = 
-* ENHANCEMENT: Added [pmpro_member_profile] shortcode
+* FEATURE: Added [pmpro_member_profile] shortcode
 * ENHANCEMENT: Added additional attributes to the [pmpro_member_directory]
 * ENHANCEMENT: Added ability to define Directory and Profile page under Memberships > Pge Settings 
 * ENHANCEMENT: Added user option to hide profile from diretory.

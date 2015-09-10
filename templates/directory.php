@@ -13,6 +13,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'avatar_size' => '128',
 		'fields' => NULL,
 		'layout' => 'div',
+		'level' => NULL,
 		'levels' => NULL,
 		'limit' => NULL,
 		'link' => NULL,
@@ -39,6 +40,10 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	else
 		$link = true;
 
+	//did they use level instead of levels?
+	if(empty($levels) && !empty($level))
+		$levels = $level;
+		
 	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
 		$show_avatar = false;
 	else
@@ -69,11 +74,6 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$s = $_REQUEST['ps'];
 	else
 		$s = "";
-	
-	if(isset($_REQUEST['pk']))
-		$key = $_REQUEST['pk'];
-	else
-		$key = "";
 		
 	if(isset($_REQUEST['pn']))
 		$pn = intval($_REQUEST['pn']);
@@ -92,23 +92,20 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	{
 		$sqlQuery = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership FROM $wpdb->users u LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 AND ";
 		
-		if(empty($key))
-			$sqlQuery .= "(u.user_login LIKE '%" . esc_sql($s) . "%' OR u.user_email LIKE '%" . esc_sql($s) . "%' OR u.display_name LIKE '%" . esc_sql($s) . "%' OR um.meta_value LIKE '%" . esc_sql($s) . "s%') ";
-		else
-			$sqlQuery .= "(um.meta_key = '" . esc_sql($key) . "' AND um.meta_value LIKE '%" . esc_sql($s) . "%') ";
-	
+		$sqlQuery .= "(u.user_login LIKE '%" . esc_sql($s) . "%' OR u.user_email LIKE '%" . esc_sql($s) . "%' OR u.display_name LIKE '%" . esc_sql($s) . "%' OR um.meta_value LIKE '%" . esc_sql($s) . "s%') ";
+		
 		if($levels)
-			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";					
+			$sqlQuery .= " AND mu.membership_id IN(" . esc_sql($levels) . ") ";					
 			
-		$sqlQuery .= "GROUP BY u.ID ORDER BY ". $order_by . " " . $order;
+		$sqlQuery .= "GROUP BY u.ID ORDER BY ". esc_sql($order_by) . " " . $order;
 	}
 	else
 	{
 		$sqlQuery = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership FROM $wpdb->users u LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id";
 		$sqlQuery .= " WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
 		if($levels)
-			$sqlQuery .= " AND mu.membership_id IN(" . $levels . ") ";
-		$sqlQuery .= "ORDER BY ". $order_by . " " . $order;
+			$sqlQuery .= " AND mu.membership_id IN(" . esc_sql($levels) . ") ";
+		$sqlQuery .= "ORDER BY ". esc_sql($order_by) . " " . esc_sql($order);
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
@@ -253,7 +250,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 										<?php
 											foreach($fields_array as $field)
 											{
-												$meta_field = get_user_meta($auser->ID,$field[1],true);
+												$meta_field = $auser->$field[1];
 												if(!empty($meta_field))
 												{	
 													?>

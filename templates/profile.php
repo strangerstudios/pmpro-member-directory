@@ -13,20 +13,58 @@ function pmpromd_profile_preheader()
 		global $main_post_id;
 		$main_post_id = $post->ID;
 		
+		//Get the profile user
+		if(!empty($_REQUEST['pu']))
+			$pu = get_user_by('login', $_REQUEST['pu']);
+		elseif(!empty($current_user->ID))
+			$pu = $current_user;
+		else
+			$pu = false;
+		
+		//If no profile user, go to directory or home
+		if(empty($pu) || empty($pu->ID))
+		{
+			if(!empty($pmpro_pages['directory']))
+				wp_redirect(get_permalink($pmpro_pages['directory']));
+			else
+				wp_redirect(home_url());
+			exit;
+		}
+		
+		/*
+			If a level is required for the profile page, make sure the profile user has it.
+		*/
+		//check is levels are required
+		$levels = pmpro_getMatches("/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true);
+		if(!empty($levels) && !pmpro_hasMembershipLevel(explode(",", $levels), $pu->ID))
+		{
+			if(!empty($pmpro_pages['directory']))
+				wp_redirect(get_permalink($pmpro_pages['directory']));
+			else
+				wp_redirect(home_url());
+			exit;
+		}
+				
+		/*
+			Update the head title and H1
+		*/
 		function pmpromd_the_title($title, $post_id = NULL)
 		{				
-			global $main_post_id;
-			if(!empty($_REQUEST['pu']) && $post_id == $main_post_id)
+			global $main_post_id, $current_user;
+			if($post_id == $main_post_id)
 			{
-				global $wpdb;
-				
-				$user_nicename = $_REQUEST['pu'];
-				$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");					
-				
-				if(!empty($display_name))
+				if(!empty($_REQUEST['pu']))
 				{
-					$title = $display_name;
+					global $wpdb;				
+					$user_nicename = $_REQUEST['pu'];
+					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
 				}
+				elseif(!empty($current_user))
+				{			
+					$display_name = $current_user->display_name;					
+				}
+				if(!empty($display_name))
+					$title = $display_name;
 			}			
 			return $title;
 		}
@@ -34,12 +72,18 @@ function pmpromd_profile_preheader()
 		
 		function pmpromd_wp_title($title, $sep)
 		{
-			global $wpdb, $main_post_id, $post;
-			if(!empty($_REQUEST['pu']) && $post->ID == $main_post_id)
-			{			
-				$user_nicename = $_REQUEST['pu'];
-				$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");					
-				
+			global $wpdb, $main_post_id, $post, $current_user;
+			if($post->ID == $main_post_id)
+			{	
+				if(!empty($_REQUEST['pu']))
+				{
+					$user_nicename = $_REQUEST['pu'];
+					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");					
+				}
+				elseif(!empty($current_user))
+				{			
+					$display_name = $current_user->display_name;					
+				}
 				if(!empty($display_name))
 				{
 					$title = $display_name . ' ' . $sep . ' ';
@@ -68,6 +112,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		'show_billing' => NULL,
 		'show_email' => NULL,
 		'show_level' => NULL,
+		'show_name' => NULL,
 		'show_phone' => NULL,
 		'show_search' => NULL,
 		'show_startdate' => NULL,
@@ -109,6 +154,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		$show_level = false;
 	else
 		$show_level = true;
+	
+	if($show_name === "0" || $show_name === "false" || $show_name === "no")
+		$show_name = false;
+	else
+		$show_name = true;
 		
 	if($show_phone === "0" || $show_phone === "false" || $show_phone === "no")
 		$show_phone = false;
@@ -180,7 +230,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						<?php echo get_avatar($pu->ID, $avatar_size, NULL, $pu->display_name, array("class"=>"alignright")); ?>
 					</p>
 				<?php } ?>
-				<?php if(!empty($pu->display_name) ) { ?>										
+				<?php if(!empty($show_name) && !empty($pu->display_name) ) { ?>										
 					<h2 class="pmpro_member_directory_name">
 						<?php echo $pu->display_name; ?>
 					</h2>
@@ -209,7 +259,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						<?php echo date(get_option("date_format"), $pu->membership_level->startdate); ?>
 					</p>
 				<?php } ?>
-				<?php if(!empty($show_billing)) { ?>										
+				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>										
 					<p class="pmpro_member_directory_baddress">
 						<strong><?php _e('Address', 'pmpro'); ?></strong>
 						<?php echo $pu->pmpro_baddress1; ?><br />
@@ -223,7 +273,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						<?php } ?>
 					</p>
 				<?php } ?>
-				<?php if(!empty($show_phone)) { ?>
+				<?php if(!empty($show_phone) && !empty($pu->pmpro_bphone)) { ?>
 					<p class="pmpro_member_directory_phone">
 						<strong><?php _e('Phone Number','pmpro'); ?></strong>
 						<?php echo formatPhone($pu->pmpro_bphone); ?>
@@ -233,8 +283,10 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					if(!empty($fields_array))
 					{
 						foreach($fields_array as $field)
-						{	
-							$meta_field = get_user_meta($pu->ID,$field[1],true);
+						{
+							if(empty($field[0]))
+								break;							
+							$meta_field = $pu->$field[1];
 							if(!empty($meta_field))
 							{
 								?>
