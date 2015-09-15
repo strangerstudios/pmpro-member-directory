@@ -105,4 +105,4 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * ENHANCEMENT: Added pagination to the directory page with a 15 members per page limit. You can override the limit by setting a limit parameter on the shortcode or by passing &limit=... to the URL.
 
 = .1 =
-* Initial committ.
+* Initial commit.
