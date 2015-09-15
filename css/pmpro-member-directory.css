@@ -15,7 +15,7 @@ form.pmpro_member_directory_search input[type=submit] {background: none; border:
 /* div/column type layous */
 div.pmpro_member_directory div h3 {clear: none; }
 div.pmpro_member_directory div p {margin: .5rem 0 0 0; } 
-div.pmpro_member_profile strong{ display: block; }
+div.pmpro_member_profile strong {display: block; }
 
 /* table type layous */
 .pmpro_member_directory table h3.pmpro_member_directory_display-name {margin-top: 0; }
@@ -44,11 +44,13 @@ div.pmpro_member_profile strong{ display: block; }
   width: 100%;
   float: left; }
 
-[class*="column"] + [class*="column"]:last-child {
-  float: right; }
+.pmpro_member_directory [class*="column"] + [class*="column"]:last-child {
+  float: right; 
+ }
 
-[class*="column"] + [class*="column"].pmpro_member_directory .end {
-  float: left; }
+.pmpro_member_directory [class*="column"] + [class*="column"].pmpro_member_directory .end {
+  float: left; 
+ }
 
 @media only screen {
   .pmpro_member_directory .column,

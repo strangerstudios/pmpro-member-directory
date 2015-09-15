@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-member-directory/
 Description: A very basic shortcode for display a member directory list on your site.
-Version: .3
+Version: .3.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -26,7 +26,15 @@ else
 	require_once($path . "/templates/profile.php");
 
 function pmpromd_register_styles() {
-	wp_register_style( 'pmpro-member-directory-styles', plugins_url( 'css/pmpro-member-directory.css', __FILE__ ) );
+	//load stylesheet (check child theme, then parent theme, then plugin folder)	
+	if(file_exists(get_stylesheet_directory()."/paid-memberships-pro/member-directory/css/pmpro-member-directory.css"))
+		wp_register_style( 'pmpro-member-directory-styles', get_stylesheet_directory_uri()."/paid-memberships-pro/member-directory/css/pmpro-member-directory.css");
+	elseif(file_exists(get_template_directory()."/paid-memberships-pro/member-directory/css/pmpro-member-directory.css"))
+		wp_register_style( 'pmpro-member-directory-styles', get_template_directory_uri()."/paid-memberships-pro/member-directory/css/pmpro-member-directory.css");
+	elseif(function_exists("pmpro_https_filter"))
+		wp_register_style( 'pmpro-member-directory-styles', pmpro_https_filter(plugins_url( 'css/pmpro-member-directory.css', __FILE__ ) ), NULL, "");		
+	else
+		wp_register_style( 'pmpro-member-directory-styles', plugins_url( 'css/pmpro-member-directory.css', __FILE__ ) );		
 	wp_enqueue_style( 'pmpro-member-directory-styles' );
 }
 add_action( 'wp_enqueue_scripts', 'pmpromd_register_styles' );
