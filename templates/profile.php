@@ -4,7 +4,7 @@
 */
 function pmpromd_profile_preheader()
 {
-	global $post, $pmpro_pages;
+	global $post, $pmpro_pages, $current_user;
 	if(!empty($post->ID) && $post->ID == $pmpro_pages['profile'])
 	{
 		/*
@@ -15,7 +15,7 @@ function pmpromd_profile_preheader()
 		
 		//Get the profile user
 		if(!empty($_REQUEST['pu']))
-			$pu = get_user_by('login', $_REQUEST['pu']);
+			$pu = get_user_by('id', $_REQUEST['pu']);
 		elseif(!empty($current_user->ID))
 			$pu = $current_user;
 		else
@@ -182,8 +182,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	
 	if(empty($user_id) && !empty($_REQUEST['pu']))		
 	{
-		$user_nicename = $_REQUEST['pu'];
-		$user_id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+		$user_id = $_REQUEST['pu'];
 	}
 		
 	if(!empty($user_id))
