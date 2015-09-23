@@ -26,8 +26,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_startdate' => NULL,
 	), $atts));
 	
-	global $wpdb, $post, $pmpro_pages;
-	
+	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
+
 	//some page vars
 	if(!empty($pmpro_pages['directory']))
 		$directory_url = get_permalink($pmpro_pages['directory']);
@@ -163,11 +163,22 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 				if(!empty($fields_array))
 				{
 					for($i = 0; $i < count($fields_array); $i++ )
-						$fields_array[$i] = explode(",", $fields_array[$i]);
+						$fields_array[$i] = explode(",", trim($fields_array[$i]));
 				}
 			}
 			else
 				$fields_array = false;
+
+			// Get Register Helper field options
+			$rh_fields = array();
+			if(!empty($pmprorh_registration_fields)) {
+				foreach($pmprorh_registration_fields as $location) {
+					foreach($location as $field) {
+						if(!empty($field->options))
+							$rh_fields[$field->name] = $field->options;
+					}
+				}
+			}
 			?>
 			<div class="pmpro_member_directory">	
 			<hr class="clear" />
@@ -242,7 +253,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 										<?php echo $auser->user_email; ?>
 									</td>
 								<?php } ?>							
-								<?php 
+								<?php
 									if(!empty($fields_array))
 									{
 										?>
@@ -266,7 +277,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 														}
 														elseif(is_array($meta_field))
 														{
-															//this is a general array, just show as comma-separated
+															//this is a general array, check for Register Helper options first
+															if(!empty($rh_fields[$field[1]])) {
+																foreach($meta_field as $key => $value)
+																	$meta_field[$key] = $rh_fields[$field[1]][$value];
+															}
 															?>
 															<strong><?php echo $field[0]; ?></strong>
 															<?php echo implode(", ",$meta_field); ?>
@@ -404,24 +419,45 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 											{
 												foreach($fields_array as $field)
 												{
-													if(!empty($auser->$field[1]))
+													$meta_field = $auser->$field[1];
+													if(!empty($meta_field))
 													{
 														?>
 														<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
 														<?php
-															if($field[1] == 'user_url')
-															{
-																?>
-																<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
-																<?php
+														if(is_array($meta_field) && !empty($meta_field['filename']) )
+														{
+															//this is a file field
+															?>
+															<strong><?php echo $field[0]; ?></strong>
+															<?php echo pmpromd_display_file_field($meta_field); ?>
+															<?php
+														}
+														elseif(is_array($meta_field))
+														{
+															//this is a general array, check for Register Helper options first
+															if(!empty($rh_fields[$field[1]])) {
+																foreach($meta_field as $key => $value)
+																	$meta_field[$key] = $rh_fields[$field[1]][$value];
 															}
-															else
-															{
-																?>
-																<strong><?php echo $field[0]; ?>:</strong>
-																<?php echo make_clickable($auser->$field[1]); ?>
-																<?php
-															}
+															?>
+															<strong><?php echo $field[0]; ?></strong>
+															<?php echo implode(", ",$meta_field); ?>
+															<?php
+														}
+														elseif($field[1] == 'user_url')
+														{
+															?>
+															<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
+															<?php
+														}
+														else
+														{
+															?>
+															<strong><?php echo $field[0]; ?>:</strong>
+															<?php echo make_clickable($auser->$field[1]); ?>
+															<?php
+														}
 														?>
 														</p>
 														<?php

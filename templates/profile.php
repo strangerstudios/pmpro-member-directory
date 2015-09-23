@@ -119,7 +119,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		'user_id' => NULL
 	), $atts));
 	
-	global $current_user, $display_name, $wpdb, $pmpro_pages;
+	global $current_user, $display_name, $wpdb, $pmpro_pages, $pmprorh_registration_fields;
 	
 	//some page vars
 	if(!empty($pmpro_pages['directory']))
@@ -222,6 +222,18 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			}
 			else
 				$fields_array = false;
+
+			// Get Register Helper field options
+			$rh_fields = array();
+			if(!empty($pmprorh_registration_fields)) {
+				foreach($pmprorh_registration_fields as $location) {
+					foreach($location as $field) {
+						if(!empty($field->options))
+							$rh_fields[$field->name] = $field->options;
+					}
+				}
+			}
+
 			?>
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
 				<?php if(!empty($show_avatar)) { ?>										
@@ -301,7 +313,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 									}
 									elseif(is_array($meta_field))
 									{
-										//this is a general array, just show as comma-separated
+										//this is a general array, check for Register Helper options first
+										if(!empty($rh_fields[$field[1]])) {
+											foreach($meta_field as $key => $value)
+												$meta_field[$key] = $rh_fields[$field[1]][$value];
+										}
 										?>
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo implode(", ",$meta_field); ?>

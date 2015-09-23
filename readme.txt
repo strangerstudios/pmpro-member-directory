@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
 Tested up to: 4.3
-Stable tag: .3.1
+Stable tag: .3.2
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -91,6 +91,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 
 == Changelog ==
 = .3.2 =
+* ENHANCEMENT: Now checking for Register Helper labels for arrays of custom fields on the profile and directory templates.
 * BUG: Fixed broken profile links on directory page for certain usernames.
 
 = .3.1 =
