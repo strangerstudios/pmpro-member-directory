@@ -280,6 +280,9 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					</p>
 				<?php } ?>
 				<?php 
+					//filter the fields
+					$fields_array = apply_filters('pmpro_member_profile_fields', $fields_array, $pu);
+					
 					if(!empty($fields_array))
 					{
 						foreach($fields_array as $field)

@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
-Tested up to: 4.3
-Stable tag: .3.1
+Tested up to: 4.3.1
+Stable tag: .4
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .4 =
+* Added pmpro_member_profile_fields filter to set or override fields available on the profile pages.
+
 = .3.1 =
 * BUG: Fixed css declaration that was affecting elements outside of the pmpro_member_directory div/table
 * ENHANCEMENT: Added ability to load the theme's (child or parent) custom pmpro-member-directory.css in place of default
