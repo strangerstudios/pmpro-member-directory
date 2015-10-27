@@ -4,7 +4,7 @@
 */
 function pmpromd_profile_preheader()
 {
-	global $post, $pmpro_pages;
+	global $post, $pmpro_pages, $current_user;
 	if(!empty($post->ID) && $post->ID == $pmpro_pages['profile'])
 	{
 		/*
@@ -15,7 +15,7 @@ function pmpromd_profile_preheader()
 		
 		//Get the profile user
 		if(!empty($_REQUEST['pu']))
-			$pu = get_user_by('login', $_REQUEST['pu']);
+			$pu = get_user_by('id', $_REQUEST['pu']);
 		elseif(!empty($current_user->ID))
 			$pu = $current_user;
 		else
@@ -119,7 +119,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		'user_id' => NULL
 	), $atts));
 	
-	global $current_user, $display_name, $wpdb, $pmpro_pages;
+	global $current_user, $display_name, $wpdb, $pmpro_pages, $pmprorh_registration_fields;
 	
 	//some page vars
 	if(!empty($pmpro_pages['directory']))
@@ -182,8 +182,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	
 	if(empty($user_id) && !empty($_REQUEST['pu']))		
 	{
-		$user_nicename = $_REQUEST['pu'];
-		$user_id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+		$user_id = $_REQUEST['pu'];
 	}
 		
 	if(!empty($user_id))
@@ -223,6 +222,18 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			}
 			else
 				$fields_array = false;
+
+			// Get Register Helper field options
+			$rh_fields = array();
+			if(!empty($pmprorh_registration_fields)) {
+				foreach($pmprorh_registration_fields as $location) {
+					foreach($location as $field) {
+						if(!empty($field->options))
+							$rh_fields[$field->name] = $field->options;
+					}
+				}
+			}
+
 			?>
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
 				<?php if(!empty($show_avatar)) { ?>										
@@ -305,7 +316,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 									}
 									elseif(is_array($meta_field))
 									{
-										//this is a general array, just show as comma-separated
+										//this is a general array, check for Register Helper options first
+										if(!empty($rh_fields[$field[1]])) {
+											foreach($meta_field as $key => $value)
+												$meta_field[$key] = $rh_fields[$field[1]][$value];
+										}
 										?>
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo implode(", ",$meta_field); ?>
