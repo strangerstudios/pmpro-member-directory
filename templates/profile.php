@@ -14,8 +14,10 @@ function pmpromd_profile_preheader()
 		$main_post_id = $post->ID;
 		
 		//Get the profile user
-		if(!empty($_REQUEST['pu']))
+		if(!empty($_REQUEST['pu']) && is_numeric($_REQUEST['pu']))
 			$pu = get_user_by('id', $_REQUEST['pu']);
+		elseif(!empty($_REQUEST['pu']))
+			$pu = get_user_by('slug', $_REQUEST['pu']);
 		elseif(!empty($current_user->ID))
 			$pu = $current_user;
 		else
@@ -179,22 +181,26 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		$limit = intval($_REQUEST['limit']);
 	elseif(empty($limit))
 		$limit = 15;
-	
+
 	if(empty($user_id) && !empty($_REQUEST['pu']))		
 	{
-		$user_id = $_REQUEST['pu'];
+		//Get the profile user
+		if(is_numeric($_REQUEST['pu']))
+			$pu = get_user_by('id', $_REQUEST['pu']);
+		else
+			$pu = get_user_by('slug', $_REQUEST['pu']);
+
+		$user_id = $pu->ID;
 	}
 		
 	if(!empty($user_id))
 		$pu = get_userdata($user_id);
 	elseif(empty($_REQUEST['pu']))
 		$pu = get_userdata($current_user->ID);		
-	else
-	{
-	}
 	
-	$pu->membership_level = pmpro_getMembershipLevelForUser($pu->ID);
-	
+	if(!empty($pu))
+		$pu->membership_level = pmpro_getMembershipLevelForUser($pu->ID);
+
 	ob_start();
 	
 	?>

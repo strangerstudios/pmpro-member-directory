@@ -233,7 +233,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 							<?php if(!empty($show_avatar)) { ?>
 								<td class="pmpro_member_directory_avatar">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size); ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size); ?></a>
 									<?php } else { ?>
 										<?php echo get_avatar($auser->ID, $avatar_size); ?>
 									<?php } ?>
@@ -242,7 +242,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 							<td>
 								<h3 class="pmpro_member_directory_display-name">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
 									<?php } else { ?>
 										<?php echo $auser->display_name; ?>
 									<?php } ?>
@@ -331,7 +331,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 							<?php } ?>
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
 								<td class="pmpro_member_directory_link">
-									<a href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
+									<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
 								</td>
 							<?php } ?>
 						</tr>
@@ -383,7 +383,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									<?php if(!empty($show_avatar)) { ?>
 										<div class="pmpro_member_directory_avatar">
 											<?php if(!empty($link) && !empty($profile_url)) { ?>
-												<a class="<?php echo $avatar_align; ?>" href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
+												<a class="<?php echo $avatar_align; ?>" href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
 											<?php } else { ?>
 												<span class="<?php echo $avatar_align; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></span>
 											<?php } ?>
@@ -391,7 +391,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									<?php } ?>
 									<h3 class="pmpro_member_directory_display-name">
 										<?php if(!empty($link) && !empty($profile_url)) { ?>
-											<a href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
+											<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
 										<?php } else { ?>
 											<?php echo $auser->display_name; ?>
 										<?php } ?>
@@ -467,7 +467,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									?>
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
 										<p class="pmpro_member_directory_link">
-											<a class="more-link" href="<?php echo add_query_arg('pu', $auser->ID, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
+											<a class="more-link" href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
 										</p>
 									<?php } ?>
 								</div> <!-- end pmpro_addon_package-->
