@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
-Tested up to: 4.3.1
-Stable tag: .4.2
+Tested up to: 4.4.1
+Stable tag: .4.3
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .4.3 =
+* BUG: Fixed bug where the Address 1 text was appearing under Address 2 on profiles.
+
 = .4.2 =
 * BUG/ENHANCEMENT: Now passing ?pu={user_nicename} in the profile link. The profile page will accept a numerical ID or alphanumerical nicename/slug to lookup the user.
 
