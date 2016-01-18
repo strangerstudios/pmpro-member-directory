@@ -282,7 +282,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						<?php echo $pu->pmpro_baddress1; ?><br />
 						<?php 
 							if(!empty($pu->pmpro_baddress2))
-								echo $pu->pmpro_baddress1 . "<br />"; 
+								echo $pu->pmpro_baddress2 . "<br />"; 
 						?>
 						<?php if($pu->pmpro_bcity && $pu->pmpro_bstate) { ?>
 							<?php echo $pu->pmpro_bcity; ?>, <?php echo $pu->pmpro_bstate; ?> <?php echo $pu->pmpro_bzipcode; ?><br />
