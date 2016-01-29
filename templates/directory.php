@@ -109,6 +109,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
+	
+	$sqlQuery = apply_filters("pmpro_member_directory_sql", $sqlQuery, $levels, $s, $pn, $limit, $start, $end);
 
 	$theusers = $wpdb->get_results($sqlQuery);
 	$totalrows = $wpdb->get_var("SELECT FOUND_ROWS() as found_rows");
