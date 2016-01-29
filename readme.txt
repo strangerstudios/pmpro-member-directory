@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 3.5
 Tested up to: 4.4.1
-Stable tag: .4.3
+Stable tag: .4.4
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .4.4 =
+* Added the pmpro_member_directory_sql filter (passes $sqlQuery, $levels, $s, $pn, $limit, $start, $end) that can be used to filter the SQL used to lookup members for the directory page.
+
 = .4.3 =
 * BUG: Fixed bug where the Address 1 text was appearing under Address 2 on profiles.
 
