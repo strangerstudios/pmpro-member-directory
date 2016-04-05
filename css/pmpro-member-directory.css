@@ -1,6 +1,5 @@
 @charset "UTF-8";
 /* CSS Document */
-
 h3#pmpro_member_directory_subheading {clear: none; margin-top: 0; }
 form.pmpro_member_directory_search {float: right; margin-bottom: 1rem; clear: both; }
 form.pmpro_member_directory_search input[type=text] { }
@@ -116,3 +115,4 @@ div.pmpro_member_profile strong {display: block; }
     padding-right: 1em;
     float: left; }
 }
+

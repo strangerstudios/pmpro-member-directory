@@ -24,6 +24,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_level' => NULL,
 		'show_search' => NULL,
 		'show_startdate' => NULL,
+		'limit_to' => NULL,
 	), $atts));
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
@@ -69,6 +70,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	else
 		$show_startdate = true;
 
+	if($limit_to === "0" || $limit_to === "false" || $limit_to === "no")
+		$limit_to = false;
+	else
+		$limit_to = true;
+
 	ob_start();
 	if(isset($_REQUEST['ps']))
 		$s = $_REQUEST['ps'];
@@ -85,35 +91,183 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	elseif(empty($limit))
 		$limit = 15;
 
+	/*
+	 * Add support for user defined search fields & tables (array value = usermeta field name)
+	 * Can be array of field names (usermeta fields)
+	 */
+	$extra_search_fields = apply_filters('pmpromd_extra_search_fields', array());
+
+	if ( ! empty($extra_search_fields) && ! is_array( $extra_search_fields ) ) {
+		$extra_search_fields = array( $extra_search_fields );
+	}
+
+	if (!empty($extra_search_fields)) {
+
+		foreach ( $extra_search_fields as $field_name ) {
+			if ( isset( $_REQUEST[ $field_name ] ) && is_array( $_REQUEST[ $field_name ] ) ) {
+				${$field_name} = array_map( 'sanitize_text_field', $_REQUEST[ $field_name ] );
+			} elseif ( isset( $_REQUEST[ $field_name ] ) && ! is_array( $_REQUEST[ $field_name ] ) ) {
+				${$field_name} = sanitize_text_field( $_REQUEST[ $field_name ] );
+			} elseif ( empty( $_REQUEST[ $field_name ] ) ) {
+				${$field_name} = null;
+			}
+		}
+	}
 	$end = $pn * $limit;
 	$start = $end - $limit;
 
-	if($s)
-	{
-		$sqlQuery = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership, umf.meta_value as first_name, uml.meta_value as last_name FROM $wpdb->users u LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 AND ";
+	$statuses = apply_filters('pmprod_membership_statuses', array('active'));
+	$status_list = esc_sql( implode("', '", $statuses ));
 
-		$sqlQuery .= "(u.user_login LIKE '%" . esc_sql($s) . "%' OR u.user_email LIKE '%" . esc_sql($s) . "%' OR u.display_name LIKE '%" . esc_sql($s) . "%' OR um.meta_value LIKE '%" . esc_sql($s) . "s%') ";
+	if(!empty($s) || !empty($extra_search_fields))
+	{
+		$sqlQuery = "
+		SELECT
+			u.ID,
+			u.user_login,
+			u.user_email,
+			u.user_nicename,
+			u.display_name,
+			UNIX_TIMESTAMP(u.user_registered) as joindate,
+			mu.membership_id, mu.initial_payment,
+			mu.billing_amount, mu.cycle_period,
+			mu.cycle_number,
+			mu.billing_limit,
+			mu.trial_amount,
+			mu.trial_limit,
+			UNIX_TIMESTAMP(mu.startdate) as startdate,
+			UNIX_TIMESTAMP(mu.enddate) as enddate,
+			m.name as membership,
+			umf.meta_value as first_name,
+			uml.meta_value as last_name
+		FROM $wpdb->users u
+		LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id
+		LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id
+		LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id
+		LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
+		LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id
+		LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id
+		";
+
+		if(! empty($extra_search_fields)) {
+			$cnt = 1;
+
+			foreach ( $extra_search_fields as $f )
+			{
+				if (! empty(${$f}))
+					$sqlQuery .= "LEFT JOIN $wpdb->usermeta umrh_{$cnt} ON umrh_{$cnt}.meta_key = '{$f}' AND u.ID = umrh_{$cnt}.user_id
+					";
+				++$cnt;
+			}
+		}
+
+		$sqlQuery .= " WHERE mu.status IN ('{$status_list}')
+			AND (umh.meta_value IS NULL
+				OR umh.meta_value <> '1')
+				";
+
+		if (!empty($s))
+			$sqlQuery .= " AND (u.user_login LIKE '%" . esc_sql($s) . "%'
+				OR u.user_email LIKE '%" . esc_sql($s) . "%'
+				OR u.display_name LIKE '%" . esc_sql($s) . "%'
+				OR um.meta_value LIKE '%" . esc_sql($s) . "%') ";
+
+		if(! empty($extra_search_fields)) {
+			$cnt = 1;
+
+			foreach ( $extra_search_fields as $f )
+			{
+				if ( is_array( ${$f} ) && ! empty( ${$f} ) ) {
+					$sqlQuery .= " AND (";
+
+					$max_v = count( ${$f} ) - 1;
+					$i     = 0;
+
+					foreach ( ${$f} as $v ) {
+
+						$sqlQuery .= " umrh_{$cnt}.meta_value LIKE '%{$v}%' ";
+
+						if (  $max_v > $i ) {
+							$sqlQuery .= " OR ";
+							++$i;
+						}
+					}
+
+					$sqlQuery .= ")
+					";
+				} elseif ( ! empty( ${$f} ) ) {
+					$sqlQuery .= " AND (";
+					$sqlQuery .= " umrh_{$cnt}.meta_value LIKE '%{${$f}}%' ";
+					$sqlQuery .= " )
+					";
+				}
+
+				++$cnt;
+			}
+		}
+
+		if (count($statuses) == 1 && in_array('active', $statuses))
+			$sqlQuery .=" AND mu.membership_id > 0";
+		else
+			$sqlQuery .=" AND mu.membership_id >= 0";
 
 		if($levels)
 			$sqlQuery .= " AND mu.membership_id IN(" . esc_sql($levels) . ") ";
 
-		$sqlQuery .= "GROUP BY u.ID ORDER BY ". esc_sql($order_by) . " " . $order;
+		$sqlQuery .= " GROUP BY u.ID ORDER BY ". esc_sql($order_by) . " " . $order;
 	}
 	else
 	{
-		$sqlQuery = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership, umf.meta_value as first_name, uml.meta_value as last_name FROM $wpdb->users u LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id";
-		$sqlQuery .= " WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
+		$sqlQuery = "
+		SELECT
+			DISTINCT u.ID,
+			u.user_login,
+			u.user_email,
+			u.user_nicename,
+			u.display_name,
+			UNIX_TIMESTAMP(u.user_registered) as joindate,
+			mu.membership_id,
+			mu.initial_payment,
+			mu.billing_amount,
+			mu.cycle_period,
+			mu.cycle_number,
+			mu.billing_limit,
+			mu.trial_amount,
+			mu.trial_limit,
+			UNIX_TIMESTAMP(mu.startdate) as startdate,
+			UNIX_TIMESTAMP(mu.enddate) as enddate,
+			m.name as membership,
+			umf.meta_value as first_name,
+			uml.meta_value as last_name
+		FROM $wpdb->users u
+		LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id
+		LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id
+		LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id
+		LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id
+		LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id
+		WHERE mu.status IN ('{$status_list}')
+			AND (umh.meta_value IS NULL OR umh.meta_value <> '1')
+			";
+
+		if (count($statuses) == 1 && in_array('active', $statuses))
+			$sqlQuery .=" AND mu.membership_id > 0";
+		else
+			$sqlQuery .=" AND mu.membership_id >= 0";
+
 		if($levels)
 			$sqlQuery .= " AND mu.membership_id IN(" . esc_sql($levels) . ") ";
-		$sqlQuery .= "ORDER BY ". esc_sql($order_by) . " " . esc_sql($order);
+		$sqlQuery .= " ORDER BY ". esc_sql($order_by) . " " . esc_sql($order);
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
 	
 	$sqlQuery = apply_filters("pmpro_member_directory_sql", $sqlQuery, $levels, $s, $pn, $limit, $start, $end);
 
+	if (WP_DEBUG)
+		error_log("Query for Directory search: " . $sqlQuery);
+
 	$theusers = $wpdb->get_results($sqlQuery);
-	$totalrows = $wpdb->get_var("SELECT FOUND_ROWS() as found_rows");
+	$totalrows = count($theusers);
 
 	//update end to match totalrows if total rows is small
 	if($totalrows < $end)
@@ -135,7 +289,17 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 			<input type="search" class="search-field" placeholder="Search Members" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="Search Members" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
-		<input type="submit" class="search-submit" value="Search Members">
+		<?php
+		$field_array = apply_filters('pmpro_member_directory_extra_search_input', array() );
+
+		foreach( $field_array as $field )
+		{
+			echo $field;
+		}
+		?>
+		<div class="search-button clear">
+			<input type="submit" class="search-submit" value="<?php _e("Search Members", "pmpromd"); ?>">
+		</div>
 	</form>
 <?php } ?>
 
