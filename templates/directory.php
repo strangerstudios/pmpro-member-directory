@@ -8,22 +8,43 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	// $code    ::= the shortcode found, when == callback name
 	// examples: [pmpro_member_directory show_avatar="false" show_email="false" levels="1,2"]
 
+	/*
+	 * Init variables (to avoid warnings/notices)
+	 */
+	$avatar_size      = '128';
+	$fields           = null;
+	$layout           = 'div';
+	$level            = null;
+	$levels           = null;
+	$limit            = null;
+	$link             = null;
+	$order_by         = 'u.display_name';
+	$order            = 'ASC';
+	$show_avatar      = null;
+	$show_email       = null;
+	$show_level       = null;
+	$show_search      = null;
+	$show_startdate   = null;
+	$limit_to         = null;
+	$search_rh_fields = false;
+
 	extract( shortcode_atts( array(
-		'avatar_size'    => '128',
-		'fields'         => null,
-		'layout'         => 'div',
-		'level'          => null,
-		'levels'         => null,
-		'limit'          => null,
-		'link'           => null,
-		'order_by'       => 'u.display_name',
-		'order'          => 'ASC',
-		'show_avatar'    => null,
-		'show_email'     => null,
-		'show_level'     => null,
-		'show_search'    => null,
-		'show_startdate' => null,
-		'limit_to'       => null,
+		'avatar_size'      => '128',
+		'fields'           => null,
+		'layout'           => 'div',
+		'level'            => null,
+		'levels'           => null,
+		'limit'            => null,
+		'link'             => null,
+		'order_by'         => 'u.display_name',
+		'order'            => 'ASC',
+		'show_avatar'      => null,
+		'show_email'       => null,
+		'show_level'       => null,
+		'show_search'      => null,
+		'show_startdate'   => null,
+		'limit_to'         => null,
+		'search_rh_fields' => false,
 	), $atts ) );
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
@@ -36,8 +57,8 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 		$profile_url = get_permalink( $pmpro_pages['profile'] );
 	}
 
-	//turn 0's into falses
-	if ( $link === "0" || $link === "false" || $link === "no" ) {
+	//turn 0's into false
+	if ( $link === "0" || $link === "false" || $link === "no" || $link === __("no", "pmpromd")) {
 		$link = false;
 	} else {
 		$link = true;
@@ -48,57 +69,63 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 		$levels = $level;
 	}
 
-	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" ) {
+	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar === __("no", "pmpromd")) {
 		$show_avatar = false;
 	} else {
 		$show_avatar = true;
 	}
 
-	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" ) {
+	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === __("no", "pmpromd")) {
 		$show_email = false;
 	} else {
 		$show_email = true;
 	}
 
-	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" ) {
+	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === __("no", "pmpromd")) {
 		$show_level = false;
 	} else {
 		$show_level = true;
 	}
 
-	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" ) {
+	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === __("no", "pmpromd") ) {
 		$show_search = false;
 	} else {
 		$show_search = true;
 	}
 
-	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" ) {
+	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === __("no", "pmpromd")) {
 		$show_startdate = false;
 	} else {
 		$show_startdate = true;
 	}
 
-	if ( $limit_to === "0" || $limit_to === "false" || $limit_to === "no" ) {
+	if ( $limit_to === "0" || $limit_to === "false" || $limit_to === "no" || $limit_to === __("no", "pmpromd") ) {
 		$limit_to = false;
 	} else {
 		$limit_to = true;
 	}
 
+	if ($search_rh_fields === "1" || $search_rh_fields === 'true' || $search_rh_fields === 'yes' || $search_rh_fields === __("yes", "pmpromd")) {
+		$search_rh_fields = true;
+	} else {
+		$search_rh_fields = false;
+	}
+
 	ob_start();
 	if ( isset( $_REQUEST['ps'] ) ) {
-		$s = $_REQUEST['ps'];
+		$s = pmpromd_sanitize($_REQUEST['ps']);
 	} else {
 		$s = "";
 	}
 
 	if ( isset( $_REQUEST['pn'] ) ) {
-		$pn = intval( $_REQUEST['pn'] );
+		$pn = pmpromd_sanitize( $_REQUEST['pn'] );
 	} else {
 		$pn = 1;
 	}
 
 	if ( isset( $_REQUEST['limit'] ) ) {
-		$limit = intval( $_REQUEST['limit'] );
+		$limit = pmpromd_sanitize( $_REQUEST['limit'] );
 	} elseif ( empty( $limit ) ) {
 		$limit = 15;
 	}
@@ -116,24 +143,21 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	if ( ! empty( $extra_search_fields ) ) {
 
 		foreach ( $extra_search_fields as $field_name ) {
-			if ( isset( $_REQUEST[ $field_name ] ) && is_array( $_REQUEST[ $field_name ] ) ) {
-				${$field_name} = array_map( 'sanitize_text_field', $_REQUEST[ $field_name ] );
-			} elseif ( isset( $_REQUEST[ $field_name ] ) && ! is_array( $_REQUEST[ $field_name ] ) ) {
-				${$field_name} = sanitize_text_field( $_REQUEST[ $field_name ] );
-			} elseif ( empty( $_REQUEST[ $field_name ] ) ) {
-				${$field_name} = null;
+			if ( isset( $_REQUEST[ $field_name ] )) {
+				${$field_name} = pmpromd_sanitize( $_REQUEST[ $field_name ] );
 			}
 		}
 	}
+
 	$end   = $pn * $limit;
 	$start = $end - $limit;
 
-	$statuses    = apply_filters( 'pmprod_membership_statuses', array( 'active' ) );
+	$statuses    = apply_filters( 'pmpromd_membership_statuses', array( 'active' ) );
 	$status_list = esc_sql( implode( "', '", $statuses ) );
 
 	if ( ! empty( $s ) || ! empty( $extra_search_fields ) ) {
 		$sqlQuery = "
-		SELECT
+		SELECT SQL_CALC_FOUND_ROWS
 			u.ID,
 			u.user_login,
 			u.user_email,
@@ -213,7 +237,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					";
 				}
 
-				++ $cnt;
+				++$cnt;
 			}
 		}
 
@@ -228,9 +252,11 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 		}
 
 		$sqlQuery .= " GROUP BY u.ID ORDER BY " . esc_sql( $order_by ) . " " . $order;
+
 	} else {
+
 		$sqlQuery = "
-		SELECT
+		SELECT SQL_CALC_FOUND_ROWS
 			DISTINCT u.ID,
 			u.user_login,
 			u.user_email,
@@ -281,7 +307,11 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	}
 
 	$theusers  = $wpdb->get_results( $sqlQuery );
-	$totalrows = count( $theusers );
+	$totalrows = $wpdb->get_var( "SELECT FOUND_ROWS() AS found_rows" );
+
+	if ( WP_DEBUG ) {
+		error_log( "Rows returned: " . $totalrows );
+	}
 
 	//update end to match totalrows if total rows is small
 	if ( $totalrows < $end ) {
@@ -300,14 +330,16 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	?>
 	<?php if ( ! empty( $show_search ) ) { ?>
 		<form role="search" class="pmpro_member_directory_search search-form">
-			<label>
-				<span class="screen-reader-text"><?php _e( 'Search for:', 'label' ); ?></span>
-				<input type="search" class="search-field" placeholder="Search Members" name="ps"
-				       value="<?php if ( ! empty( $_REQUEST['ps'] ) ) {
-					       echo esc_attr( $_REQUEST['ps'] );
-				       } ?>" title="Search Members"/>
-				<input type="hidden" name="limit" value="<?php echo esc_attr( $limit ); ?>"/>
-			</label>
+			<div class="pmpromd_main_search_field">
+				<label>
+					<span class="screen-reader-text"><?php _e( 'Search for:', 'label' ); ?></span>
+					<input type="search" class="search-field" placeholder="<?php _e("Search Members", "pmpromd"); ?>" name="ps"
+					       value="<?php if ( ! empty( $_REQUEST['ps'] ) ) {
+						       echo esc_attr( $_REQUEST['ps'] );
+					       } ?>" title="<?php _e("Search Members", "pmprmd"); ?>"/>
+					<input type="hidden" name="limit" value="<?php echo esc_attr( $limit ); ?>"/>
+				</label>
+			</div>
 			<?php
 			$field_array = apply_filters( 'pmpro_member_directory_extra_search_input', array() );
 
@@ -678,7 +710,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					"ps"    => $s,
 					"pn"    => $pn - 1,
 					"limit" => $limit
-				), get_permalink( $post->ID ) ) ); ?>">&laquo; Previous</a></span>
+				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __("%s Previous", "pmpromd"), '&alquo;'); ?></a></span>
 			<?php
 		}
 		//next
@@ -688,7 +720,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					"ps"    => $s,
 					"pn"    => $pn + 1,
 					"limit" => $limit
-				), get_permalink( $post->ID ) ) ); ?>">Next &raquo;</a></span>
+				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __("Next %s", "pmpromd"), '&raquo;'); ?></a></span>
 			<?php
 		}
 		?>
