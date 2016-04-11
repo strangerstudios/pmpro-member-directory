@@ -14,9 +14,9 @@ function pmpromd_profile_preheader() {
 
 		//Get the profile user
 		if ( ! empty( $_REQUEST['pu'] ) && is_numeric( $_REQUEST['pu'] ) ) {
-			$pu = get_user_by( 'id', pmpromd_sanitize($_REQUEST['pu']) );
+			$pu = get_user_by( 'id', pmpromd_sanitize( $_REQUEST['pu'] ) );
 		} elseif ( ! empty( $_REQUEST['pu'] ) ) {
-			$pu = get_user_by( 'slug', pmpromd_sanitize($_REQUEST['pu']) );
+			$pu = get_user_by( 'slug', pmpromd_sanitize( $_REQUEST['pu'] ) );
 		} elseif ( ! empty( $current_user->ID ) ) {
 			$pu = $current_user;
 		} else {
@@ -145,55 +145,55 @@ function pmpromd_profile_shortcode( $atts, $content = null, $code = "" ) {
 	}
 
 	//turn 0's into falses
-	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" ) {
+	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar === __( 'no', 'pmpromd' ) ) {
 		$show_avatar = false;
 	} else {
 		$show_avatar = true;
 	}
 
-	if ( $show_billing === "0" || $show_billing === "false" || $show_billing === "no" ) {
+	if ( $show_billing === "0" || $show_billing === "false" || $show_billing === "no" || $show_billing === __( 'no', 'pmpromd' ) ) {
 		$show_billing = false;
 	} else {
 		$show_billing = true;
 	}
 
-	if ( $show_bio === "0" || $show_bio === "false" || $show_bio === "no" ) {
+	if ( $show_bio === "0" || $show_bio === "false" || $show_bio === "no" || $show_bio === __( 'no', 'pmpromd' ) ) {
 		$show_bio = false;
 	} else {
 		$show_bio = true;
 	}
 
-	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" ) {
+	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === __( 'no', 'pmpromd' ) ) {
 		$show_email = false;
 	} else {
 		$show_email = true;
 	}
 
-	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" ) {
+	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === __( 'no', 'pmpromd' ) ) {
 		$show_level = false;
 	} else {
 		$show_level = true;
 	}
 
-	if ( $show_name === "0" || $show_name === "false" || $show_name === "no" ) {
+	if ( $show_name === "0" || $show_name === "false" || $show_name === "no" || $show_name === __( 'no', 'pmpromd' ) ) {
 		$show_name = false;
 	} else {
 		$show_name = true;
 	}
 
-	if ( $show_phone === "0" || $show_phone === "false" || $show_phone === "no" ) {
+	if ( $show_phone === "0" || $show_phone === "false" || $show_phone === "no" || $show_phone === __( 'no', 'pmpromd' ) ) {
 		$show_phone = false;
 	} else {
 		$show_phone = true;
 	}
 
-	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" ) {
+	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === __( 'no', 'pmpromd' ) ) {
 		$show_search = false;
 	} else {
 		$show_search = true;
 	}
 
-	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" ) {
+	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === __( 'no', 'pmpromd' ) ) {
 		$show_startdate = false;
 	} else {
 		$show_startdate = true;
@@ -207,10 +207,12 @@ function pmpromd_profile_shortcode( $atts, $content = null, $code = "" ) {
 
 	if ( empty( $user_id ) && ! empty( $_REQUEST['pu'] ) ) {
 		//Get the profile user
-		if ( is_numeric( $_REQUEST['pu'] ) ) {
-			$pu = get_user_by( 'id', $_REQUEST['pu'] );
+		$pu = pmpromd_sanitize( $_REQUEST['pu'] );
+
+		if ( is_numeric( $pu ) ) {
+			$pu = get_user_by( 'id', $pu );
 		} else {
-			$pu = get_user_by( 'slug', $_REQUEST['pu'] );
+			$pu = get_user_by( 'slug', $pu );
 		}
 
 		$user_id = $pu->ID;
@@ -234,13 +236,14 @@ function pmpromd_profile_shortcode( $atts, $content = null, $code = "" ) {
 		      class="pmpro_member_directory_search search-form">
 			<label>
 				<span class="screen-reader-text"><?php _e( 'Search for:', 'label' ); ?></span>
-				<input type="search" class="search-field" placeholder="Search Members" name="ps"
+				<input type="search" class="search-field" placeholder="<?php _e( "Search Members", "pmpromd" ); ?>"
+				       name="ps"
 				       value="<?php if ( ! empty( $_REQUEST['ps'] ) ) {
-					       echo esc_attr( $_REQUEST['ps'] );
-				       } ?>" title="Search Members"/>
+					       echo esc_attr( pmpro_sanitize( $_REQUEST['ps'] ) );
+				       } ?>" title="<?php _e( "Search Members", "pmpromd" ); ?>"/>
 				<input type="hidden" name="limit" value="<?php echo esc_attr( $limit ); ?>"/>
 			</label>
-			<input type="submit" class="search-submit" value="Search Members">
+			<input type="submit" class="search-submit" value="<?php _e( "Search Members", "pmpromd" ); ?>">
 		</form>
 	<?php } ?>
 	<?php
@@ -388,7 +391,9 @@ function pmpromd_profile_shortcode( $atts, $content = null, $code = "" ) {
 		</div>
 		<hr/>
 		<?php if ( ! empty( $directory_url ) ) { ?>
-			<div align="center"><a class="more-link" href="<?php echo $directory_url; ?>">View All Members</a></div>
+			<div align="center"><a class="more-link"
+			                       href="<?php echo $directory_url; ?>"><?php _e( "View All Members", "pmpromd" ); ?></a>
+			</div>
 		<?php } ?>
 		<?php
 	}
