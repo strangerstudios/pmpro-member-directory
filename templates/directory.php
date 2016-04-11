@@ -6,7 +6,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	// $atts    ::= array of attributes
 	// $content ::= text within enclosing form of shortcode element
 	// $code    ::= the shortcode found, when == callback name
-	// examples: [pmpro_member_directory show_avatar="false" show_email="false" levels="1,2"]
+	// examples: [pmpro_member_directory show_avatar="false" show_email="false" levels="1,2" search_rh_fields="yes" search_fields="" statuses="active,expired"]
 
 	/*
 	 * Init variables (to avoid warnings/notices)
@@ -27,6 +27,8 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	$show_startdate   = null;
 	$limit_to         = null;
 	$search_rh_fields = false;
+	$search_fields    = '';
+	$statuses         = 'active';
 
 	extract( shortcode_atts( array(
 		'avatar_size'      => '128',
@@ -45,6 +47,8 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 		'show_startdate'   => null,
 		'limit_to'         => null,
 		'search_rh_fields' => false,
+		'search_fields'    => null,
+		'statuses'         => 'active'
 	), $atts ) );
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
@@ -58,7 +62,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	}
 
 	//turn 0's into false
-	if ( $link === "0" || $link === "false" || $link === "no" || $link === __("no", "pmpromd")) {
+	if ( $link === "0" || $link === "false" || $link === "no" || $link === __( "no", "pmpromd" ) ) {
 		$link = false;
 	} else {
 		$link = true;
@@ -69,43 +73,43 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 		$levels = $level;
 	}
 
-	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar === __("no", "pmpromd")) {
+	if ( $show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar === __( "no", "pmpromd" ) ) {
 		$show_avatar = false;
 	} else {
 		$show_avatar = true;
 	}
 
-	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === __("no", "pmpromd")) {
+	if ( $show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === __( "no", "pmpromd" ) ) {
 		$show_email = false;
 	} else {
 		$show_email = true;
 	}
 
-	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === __("no", "pmpromd")) {
+	if ( $show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === __( "no", "pmpromd" ) ) {
 		$show_level = false;
 	} else {
 		$show_level = true;
 	}
 
-	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === __("no", "pmpromd") ) {
+	if ( $show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === __( "no", "pmpromd" ) ) {
 		$show_search = false;
 	} else {
 		$show_search = true;
 	}
 
-	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === __("no", "pmpromd")) {
+	if ( $show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === __( "no", "pmpromd" ) ) {
 		$show_startdate = false;
 	} else {
 		$show_startdate = true;
 	}
 
-	if ( $limit_to === "0" || $limit_to === "false" || $limit_to === "no" || $limit_to === __("no", "pmpromd") ) {
+	if ( $limit_to === "0" || $limit_to === "false" || $limit_to === "no" || $limit_to === __( "no", "pmpromd" ) ) {
 		$limit_to = false;
 	} else {
 		$limit_to = true;
 	}
 
-	if ($search_rh_fields === "1" || $search_rh_fields === 'true' || $search_rh_fields === 'yes' || $search_rh_fields === __("yes", "pmpromd")) {
+	if ( $search_rh_fields === "1" || $search_rh_fields === 'true' || $search_rh_fields === 'yes' || $search_rh_fields === __( "yes", "pmpromd" ) ) {
 		$search_rh_fields = true;
 	} else {
 		$search_rh_fields = false;
@@ -113,7 +117,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 
 	ob_start();
 	if ( isset( $_REQUEST['ps'] ) ) {
-		$s = pmpromd_sanitize($_REQUEST['ps']);
+		$s = pmpromd_sanitize( $_REQUEST['ps'] );
 	} else {
 		$s = "";
 	}
@@ -134,17 +138,37 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	 * Add support for user defined search fields & tables (array value = usermeta field name)
 	 * Can be array of field names (usermeta fields)
 	 */
-	$extra_search_fields = apply_filters( 'pmpromd_extra_search_fields', array() );
+	$rh_fields = array();
+
+	if ( true === $search_rh_fields && ! empty( $search_fields ) ) {
+		$rh_fields = array_map( 'trim', explode( ',', $search_fields ) );
+	}
+
+	$extra_search_fields = apply_filters( 'pmpromd_extra_search_fields', $rh_fields );
 
 	if ( ! empty( $extra_search_fields ) && ! is_array( $extra_search_fields ) ) {
 		$extra_search_fields = array( $extra_search_fields );
 	}
 
-	if ( ! empty( $extra_search_fields ) ) {
+	// process list of extra search fields when filter is set but not included in shortcode
+	if ( ! empty( $extra_search_fields ) && false === $search_rh_fields ) {
 
 		foreach ( $extra_search_fields as $field_name ) {
-			if ( isset( $_REQUEST[ $field_name ] )) {
+			if ( isset( $_REQUEST[ $field_name ] ) ) {
 				${$field_name} = pmpromd_sanitize( $_REQUEST[ $field_name ] );
+			}
+		}
+
+	// search the field name (from shortcode attribute: search_fields="")
+	} elseif ( ! empty( $extra_search_fields ) && true === $search_rh_fields ) {
+
+		foreach ( $extra_search_fields as $field_name ) {
+
+			// still support using the query_var if present
+			if ( isset( $_REQUEST[ $field_name ] ) ) {
+				${$field_name} = pmpromd_sanitize( $_REQUEST[ $field_name ] );
+			} else {
+				${$field_name} = $s;
 			}
 		}
 	}
@@ -152,7 +176,14 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 	$end   = $pn * $limit;
 	$start = $end - $limit;
 
-	$statuses    = apply_filters( 'pmpromd_membership_statuses', array( 'active' ) );
+	// handle lists of statuses to include
+	if ( 'active' !== $statuses) {
+		$statuses_list = array_map('trim', explode(',', $statuses));
+	} else {
+		$statuses_list = array($statuses);
+	}
+
+	$statuses    = apply_filters( 'pmpromd_membership_statuses', $statuses_list );
 	$status_list = esc_sql( implode( "', '", $statuses ) );
 
 	if ( ! empty( $s ) || ! empty( $extra_search_fields ) ) {
@@ -208,6 +239,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 				OR um.meta_value LIKE '%" . esc_sql( $s ) . "%') ";
 		}
 
+		// process any additional/extra/RH related search fields
 		if ( ! empty( $extra_search_fields ) ) {
 			$cnt = 1;
 
@@ -237,10 +269,11 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					";
 				}
 
-				++$cnt;
+				++ $cnt;
 			}
 		}
 
+		// allow users to specify a status other than 'active'
 		if ( count( $statuses ) == 1 && in_array( 'active', $statuses ) ) {
 			$sqlQuery .= " AND mu.membership_id > 0";
 		} else {
@@ -333,10 +366,11 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 			<div class="pmpromd_main_search_field">
 				<label>
 					<span class="screen-reader-text"><?php _e( 'Search for:', 'label' ); ?></span>
-					<input type="search" class="search-field" placeholder="<?php _e("Search Members", "pmpromd"); ?>" name="ps"
+					<input type="search" class="search-field" placeholder="<?php _e( "Search Members", "pmpromd" ); ?>"
+					       name="ps"
 					       value="<?php if ( ! empty( $_REQUEST['ps'] ) ) {
 						       echo esc_attr( $_REQUEST['ps'] );
-					       } ?>" title="<?php _e("Search Members", "pmprmd"); ?>"/>
+					       } ?>" title="<?php _e( "Search Members", "pmprmd" ); ?>"/>
 					<input type="hidden" name="limit" value="<?php echo esc_attr( $limit ); ?>"/>
 				</label>
 			</div>
@@ -710,7 +744,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					"ps"    => $s,
 					"pn"    => $pn - 1,
 					"limit" => $limit
-				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __("%s Previous", "pmpromd"), '&alquo;'); ?></a></span>
+				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __( "%s Previous", "pmpromd" ), '&alquo;' ); ?></a></span>
 			<?php
 		}
 		//next
@@ -720,7 +754,7 @@ function pmpromd_shortcode( $atts, $content = null, $code = "" ) {
 					"ps"    => $s,
 					"pn"    => $pn + 1,
 					"limit" => $limit
-				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __("Next %s", "pmpromd"), '&raquo;'); ?></a></span>
+				), get_permalink( $post->ID ) ) ); ?>"><?php printf( __( "Next %s", "pmpromd" ), '&raquo;' ); ?></a></span>
 			<?php
 		}
 		?>
