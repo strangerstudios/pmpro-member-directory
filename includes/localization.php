@@ -1,5 +1,5 @@
 <?php
-function pmpro_load_textdomain()
+function pmpromd_load_textdomain()
 {
     //get the locale
 	$locale = apply_filters("plugin_locale", get_locale(), "pmpro");
@@ -15,4 +15,4 @@ function pmpro_load_textdomain()
 	//load local second
 	load_textdomain("pmpro", $mofile_local);
 }
-add_action("init", "pmpro_load_textdomain", 1);
+add_action("init", "pmpromd_load_textdomain", 1);
