@@ -131,11 +131,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	<?php if(!empty($show_search)) { ?>
 	<form role="search" class="pmpro_member_directory_search search-form">
 		<label>
-			<span class="screen-reader-text"><?php _e('Search for:','label'); ?></span>
-			<input type="search" class="search-field" placeholder="Search Members" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="Search Members" />
+			<span class="screen-reader-text"><?php _e('Search for:','pmpromd'); ?></span>
+			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpromd'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
-		<input type="submit" class="search-submit" value="Search Members">
+		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpromd'); ?>">
 	</form>
 <?php } ?>
 
@@ -519,14 +519,14 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		if($pn > 1)
 		{
 			?>
-			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; Previous</a></span>
+			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpromd'); ?></a></span>
 			<?php
 		}
 		//next
 		if($totalrows > $end)
 		{
 			?>
-			<span class="pmpro_next"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>">Next &raquo;</a></span>
+			<span class="pmpro_next"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>"><?php _e('Next','pmpromd'); ?> &raquo;</a></span>
 			<?php
 		}
 		?>
