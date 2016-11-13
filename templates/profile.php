@@ -254,31 +254,31 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>										
 					<p class="pmpro_member_directory_bio">
-						<strong><?php _e('Biographical Info', 'wp'); ?></strong>
+						<strong><?php _e('Biographical Info', 'pmpromd'); ?></strong>
 						<?php echo $pu->description; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_email)) { ?>										
 					<p class="pmpro_member_directory_email">
-						<strong><?php _e('Email Address', 'pmpro'); ?></strong>
+						<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
 						<?php echo $pu->user_email; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_level)) { ?>										
 					<p class="pmpro_member_directory_level">
-						<strong><?php _e('Level', 'pmpro'); ?></strong>
+						<strong><?php _e('Level', 'pmpromd'); ?></strong>
 						<?php echo $pu->membership_level->name; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>										
 					<p class="pmpro_member_directory_date">
-						<strong><?php _e('Start Date', 'pmpro'); ?></strong>
+						<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
 						<?php echo date(get_option("date_format"), $pu->membership_level->startdate); ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>										
 					<p class="pmpro_member_directory_baddress">
-						<strong><?php _e('Address', 'pmpro'); ?></strong>
+						<strong><?php _e('Address', 'pmpromd'); ?></strong>
 						<?php echo $pu->pmpro_baddress1; ?><br />
 						<?php 
 							if(!empty($pu->pmpro_baddress2))
@@ -292,7 +292,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_phone) && !empty($pu->pmpro_bphone)) { ?>
 					<p class="pmpro_member_directory_phone">
-						<strong><?php _e('Phone Number','pmpro'); ?></strong>
+						<strong><?php _e('Phone Number','pmpromd'); ?></strong>
 						<?php echo formatPhone($pu->pmpro_bphone); ?>
 					</p>
 				<?php } ?>

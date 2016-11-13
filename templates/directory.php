@@ -192,30 +192,30 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 					<thead>
 					<?php if(!empty($show_avatar)) { ?>
 						<th class="pmpro_member_directory_avatar">
-							<?php _e('Avatar', 'pmpro'); ?>
+							<?php _e('Avatar', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<th class="pmpro_member_directory_display-name">
-						<?php _e('Member', 'pmpro'); ?>
+						<?php _e('Member', 'pmpromd'); ?>
 					</th>
 					<?php if(!empty($show_email)) { ?>
 						<th class="pmpro_member_directory_email">
-							<?php _e('Email Address', 'pmpro'); ?>
+							<?php _e('Email Address', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($fields_array)) { ?>
 						<th class="pmpro_member_directory_additional">
-							<?php _e('More Information', 'pmpro'); ?>
+							<?php _e('More Information', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($show_level)) { ?>
 						<th class="pmpro_member_directory_level">
-							<?php _e('Level', 'pmpro'); ?>
+							<?php _e('Level', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($show_startdate)) { ?>
 						<th class="pmpro_member_directory_date">
-							<?php _e('Start Date', 'pmpro'); ?>
+							<?php _e('Start Date', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($link) && !empty($profile_url)) { ?>
@@ -400,19 +400,19 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									</h3>
 									<?php if(!empty($show_email)) { ?>
 										<p class="pmpro_member_directory_email">
-											<strong><?php _e('Email Address', 'pmpro'); ?></strong>
+											<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
 											<?php echo $auser->user_email; ?>
 										</p>
 									<?php } ?>
 									<?php if(!empty($show_level)) { ?>
 										<p class="pmpro_member_directory_level">
-											<strong><?php _e('Level', 'pmpro'); ?></strong>
+											<strong><?php _e('Level', 'pmpromd'); ?></strong>
 											<?php echo $auser->membership_level->name; ?>
 										</p>
 									<?php } ?>
 									<?php if(!empty($show_startdate)) { ?>
 										<p class="pmpro_member_directory_date">
-											<strong><?php _e('Start Date', 'pmpro'); ?></strong>
+											<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
 											<?php echo date(get_option("date_format"), $auser->membership_level->startdate); ?>
 										</p>
 									<?php } ?>
