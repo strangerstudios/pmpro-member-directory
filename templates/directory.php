@@ -24,7 +24,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_level' => NULL,
 		'show_search' => NULL,
 		'show_startdate' => NULL,
-	), $atts));
+	), $atts, "pmpro_member_directory"));
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
 
