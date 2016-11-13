@@ -2,7 +2,7 @@
 function pmpromd_load_textdomain()
 {
     //get the locale
-	$locale = apply_filters("plugin_locale", get_locale(), "pmpro");
+	$locale = apply_filters("plugin_locale", get_locale(), "pmpromd");
 	$mofile = "pmpro-" . $locale . ".mo";
 
 	//paths to local (plugin) and global (WP) language files
