@@ -109,7 +109,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
-	
+
 	$sqlQuery = apply_filters("pmpro_member_directory_sql", $sqlQuery, $levels, $s, $pn, $limit, $start, $end, $order_by, $order);
 
 	$theusers = $wpdb->get_results($sqlQuery);
@@ -143,7 +143,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		<?php if(!empty($s)) { ?>
 			<?php printf(__('Profiles Within <em>%s</em>.','pmpromd'), ucwords(esc_html($s))); ?>
 		<?php } else { ?>
-			<?php _e('Viewing All Profiles.','pmpromd'); ?>
+			<?php _e('Viewing All Profiles','pmpromd'); ?>
 		<?php } ?>
 		<?php if($totalrows > 0) { ?>
 			<small class="muted">

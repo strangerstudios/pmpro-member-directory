@@ -10,9 +10,9 @@ function pmpromd_load_textdomain()
 	$mofile_global = WP_LANG_DIR . '/pmpro/' . $mofile;
 
 	//load global first
-    load_textdomain("pmpro", $mofile_global);
+    load_textdomain("pmpromd", $mofile_global);
 
 	//load local second
-	load_textdomain("pmpro", $mofile_local);
+	load_textdomain("pmpromd", $mofile_local);
 }
 add_action("init", "pmpromd_load_textdomain", 1);
