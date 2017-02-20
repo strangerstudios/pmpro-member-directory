@@ -1,0 +1,159 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On\n"
+"POT-Creation-Date: 2016-11-17 19:53-0500\n"
+"PO-Revision-Date: 2016-11-17 22:02-0500\n"
+"Last-Translator: Max <max@liro.ca>\n"
+"Language-Team: Max <max@liro.ca>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: pmpro-member-directory.php\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_;_e;_ex;_x;_n\n"
+"_n_noop: 1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: templates\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: pmpro-member-directory.php:63
+#, php-format
+msgid "Hide from %s?"
+msgstr "Cacher de %s ?"
+
+#: pmpro-member-directory.php:110
+msgid "View Documentation"
+msgstr "Voir la documentation"
+
+#: pmpro-member-directory.php:110
+msgid "Docs"
+msgstr "Documents"
+
+#: pmpro-member-directory.php:111
+msgid "Visit Customer Support Forum"
+msgstr "Consultez le forum de support"
+
+#: pmpro-member-directory.php:111
+msgid "Support"
+msgstr "Soutien"
+
+#: templates/directory.php:134 templates/profile.php:210
+msgid "Search for:"
+msgstr "Rechercher"
+
+#: templates/directory.php:135 templates/directory.php:138
+#: templates/profile.php:211 templates/profile.php:214
+msgid "Search Members"
+msgstr "Recherchez les membres"
+
+#: templates/directory.php:144
+#, php-format
+msgid "Profiles Within <em>%s</em>."
+msgstr "Profils au sein de <em>%s</em>."
+
+#: templates/directory.php:146
+msgid "Viewing All Profiles"
+msgstr "Tous les profils"
+
+#: templates/directory.php:152
+msgid "Showing 1 Result"
+msgstr "1 résultat trouvé."
+
+#: templates/directory.php:154
+#, php-format
+msgid "Showing %s-%s of %s Results"
+msgstr "Liste de %s -%s des %s résultats"
+
+#: templates/directory.php:195
+msgid "Avatar"
+msgstr "Avatar"
+
+#: templates/directory.php:199
+msgid "Member"
+msgstr "Membre"
+
+#: templates/directory.php:203 templates/directory.php:403
+#: templates/profile.php:263
+msgid "Email Address"
+msgstr "Courriel"
+
+#: templates/directory.php:208
+msgid "More Information"
+msgstr "Plus de détails"
+
+#: templates/directory.php:213 templates/directory.php:409
+#: templates/profile.php:269
+msgid "Level"
+msgstr "Niveau"
+
+#: templates/directory.php:218 templates/directory.php:415
+#: templates/profile.php:275
+msgid "Start Date"
+msgstr "Date de début"
+
+#: templates/directory.php:336 templates/directory.php:472
+msgid "View Profile"
+msgstr "Voir le profil"
+
+#: templates/directory.php:493
+msgid "No matching profiles found"
+msgstr "Aucun profils trouvé"
+
+#: templates/directory.php:497
+#, php-format
+msgid "within <em>%s</em>."
+msgstr "au sein de <em>%s</em>."
+
+#: templates/directory.php:501 templates/profile.php:368
+msgid "View All Members"
+msgstr "Voir tous les membres"
+
+#: templates/directory.php:522
+msgid "Previous"
+msgstr "Précédent"
+
+#: templates/directory.php:529
+msgid "Next"
+msgstr "Suiv."
+
+#: templates/profile.php:257
+msgid "Biographical Info"
+msgstr "Biographie"
+
+#: templates/profile.php:281
+msgid "Address"
+msgstr "Adresse"
+
+#: templates/profile.php:295
+msgid "Phone Number"
+msgstr "Téléphone"
+
+#. Plugin Name of the plugin/theme
+msgid "Paid Memberships Pro - Member Directory Add On"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.paidmembershipspro.com/wp/pmpro-member-directory/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "A very basic shortcode for display a member directory list on your site."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Stranger Studios"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.strangerstudios.com"
+msgstr ""
+
+#~ msgid "Viewing All Profiles!"
+#~ msgstr "Tous les profils"
+
+#~ msgid "Viewing All Profiles."
+#~ msgstr "Tous les profils"

@@ -24,7 +24,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_level' => NULL,
 		'show_search' => NULL,
 		'show_startdate' => NULL,
-	), $atts));
+	), $atts, "pmpro_member_directory"));
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
 
@@ -109,7 +109,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	}
 
 	$sqlQuery .= " LIMIT $start, $limit";
-	
+
 	$sqlQuery = apply_filters("pmpro_member_directory_sql", $sqlQuery, $levels, $s, $pn, $limit, $start, $end, $order_by, $order);
 
 	$theusers = $wpdb->get_results($sqlQuery);
@@ -131,11 +131,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	<?php if(!empty($show_search)) { ?>
 	<form role="search" class="pmpro_member_directory_search search-form">
 		<label>
-			<span class="screen-reader-text"><?php _e('Search for:','label'); ?></span>
-			<input type="search" class="search-field" placeholder="Search Members" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="Search Members" />
+			<span class="screen-reader-text"><?php _e('Search for:','pmpromd'); ?></span>
+			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpromd'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
-		<input type="submit" class="search-submit" value="Search Members">
+		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpromd'); ?>">
 	</form>
 <?php } ?>
 
@@ -143,7 +143,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		<?php if(!empty($s)) { ?>
 			<?php printf(__('Profiles Within <em>%s</em>.','pmpromd'), ucwords(esc_html($s))); ?>
 		<?php } else { ?>
-			<?php _e('Viewing All Profiles.','pmpromd'); ?>
+			<?php _e('Viewing All Profiles','pmpromd'); ?>
 		<?php } ?>
 		<?php if($totalrows > 0) { ?>
 			<small class="muted">
@@ -192,30 +192,30 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 					<thead>
 					<?php if(!empty($show_avatar)) { ?>
 						<th class="pmpro_member_directory_avatar">
-							<?php _e('Avatar', 'pmpro'); ?>
+							<?php _e('Avatar', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<th class="pmpro_member_directory_display-name">
-						<?php _e('Member', 'pmpro'); ?>
+						<?php _e('Member', 'pmpromd'); ?>
 					</th>
 					<?php if(!empty($show_email)) { ?>
 						<th class="pmpro_member_directory_email">
-							<?php _e('Email Address', 'pmpro'); ?>
+							<?php _e('Email Address', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($fields_array)) { ?>
 						<th class="pmpro_member_directory_additional">
-							<?php _e('More Information', 'pmpro'); ?>
+							<?php _e('More Information', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($show_level)) { ?>
 						<th class="pmpro_member_directory_level">
-							<?php _e('Level', 'pmpro'); ?>
+							<?php _e('Level', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($show_startdate)) { ?>
 						<th class="pmpro_member_directory_date">
-							<?php _e('Start Date', 'pmpro'); ?>
+							<?php _e('Start Date', 'pmpromd'); ?>
 						</th>
 					<?php } ?>
 					<?php if(!empty($link) && !empty($profile_url)) { ?>
@@ -404,19 +404,19 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									</h3>
 									<?php if(!empty($show_email)) { ?>
 										<p class="pmpro_member_directory_email">
-											<strong><?php _e('Email Address', 'pmpro'); ?></strong>
+											<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
 											<?php echo $auser->user_email; ?>
 										</p>
 									<?php } ?>
 									<?php if(!empty($show_level)) { ?>
 										<p class="pmpro_member_directory_level">
-											<strong><?php _e('Level', 'pmpro'); ?></strong>
+											<strong><?php _e('Level', 'pmpromd'); ?></strong>
 											<?php echo $auser->membership_level->name; ?>
 										</p>
 									<?php } ?>
 									<?php if(!empty($show_startdate)) { ?>
 										<p class="pmpro_member_directory_date">
-											<strong><?php _e('Start Date', 'pmpro'); ?></strong>
+											<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
 											<?php echo date(get_option("date_format"), $auser->membership_level->startdate); ?>
 										</p>
 									<?php } ?>
@@ -523,14 +523,14 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		if($pn > 1)
 		{
 			?>
-			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; Previous</a></span>
+			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpromd'); ?></a></span>
 			<?php
 		}
 		//next
 		if($totalrows > $end)
 		{
 			?>
-			<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( array( "ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>">Next &raquo;</a></span>
+			<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( array( "ps"=>$s, "pn"=>$pn+1, "limit"=>$limit ), get_permalink( $post->ID ) ) );?>"><?php _e( 'Next', 'pmpromd' ); ?> &raquo;</a></span>
 			<?php
 		}
 		?>

@@ -25,6 +25,8 @@ if(file_exists($custom_profile_file))
 else
 	require_once($path . "/templates/profile.php");
 
+require_once($path . "/includes/localization.php"); //localization functions
+
 function pmpromd_register_styles() {
 	//load stylesheet (check child theme, then parent theme, then plugin folder)	
 	if(file_exists(get_stylesheet_directory()."/paid-memberships-pro/member-directory/css/pmpro-member-directory.css"))
