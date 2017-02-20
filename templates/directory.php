@@ -263,6 +263,10 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									<?php
 									foreach($fields_array as $field)
 									{
+									    if ( WP_DEBUG ) {
+									        error_log("Content of field data: " . print_r( $field, true));
+                                        }
+
 										$meta_field = $auser->$field[1];
 										if(!empty($meta_field))
 										{
@@ -421,7 +425,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									{
 										foreach($fields_array as $field)
 										{
-											$meta_field = $auser->$field[1];
+											$meta_field = $auser->{$field[1]};
 											if(!empty($meta_field))
 											{
 												?>
@@ -450,14 +454,14 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 													elseif($field[1] == 'user_url')
 													{
 														?>
-														<a href="<?php echo $auser->$field[1]; ?>" target="_blank"><?php echo $field[0]; ?></a>
+														<a href="<?php echo $auser->{$field[1]}; ?>" target="_blank"><?php echo $field[0]; ?></a>
 														<?php
 													}
 													else
 													{
 														?>
 														<strong><?php echo $field[0]; ?>:</strong>
-														<?php echo make_clickable($auser->$field[1]); ?>
+														<?php echo make_clickable($auser->{$field[1]}); ?>
 														<?php
 													}
 													?>
@@ -526,7 +530,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		if($totalrows > $end)
 		{
 			?>
-			<span class="pmpro_next"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>">Next &raquo;</a></span>
+			<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( array( "ps"=>$s, "pn"=>$pn+1, "limit"=>$limit), get_permalink($post->ID)));?>">Next &raquo;</a></span>
 			<?php
 		}
 		?>
