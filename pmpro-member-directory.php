@@ -76,7 +76,7 @@ function pmpromd_save_extra_profile_fields( $user_id )
 	if ( !current_user_can( 'edit_user', $user_id ) )
 		return false;
  
-	update_usermeta( $user_id, 'pmpromd_hide_directory', $_POST['hide_directory'] );
+	update_user_meta( $user_id, 'pmpromd_hide_directory', ( isset( $_POST['hide_directory'] ) ? sanitize_text_field( $_POST['hide_directory'] ) : null ) );
 }
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
