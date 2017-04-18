@@ -1,9 +1,9 @@
 === Paid Memberships Pro - Member Directory Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
-Requires at least: 3.5
-Tested up to: 4.4.1
-Stable tag: .4.4
+Requires at least: 4
+Tested up to: 4.7.2
+Stable tag: .5
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .5 =
+* BUG: Fixed bug with the fields attribute of the directory shortcode.
+* ENHANCEMENT: Added localization support and French translation. (Thanks, Max Kovalenkov)
+
 = .4.4 =
 * ENHANCEMENT: Added the pmpro_member_directory_sql filter (passes $sqlQuery, $levels, $s, $pn, $limit, $start, $end) that can be used to filter the SQL used to lookup members for the directory page.
 
