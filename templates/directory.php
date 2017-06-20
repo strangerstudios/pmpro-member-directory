@@ -266,8 +266,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									    if ( WP_DEBUG ) {
 									        error_log("Content of field data: " . print_r( $field, true));
                                         }
-
-										$meta_field = $auser->$field[1];
+                                        $field_val = $field[1];
+										$meta_field = $auser->$field_val;
 										if(!empty($meta_field))
 										{
 											?>
