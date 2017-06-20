@@ -305,8 +305,9 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						foreach($fields_array as $field)
 						{
 							if(empty($field[0]))
-								break;							
-							$meta_field = $pu->$field[1];
+								break;
+							$field_val = $field[1];						
+							$meta_field = $pu->$field_val;
 							if(!empty($meta_field))
 							{
 								?>
