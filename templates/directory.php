@@ -267,7 +267,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 									        error_log("Content of field data: " . print_r( $field, true));
                                         }
 
-										$meta_field = $auser->$field[1];
+										$meta_field = $auser->{$field[1]};
 										if(!empty($meta_field))
 										{
 											?>

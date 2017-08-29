@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: .5
+Version: .5.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -107,8 +107,8 @@ function pmpromd_plugin_row_meta($links, $file) {
 	if(strpos($file, 'pmpro-member-directory.php') !== false)
 	{
 		$new_links = array(
-			'<a href="' . esc_url('http://www.paidmembershipspro.com/add-ons/plugins-on-github/pmpro-member-directory/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/pmpro-member-directory/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
 		);
 		$links = array_merge($links, $new_links);
 	}
