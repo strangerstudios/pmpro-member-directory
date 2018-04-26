@@ -69,7 +69,6 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	else
 		$show_startdate = true;
 
-	ob_start();
 	if(isset($_REQUEST['ps']))
 		$s = $_REQUEST['ps'];
 	else

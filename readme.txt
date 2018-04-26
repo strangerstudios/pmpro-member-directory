@@ -90,6 +90,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .5.2 =
+* BUG FIX: Removed extra ob_start() in templates/directory.php, which was causing issues sometimes.
+
 = .5.1 =
 * BUG/ENHANCEMENT: Improved meta_field code for PHP7 support.
 
