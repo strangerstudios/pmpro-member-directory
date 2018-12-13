@@ -228,19 +228,23 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			}
 			else
 				$fields_array = false;
-
+			
 			// Get Register Helper field options
 			$rh_fields = array();
 			if(!empty($pmprorh_registration_fields)) {
 				foreach($pmprorh_registration_fields as $location) {
 					foreach($location as $field) {
-						if(!empty($field->options))
+						if(!empty($field->options)){
 							$rh_fields[$field->name] = $field->options;
+						}
 					}
 				}
 			}
 
+
 			?>
+
+
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
 				<?php if(!empty($show_avatar)) { ?>										
 					<p class="pmpro_member_directory_avatar">
@@ -304,9 +308,12 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					{
 						foreach($fields_array as $field)
 						{
+
 							if(empty($field[0]))
-								break;							
+								break;		
+			
 							$meta_field = $pu->{$field[1]};
+
 							if(!empty($meta_field))
 							{
 								?>
@@ -320,16 +327,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<?php echo pmpromd_display_file_field($meta_field); ?>
 										<?php
 									}
-									elseif(is_array($meta_field))
+									elseif(is_array($rh_fields[$field[1]]) && !empty($rh_fields[$field[1]]) )
 									{
-										//this is a general array, check for Register Helper options first
-										if(!empty($rh_fields[$field[1]])) {
-											foreach($meta_field as $key => $value)
-												$meta_field[$key] = $rh_fields[$field[1]][$value];
-										}
-										?>
+									?>
 										<strong><?php echo $field[0]; ?></strong>
-										<?php echo implode(", ",$meta_field); ?>
+										<?php echo $rh_fields[$field[1]][$meta_field]; ?>
 										<?php
 									}								
 									else
@@ -346,15 +348,18 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
 												$meta_field_embed = wp_oembed_get($meta_field);
-												if(!empty($meta_field_embed))
+												if(!empty($meta_field_embed)){
 													echo $meta_field_embed;
-												else
+												}else{
 													echo make_clickable($meta_field); 
+												}
 											?>
 											<?php
 										}
 									}
 								?>
+
+
 								</p>
 								<?php
 							}
