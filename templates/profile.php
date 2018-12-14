@@ -337,7 +337,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<?php echo implode(", ",$meta_field); ?>
 										<?php
 									}				
-									elseif(is_array($rh_fields[$field[1]]) && !empty($rh_fields[$field[1]]) )
+									elseif(!empty($rh_fields[$field[1]])  && is_array($rh_fields[$field[1]]) )
 									{
 									?>
 										<strong><?php echo $field[0]; ?></strong>
