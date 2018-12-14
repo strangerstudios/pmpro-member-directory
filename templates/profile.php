@@ -326,7 +326,17 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo pmpromd_display_file_field($meta_field); ?>
 										<?php
-									}
+									}elseif(is_array($meta_field)){
+										//this is a general array, check for Register Helper options first
+										if(!empty($rh_fields[$field[1]])) {
+											foreach($meta_field as $key => $value)
+												$meta_field[$key] = $rh_fields[$field[1]][$value];
+										}
+										?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo implode(", ",$meta_field); ?>
+										<?php
+									}				
 									elseif(is_array($rh_fields[$field[1]]) && !empty($rh_fields[$field[1]]) )
 									{
 									?>
