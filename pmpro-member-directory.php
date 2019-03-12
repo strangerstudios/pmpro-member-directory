@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: .5.1
+Version: .5.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */

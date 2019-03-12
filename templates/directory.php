@@ -360,17 +360,17 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 							$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
 							?>
 							<div class="medium-<?php
-							if($layout == '2col')
+							if($layout_cols == 2)
 							{
 								$avatar_align = "alignright";
 								echo '6 ';
 							}
-							elseif($layout == '3col')
+							elseif($layout_cols == 3)
 							{
 								$avatar_align = "aligncenter";
 								echo '4 text-center ';
 							}
-							elseif($layout == '4col')
+							elseif($layout_cols == 4)
 							{
 								$avatar_align = "aligncenter";
 								echo '3 text-center ';
