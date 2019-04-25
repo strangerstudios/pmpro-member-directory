@@ -34,7 +34,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	}
 
 	if(!empty($pmpro_pages['profile'])) {
-		$profile_url = apply_filters( 'pmpro_profile_url', get_permalink( $pmpro_pages['profile'] ) );
+		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
 	}
 
 	//turn 0's into falses
