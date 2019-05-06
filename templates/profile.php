@@ -106,23 +106,26 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	// $code    ::= the shortcode found, when == callback name
 	// examples: [pmpro_member_profile avatar="false" email="false"]
 	
+	// var_dump( $atts );
+
+
 	extract(shortcode_atts(array(
 		'avatar_size' => '128',
 		'fields' => NULL,
-		'show_avatar' => NULL,
-		'show_bio' => NULL,
-		'show_billing' => NULL,
-		'show_email' => NULL,
-		'show_level' => NULL,
-		'show_name' => NULL,
-		'show_phone' => NULL,
-		'show_search' => NULL,
-		'show_startdate' => NULL,
-		'user_id' => NULL
+		'show_avatar' => true,
+		'show_bio' => true,
+		'show_billing' => true,
+		'show_email' => true,
+		'show_level' => true,
+		'show_name' => true,
+		'show_phone' => true,
+		'show_search' => true,
+		'show_startdate' => true,
+		'user_id' => NULL,
 	), $atts));
 	
 	global $current_user, $display_name, $wpdb, $pmpro_pages, $pmprorh_registration_fields;
-	
+		
 	//some page vars
 	if(!empty($pmpro_pages['directory']))
 		$directory_url = get_permalink($pmpro_pages['directory']);
@@ -132,47 +135,47 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		$profile_url = get_permalink($pmpro_pages['profile']);
 	
 	//turn 0's into falses
-	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
+	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar == false )
 		$show_avatar = false;
 	else
 		$show_avatar = true;
 		
-	if($show_billing === "0" || $show_billing === "false" || $show_billing === "no")
+	if($show_billing === "0" || $show_billing === "false" || $show_billing === "no" || $show_billing == false )
 		$show_billing = false;
 	else
 		$show_billing = true;
 		
-	if($show_bio === "0" || $show_bio === "false" || $show_bio === "no")
+	if($show_bio === "0" || $show_bio === "false" || $show_bio === "no" || $show_bio == false )
 		$show_bio = false;
 	else
 		$show_bio = true;
 	
-	if($show_email === "0" || $show_email === "false" || $show_email === "no")
+	if($show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email == false )
 		$show_email = false;
 	else
 		$show_email = true;
 
-	if($show_level === "0" || $show_level === "false" || $show_level === "no")
+	if($show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level == false )
 		$show_level = false;
 	else
 		$show_level = true;
 	
-	if($show_name === "0" || $show_name === "false" || $show_name === "no")
+	if($show_name === "0" || $show_name === "false" || $show_name === "no" || $show_name == false )
 		$show_name = false;
 	else
 		$show_name = true;
 		
-	if($show_phone === "0" || $show_phone === "false" || $show_phone === "no")
+	if($show_phone === "0" || $show_phone === "false" || $show_phone === "no" || $show_phone == false )
 		$show_phone = false;
 	else
 		$show_phone = true;
 
-	if($show_search === "0" || $show_search === "false" || $show_search === "no")
+	if($show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search == false )
 		$show_search = false;
 	else
 		$show_search = true;
 
-	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no")
+	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate == false )
 		$show_startdate = false;
 	else
 		$show_startdate = true;

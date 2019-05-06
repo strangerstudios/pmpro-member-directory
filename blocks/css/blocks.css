@@ -1,0 +1,39 @@
+.pmpro-member-profile-subheading{
+	font-weight:bold;
+	font-size:16px;
+}
+
+.pmpro-member-profile-wrapper{ padding-top: 3%; }
+
+#pmpro-member-profile-search{ 
+	width: 120px;
+	padding:1%;
+	text-align:center;
+	border: 1px solid #CCC;
+	display:inline-block;
+	border-radius: 5px;
+}
+
+#pmpro-member-profile-placeholder{
+	background-image: url( '../assets/img/placeholder.jpg' );
+	background-size: cover;
+	display:inline-block;
+	max-width: 200px;
+	max-height: 200px;
+	border-radius: 100%;
+	right:0;
+}
+
+#pmpro-member-directory-placeholder{
+	background-image: url( '../assets/img/placeholder.jpg' );
+	background-size: cover;
+	display:inline-block;
+	max-width: 64px;
+	max-height: 64px;
+	border-radius: 100%;
+	right:0;
+}
+
+.pmpro-member-directory-hide{
+	display:none !important;
+}
