@@ -29,10 +29,13 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
 
 	//some page vars
-	if(!empty($pmpro_pages['directory']))
+	if(!empty($pmpro_pages['directory'])) {
 		$directory_url = get_permalink($pmpro_pages['directory']);
-	if(!empty($pmpro_pages['profile']))
-		$profile_url = get_permalink($pmpro_pages['profile']);
+	}
+
+	if(!empty($pmpro_pages['profile'])) {
+		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
+	}
 
 	//turn 0's into falses
 	if($link === "0" || $link === "false" || $link === "no")
