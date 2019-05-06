@@ -291,7 +291,12 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 													<strong><?php echo $field[0]; ?></strong>
 													<?php echo implode(", ",$meta_field); ?>
 													<?php
-												}
+												}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]])  ) {
+												?>
+													<strong><?php echo $field[0]; ?></strong>
+													<?php echo $rh_fields[$field[1]][$meta_field]; ?>
+													<?php
+												}			
 												else
 												{
 													if($field[1] == 'user_url')
@@ -449,7 +454,12 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 														<strong><?php echo $field[0]; ?></strong>
 														<?php echo implode(", ",$meta_field); ?>
 														<?php
-													}
+													}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]]) ) {
+												?>
+													<strong><?php echo $field[0]; ?></strong>
+													<?php echo $rh_fields[$field[1]][$meta_field]; ?>
+													<?php
+												}		
 													elseif($field[1] == 'user_url')
 													{
 														?>
