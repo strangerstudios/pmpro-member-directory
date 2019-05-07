@@ -19,11 +19,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'link' => NULL,
 		'order_by' => 'u.display_name',
 		'order' => 'ASC',
-		'show_avatar' => NULL,
-		'show_email' => NULL,
-		'show_level' => NULL,
-		'show_search' => NULL,
-		'show_startdate' => NULL,
+		'show_avatar' => true,
+		'show_email' => true,
+		'show_level' => true,
+		'show_search' => true,
+		'show_startdate' => true,
 	), $atts, "pmpro_member_directory"));
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
@@ -35,7 +35,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$profile_url = get_permalink($pmpro_pages['profile']);
 
 	//turn 0's into falses
-	if($link === "0" || $link === "false" || $link === "no")
+	if($link === "0" || $link === "false" || $link === "no" || $link == false )
 		$link = false;
 	else
 		$link = true;
@@ -44,27 +44,32 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	if(empty($levels) && !empty($level))
 		$levels = $level;
 
-	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
+	//support for block editor
+	if ( is_array( $levels ) ) {
+		$levels = implode( ',', $levels );
+	}
+
+	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar == false )
 		$show_avatar = false;
 	else
 		$show_avatar = true;
 
-	if($show_email === "0" || $show_email === "false" || $show_email === "no")
+	if($show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email == false )
 		$show_email = false;
 	else
 		$show_email = true;
 
-	if($show_level === "0" || $show_level === "false" || $show_level === "no")
+	if($show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level == false )
 		$show_level = false;
 	else
 		$show_level = true;
 
-	if($show_search === "0" || $show_search === "false" || $show_search === "no")
+	if($show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search == false )
 		$show_search = false;
 	else
 		$show_search = true;
 
-	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no")
+	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate == false )
 		$show_startdate = false;
 	else
 		$show_startdate = true;
