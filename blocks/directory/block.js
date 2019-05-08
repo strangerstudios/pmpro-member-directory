@@ -1,3 +1,7 @@
+import ShowExtraFields from '../components/extra-fields/extra-fields.js';
+import DivLayout from './templates/div.js';
+import TableLayout from './templates/table.js';
+
 const { __ } = wp.i18n;
 
 const {
@@ -5,13 +9,10 @@ const {
 } = wp.blocks;
 
 const {
-  Panel,
   PanelBody,
-  PanelRow,
   SelectControl,
   TextControl,
   CheckboxControl,
-  Icon
 } = wp.components;
 
 const {
@@ -19,6 +20,15 @@ const {
 } = wp.editor;
 
 const all_levels = pmpro.all_level_values_and_labels;
+
+// Dummy Data for up to 4 users:
+
+const dummy_data = [
+  { name: 'Andrew Lima', email: 'andrew@email-example.com', level: 'Free', startdate: 'Apr 1, 2019'},
+  { name: 'Travis Lima', email: 'travis@email-example.com', level: 'VIP', startdate: 'Feb 12, 2019'},
+  { name: 'Jason Coleman', email: 'jason@email-example.com', level: 'Unlimited', startdate: 'Jan 1, 2017'},
+  { name: 'Kim Coleman', email: 'kim@email-example.com', level: 'Unlimited', startdate: 'Jan 1, 2017'},
+];
 
 export default registerBlockType(
     'pmpro-member-directory/directory',
@@ -94,27 +104,23 @@ export default registerBlockType(
 
           const date = moment().format('MMM D, YYYY');  //Figure this out at a later stage.
 
-          function show_custom_fields() {
-            
-            // Empty array to return styled data.
-            const custom_fields = [];
-
-            // take all fields and split them twice.
-            const fields_array = fields.split(';');
-
-            for( const [index, value] of fields_array.entries() ) {         
-
-              const field_data = value.split(',');
-              
-              custom_fields.push(
-                <div className='pmpro-member-profile-wrapper'>
-                  <span className='pmpro-member-profile-subheading'>{field_data[0]}: </span><span className='pmpro-member-profile-content'>{field_data[1]}</span>
-                </div>
+          function show_layout_selected() {
+            const layout_return = [];
+            if ( layout == 'div' ) {
+              layout_return.push(
+                <DivLayout 
+                    attributes={props.attributes}             
+                  />
               );
-
+            } else if( layout == 'table' ) {
+              layout_return.push(
+                <TableLayout
+                  attributes={props.attributes}
+                />
+              );
             }
 
-            return custom_fields;
+            return layout_return;
           }
 
           function show_levels_selected() {
@@ -129,6 +135,7 @@ export default registerBlockType(
 
           return [
             isSelected && <InspectorControls>
+              
               <PanelBody
                 title={ __('Display Options', 'pmpro-member-directory' ) }
               >
@@ -246,34 +253,10 @@ export default registerBlockType(
             </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Directory', 'pmpro-member-directory' ) }</span><br/>
+                { show_levels_selected() }             
                 
-                { show_levels_selected() }
-
-                <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ float: 'right', marginBottom: '2%' }}>Search Members</div>
-                
-                <div className={ show_avatar ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-directory-placeholder" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>&nbsp;</div>
-                
-                <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ __( 'Name', 'pmpro-member-directory' ) }</span><br/>
-                                            
-                <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Email Address</span> <span className='pmpro-member-profile-content'>email@email.com</span>
-                </div>
-
-                <div className={ show_level ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Level</span> <span className='pmpro-member-profile-content'>Free Level</span>
-                </div>
-
-                <div className={ show_startdate ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Start Date</span> <span className='pmpro-member-profile-content'>{ date }</span>
-                </div>
-
-                { fields && show_custom_fields() }
-
-                <div className={ link ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className="pmpro-member-directory-view-profile">View Profile &rarr;</span>
-                </div>
-
-            </div>
+                { show_layout_selected() }
+              </div>
           ];
         },
         save: props => {

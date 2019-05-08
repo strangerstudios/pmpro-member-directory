@@ -1,3 +1,5 @@
+import ShowExtraFields from "../components/extra-fields/extra-fields";
+
 const { __ } = wp.i18n;
 
 const {
@@ -6,11 +8,9 @@ const {
 
 const {
   PanelBody,
-  PanelRow,
   SelectControl,
   TextControl,
   CheckboxControl,
-  Icon
 } = wp.components;
 
 const {
@@ -90,44 +90,22 @@ export default registerBlockType(
           },
         },
         edit: props => {
-          const { attributes:  { avatar_size, fields, levels, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id } } = props;
-          const { className, isSelected, setAttributes } = props;
-
-          function show_custom_fields() {
-            
-            // Empty array to return styled data.
-            const custom_fields = [];
-
-            // take all fields and split them twice.
-            const fields_array = fields.split(';');
-
-            for( const [index, value] of fields_array.entries() ) {         
-
-              const field_data = value.split(',');
-              
-              custom_fields.push(
-                  <div className='pmpro-member-profile-wrapper'>
-                    <span className='pmpro-member-profile-subheading'>{field_data[0]}</span><br/>
-                    <span className='pmpro-member-profile-content'>{field_data[1]}</span>
-                  </div>
-              );
-
-            }
-
-            return custom_fields;
-          }
+          const { attributes:  { avatar_size, fields, levels, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id },
+          className, isSelected, setAttributes } = props;
 
           return [
             isSelected && <InspectorControls>
-                <PanelBody>
-                 <SelectControl
-                    multiple
-                    label={ __( 'Select levels', 'pmpro-member-directory' ) }
-                    help={ __('List of level IDs that allow profiles. Default: All', 'pmpro-member-directory') }
-                    value={ levels }
-                    onChange={ levels => { setAttributes( { levels } ) } }
-                    options={ all_levels }
-                  />
+              <PanelBody
+                title={ __( 'Display Settings', 'pmpro-member-directory' ) }
+              >
+                <SelectControl
+                  multiple
+                  label={ __( 'Select levels', 'pmpro-member-directory' ) }
+                  help={ __('List of level IDs that allow profiles. Default: All', 'pmpro-member-directory') }
+                  value={ levels }
+                  onChange={ levels => { setAttributes( { levels } ) } }
+                  options={ all_levels }
+                />
 
                 <CheckboxControl 
                   label='Show Search'
@@ -148,13 +126,6 @@ export default registerBlockType(
                   onChange={ avatar_size => { setAttributes( { avatar_size } ) } }
                 />
 
-                <TextControl 
-                  label="Fields"
-                  value={ fields }
-                  onChange={ fields => { setAttributes( { fields } ) } }
-                  help='Accepts a list of label names and metakeys. i.e. Company,company;Website,user_url'
-                />
-
                 <CheckboxControl 
                   label='Show Bio'
                   checked={ show_bio }
@@ -172,7 +143,6 @@ export default registerBlockType(
                   checked={ show_billing }
                   onChange={ show_billing => { setAttributes( { show_billing } ) } }
                 />
-
                 <CheckboxControl 
                   label='Show Email Address'
                   checked={ show_email }
@@ -204,7 +174,17 @@ export default registerBlockType(
                   help='Set this to a user ID to show a profile of a specific user. Leave blank for current user.'
                 />
 
-                </PanelBody>
+              </PanelBody>
+              <PanelBody
+                title={ __('Extra Fields', 'pmpro-member-directory' ) }
+              >
+                <TextControl 
+                  label="Fields"
+                  value={ fields }
+                  onChange={ fields => { setAttributes( { fields } ) } }
+                  help='Accepts a list of label names and metakeys. i.e. Company,company;Website,user_url'
+                />
+              </PanelBody>
               </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><br/>
@@ -254,7 +234,10 @@ export default registerBlockType(
                   <span className='pmpro-member-profile-content'>(072) 685-8234</span>
                 </div>
 
-                { fields && show_custom_fields() }
+                <ShowExtraFields
+                  fields={fields}
+                  type="profile"
+                />
 
             </div>
           ];
