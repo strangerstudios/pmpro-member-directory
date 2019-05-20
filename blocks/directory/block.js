@@ -1,6 +1,9 @@
 import ShowExtraFields from '../components/extra-fields/extra-fields.js';
 import DivLayout from './templates/div.js';
 import TableLayout from './templates/table.js';
+import Col2 from './templates/2col.js';
+import Col3 from './templates/3col.js';
+import Col4 from './templates/4col.js';
 
 const { __ } = wp.i18n;
 
@@ -20,15 +23,6 @@ const {
 } = wp.editor;
 
 const all_levels = pmpro.all_level_values_and_labels;
-
-// Dummy Data for up to 4 users:
-
-const dummy_data = [
-  { name: 'Andrew Lima', email: 'andrew@email-example.com', level: 'Free', startdate: 'Apr 1, 2019'},
-  { name: 'Travis Lima', email: 'travis@email-example.com', level: 'VIP', startdate: 'Feb 12, 2019'},
-  { name: 'Jason Coleman', email: 'jason@email-example.com', level: 'Unlimited', startdate: 'Jan 1, 2017'},
-  { name: 'Kim Coleman', email: 'kim@email-example.com', level: 'Unlimited', startdate: 'Jan 1, 2017'},
-];
 
 export default registerBlockType(
     'pmpro-member-directory/directory',
@@ -102,8 +96,6 @@ export default registerBlockType(
           const { attributes:  { show_avatar, avatar_size, fields, levels, show_email, show_level, show_search, show_startdate, layout, limit, link, order, order_by },
                 className, isSelected, setAttributes } = props;
 
-          const date = moment().format('MMM D, YYYY');  //Figure this out at a later stage.
-
           function show_layout_selected() {
             const layout_return = [];
             if ( layout == 'div' ) {
@@ -115,6 +107,24 @@ export default registerBlockType(
             } else if( layout == 'table' ) {
               layout_return.push(
                 <TableLayout
+                  attributes={props.attributes}
+                />
+              );
+            } else if( layout == '2col' ) {
+              layout_return.push( 
+                <Col2
+                  attributes={props.attributes}
+                /> 
+                );
+            } else if( layout == '3col' ) {
+              layout_return.push( 
+                <Col3
+                  attributes={props.attributes}
+                /> 
+                );
+            } else {
+              layout_return.push(
+                <Col4
                   attributes={props.attributes}
                 />
               );
@@ -253,10 +263,13 @@ export default registerBlockType(
             </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Directory', 'pmpro-member-directory' ) }</span><br/>
+                
+
                 { show_levels_selected() }             
                 
                 { show_layout_selected() }
-              </div>
+                { isSelected && <em><small style={{color: 'red'}}> {__( 'Example data for reference purposes only.', 'pmpro-member-directory' ) }</small></em> }
+              </div> 
           ];
         },
         save: props => {

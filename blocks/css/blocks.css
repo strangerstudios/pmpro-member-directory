@@ -1,6 +1,6 @@
 .pmpro-member-profile-subheading{
 	font-weight:bold;
-	font-size:16px;
+	font-size:14px;
 }
 
 .pmpro-member-profile-wrapper{ padding-top: 3%; }
@@ -34,6 +34,67 @@
 	right:0;
 }
 
+#pmpro-member-directory-placeholder-4col{
+	background-image: url( '../assets/img/placeholder.jpg' );
+	background-size: cover;
+	display:inline-block;
+	max-width: 32px;
+	max-height: 32px;
+	border-radius: 100%;
+	right:0;
+}
+
 .pmpro-member-directory-hide{
 	display:none !important;
 }
+
+.col2 {
+	width:45%;
+	display: inline-block;
+	margin-right:3%;
+}
+
+.col3{
+	width:30%;
+	display: inline-block;
+	margin-right:3%;
+	font-size:12px;
+}
+
+.col4{
+	width:22%;
+	display: inline-block;
+	margin-right:3%;
+	font-size:12px;
+}
+
+.pmpro-member-directory-icon{
+	max-width: 50px;
+	max-height: 50px;
+}
+
+.pmpro-member-directory-icon svg {
+	border-radius: 100%;
+}
+
+.col4 .pmpro-member-directory-icon{
+	max-width: 30px;
+	max-height: 30px;
+}
+
+td.pmpro-member-directory-icon svg{
+    width:32px;
+    height:32px;
+}
+
+.pmpro-table{
+	font-size:12px;
+	border-collapse: collapse;
+}
+
+.pmpro-table th, .pmpro-table td{
+    border: 1px solid #ccc;
+    padding:0.5em;
+}
+
+.pmpro-table .pmpro-member-profile-subheading{font-size:12px;}

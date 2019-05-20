@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import ShowExtraFields from '../../components/extra-fields/extra-fields';
+import dummy_data from '../../components/dummy-data/dummy-data';
 
 const { __ } = wp.i18n;
 
@@ -12,20 +13,20 @@ class DivLayout extends Component {
         <div>
             <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ float: 'right', marginBottom: '2%' }}>Search Members</div>
                 
-            <div className={ show_avatar ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-directory-placeholder" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>&nbsp;</div>
+            <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } id="" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>{dummy_data[0].icon}</div>
             
-            <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ __( 'Name', 'pmpro-member-directory' ) }</span><br/>
+            <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ dummy_data[0].name }</span><br/>
                                         
             <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-              <span className='pmpro-member-profile-subheading'>Email Address</span> <span className='pmpro-member-profile-content'>email@email.com</span>
+              <span className='pmpro-member-profile-subheading'>Email Address</span> <span className='pmpro-member-profile-content'>{dummy_data[0].email}</span>
             </div>
 
             <div className={ show_level ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-              <span className='pmpro-member-profile-subheading'>Level</span> <span className='pmpro-member-profile-content'>Free Level</span>
+              <span className='pmpro-member-profile-subheading'>Level</span> <span className='pmpro-member-profile-content'>{dummy_data[0].level}</span>
             </div>
 
             <div className={ show_startdate ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-              <span className='pmpro-member-profile-subheading'>Start Date</span> <span className='pmpro-member-profile-content'>{ "YOLO" }</span>
+              <span className='pmpro-member-profile-subheading'>Start Date</span> <span className='pmpro-member-profile-content'>{dummy_data[0].startdate}</span>
             </div>
 
             <ShowExtraFields 

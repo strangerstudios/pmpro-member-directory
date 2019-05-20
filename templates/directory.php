@@ -16,7 +16,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'level' => NULL,
 		'levels' => NULL,
 		'limit' => NULL,
-		'link' => NULL,
+		'link' => true,
 		'order_by' => 'u.display_name',
 		'order' => 'ASC',
 		'show_avatar' => true,
