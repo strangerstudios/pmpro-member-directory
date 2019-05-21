@@ -94,6 +94,16 @@ export default registerBlockType(
           const { attributes:  { avatar_size, fields, levels, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id },
           className, isSelected, setAttributes } = props;
 
+          function show_levels_selected() {
+            if ( !levels.length ) {
+             return null;
+            }
+             return [
+             <span className="pmpro-member-profile-levels" style={{ fontSize: '12px' }}>{ __( 'Levels Selected: ',  'pmpro-member-directory' ) + levels }</span>,
+             <br/>
+             ]
+           }
+
           return [
             isSelected && <InspectorControls>
               <PanelBody
@@ -188,14 +198,11 @@ export default registerBlockType(
               </PanelBody>
               </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
-                <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><br/>
-                <span className="pmpro-member-profile-levels" style={{ fontSize: '12px' }}>{ __( 'Levels Selected: ',  'pmpro-member-directory' ) + levels }</span><br/>
-               
-                <div style={{float:'right'}}>
-                  <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block'}}>{dummy_data[0].icon}</div> 
-                  <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block'}}>Search Members</div>
-                </div>
+                <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block', float: 'right'}}>Search Members</div>
+<br/>
+                { show_levels_selected() }
 
+                <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block', float: 'right'}}>{dummy_data[0].icon}</div> 
 
                 <div className={ show_name ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                   <span style={{fontSize: '24px', fontWeight: 'bold'}}>{dummy_data[0].name}</span><br/>

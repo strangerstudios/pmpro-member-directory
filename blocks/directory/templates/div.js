@@ -7,12 +7,10 @@ const { __ } = wp.i18n;
 class DivLayout extends Component {
 
     render() {
-        const { attributes:  { show_avatar, avatar_size, fields, levels, show_email, show_level, show_search, show_startdate, layout, link } } = this.props;
+        const { attributes:  { show_avatar, avatar_size, fields, levels, show_email, show_level, show_startdate, layout, link } } = this.props;
 
         return (
-        <div>
-            <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ float: 'right', marginBottom: '2%' }}>Search Members</div>
-                
+        <div>                
             <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } id="" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>{dummy_data[0].icon}</div>
             
             <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ dummy_data[0].name }</span><br/>

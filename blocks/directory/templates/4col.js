@@ -7,7 +7,7 @@ const { __ } = wp.i18n;
 class Col4 extends Component { 
     render() {
 
-        const { attributes:  { show_avatar, avatar_size, fields, levels, show_email, show_level, show_search, show_startdate, layout, link } } = this.props;
+        const { attributes:  { show_avatar, avatar_size, fields, levels, show_email, show_level, show_startdate, layout, link } } = this.props;
 
         return (
             <div>

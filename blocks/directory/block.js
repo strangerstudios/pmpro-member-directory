@@ -122,12 +122,18 @@ export default registerBlockType(
                   attributes={props.attributes}
                 /> 
                 );
-            } else {
+            } else if( layout == '4col' ) {
               layout_return.push(
                 <Col4
                   attributes={props.attributes}
                 />
               );
+            } else {
+              layout_return.push(
+                <DivLayout 
+                    attributes={props.attributes}             
+                  />
+              )
             }
 
             return layout_return;
@@ -262,12 +268,15 @@ export default registerBlockType(
               </PanelBody>
             </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
-                <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Directory', 'pmpro-member-directory' ) }</span><br/>
                 
+                <div className="pmpro-member-directory-title" style={{ marginBottom: '2%'}}>
+                  <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Directory', 'pmpro-member-directory' ) }</span>
+                  <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ float: 'right' }}>Search Members</div><br/>
+                  { show_levels_selected() }   
+                </div>
 
-                { show_levels_selected() }             
-                
                 { show_layout_selected() }
+
                 { isSelected && <em><small style={{color: 'red'}}> {__( 'Example data for reference purposes only.', 'pmpro-member-directory' ) }</small></em> }
               </div> 
           ];
