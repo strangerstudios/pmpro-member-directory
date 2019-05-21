@@ -1,4 +1,5 @@
 import ShowExtraFields from "../components/extra-fields/extra-fields";
+import dummy_data from "../components/dummy-data/dummy-data";
 
 const { __ } = wp.i18n;
 
@@ -191,12 +192,13 @@ export default registerBlockType(
                 <span className="pmpro-member-profile-levels" style={{ fontSize: '12px' }}>{ __( 'Levels Selected: ',  'pmpro-member-directory' ) + levels }</span><br/>
                
                 <div style={{float:'right'}}>
-                  <div className={ show_avatar ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-placeholder" style={{ width: avatar_size + 'px', height: avatar_size + 'px'}}>&nbsp;</div> <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search">Search Members</div>
+                  <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block'}}>{dummy_data[0].icon}</div> 
+                  <div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block'}}>Search Members</div>
                 </div>
 
 
                 <div className={ show_name ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ __( 'Name', 'pmpro-member-directory' ) }</span><br/>
+                  <span style={{fontSize: '24px', fontWeight: 'bold'}}>{dummy_data[0].name}</span><br/>
                 </div>
 
                 <div className={ show_bio ? 'pmpro-member-profile-wrapper' : 'hidden'}>
@@ -206,17 +208,17 @@ export default registerBlockType(
                                             
                 <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                   <span className='pmpro-member-profile-subheading'>Email Address</span><br/>
-                  <span className='pmpro-member-profile-content'>email@email.com</span>
+                  <span className='pmpro-member-profile-content'>{dummy_data[0].email}</span>
                 </div>
 
                 <div className={ show_level ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                   <span className='pmpro-member-profile-subheading'>Level</span><br/>
-                  <span className='pmpro-member-profile-content'>Free Level</span>
+                  <span className='pmpro-member-profile-content'>{dummy_data[0].level}</span>
                 </div>
 
                 <div className={ show_startdate ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                   <span className='pmpro-member-profile-subheading'>Start Date</span><br/>
-                  <span className='pmpro-member-profile-content'>12 December 2001</span>
+                  <span className='pmpro-member-profile-content'>{dummy_data[0].startdate}</span>
                 </div>
 
                 <div className={ show_billing ? 'pmpro-member-profile-wrapper' : 'hidden'}>
