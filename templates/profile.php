@@ -23,8 +23,8 @@ function pmpromd_profile_preheader()
 		else
 			$pu = false;
 		
-		//If no profile user, go to directory or home
-		if(empty($pu) || empty($pu->ID))
+		//If no profile user or membership level, go to directory or home
+		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID))
 		{
 			if(!empty($pmpro_pages['directory']))
 				wp_redirect(get_permalink($pmpro_pages['directory']));
