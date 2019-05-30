@@ -223,6 +223,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			if(!empty($fields))
 			{
 				$fields_array = explode(";",$fields);
+				$fields_array = explode("\n", $fields);
 				if(!empty($fields_array))
 				{
 					for($i = 0; $i < count($fields_array); $i++ )

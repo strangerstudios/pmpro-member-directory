@@ -15,6 +15,7 @@ const {
   PanelBody,
   SelectControl,
   TextControl,
+  TextareaControl,
   CheckboxControl,
 } = wp.components;
 
@@ -224,11 +225,11 @@ export default registerBlockType(
               <PanelBody
                 title={ __( 'Extra Fields', 'pmpro-member-directory' ) }
               >
-                <TextControl 
+                <TextareaControl 
                   label="Fields"
                   value={ fields }
                   onChange={ fields => { setAttributes( { fields } ) } }
-                  help='Accepts a list of label names and metakeys. i.e. Company,company;Website,user_url'
+                  help='Accepts a list of label names and metakeys per line. Label,meta_key'
                 />
               </PanelBody>
 
@@ -277,7 +278,7 @@ export default registerBlockType(
 
                 { show_layout_selected() }
 
-                { isSelected && <em><small style={{color: 'red'}}> {__( 'Example data for reference purposes only.', 'pmpro-member-directory' ) }</small></em> }
+                { isSelected && <em><small style={{color: 'red'}}> {__( 'Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental.', 'pmpro-member-directory' ) }</small></em> }
               </div> 
           ];
         },

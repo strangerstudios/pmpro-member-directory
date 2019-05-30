@@ -11,6 +11,7 @@ const {
   PanelBody,
   SelectControl,
   TextControl,
+  TextareaControl,
   CheckboxControl,
 } = wp.components;
 
@@ -182,72 +183,73 @@ export default registerBlockType(
                   label="User ID"
                   value={ user_id }
                   onChange={ user_id => { setAttributes( { user_id } ) } }
-                  help='Set this to a user ID to show a profile of a specific user. Leave blank for current user.'
+                  help={ __( 'Set this to a user ID to show a profile of a specific user. Leave blank for current user.', 'pmpro-member-directory' ) }
                 />
 
               </PanelBody>
               <PanelBody
                 title={ __('Extra Fields', 'pmpro-member-directory' ) }
               >
-                <TextControl 
+                <TextareaControl 
                   label="Fields"
                   value={ fields }
                   onChange={ fields => { setAttributes( { fields } ) } }
-                  help='Accepts a list of label names and metakeys. i.e. Company,company;Website,user_url'
+                  help= { __( 'Accepts a list of label names and metakeys per line. (i.e. Label,meta_key)', 'pmpro-member-directory' ) }
                 />
               </PanelBody>
               </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block', float: 'right'}}>Search Members</div>
-<br/>
+                <br/>
                 { show_levels_selected() }
 
                 <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block', float: 'right'}}>{dummy_data[0].icon}</div> 
 
                 <div className={ show_name ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span style={{fontSize: '24px', fontWeight: 'bold'}}>{dummy_data[0].name}</span><br/>
+                  <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ __( 'August Dibble', 'pmpro-member-directory' )}</span><br/>
                 </div>
 
                 <div className={ show_bio ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Biographical Info</span><br/>
+                  <span className='pmpro-member-profile-subheading'>{ __( 'Biographical Info', 'pmpro-member-directory' ) }</span><br/>
                   <span className='pmpro-member-profile-content'>Some biographical information</span>
                 </div>
                                             
                 <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Email Address</span><br/>
-                  <span className='pmpro-member-profile-content'>{dummy_data[0].email}</span>
+                  <span className='pmpro-member-profile-subheading'>{ __( 'Email Address', 'pmpro-member-directory' ) }</span><br/>
+                  <span className='pmpro-member-profile-content'>{ __( 'August.Dibble@mail.com', 'pmpro-member-directory' ) }</span>
                 </div>
 
                 <div className={ show_level ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Level</span><br/>
-                  <span className='pmpro-member-profile-content'>{dummy_data[0].level}</span>
+                  <span className='pmpro-member-profile-subheading'>{ __('Level', 'pmpro-member-directory' ) }</span><br/>
+                  <span className='pmpro-member-profile-content'>{ __( 'Free', 'pmpro-member-directory' )}</span>
                 </div>
 
                 <div className={ show_startdate ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Start Date</span><br/>
-                  <span className='pmpro-member-profile-content'>{dummy_data[0].startdate}</span>
+                  <span className='pmpro-member-profile-subheading'>{ __( 'Start Date', 'pmpro-member-directory' ) }</span><br/>
+                  <span className='pmpro-member-profile-content'>{ __( 'Jan 21, 2019', 'pmpro-member-directory' )}</span>
                 </div>
 
                 <div className={ show_billing ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Address</span><br/>
+                  <span className='pmpro-member-profile-subheading'>{ __( 'Address', 'pmpro-member-directory' ) }</span><br/>
                   <span className='pmpro-member-profile-content'>
-                    195 Jan Smuts Avenue<br/>
-                    Rosebank<br/>
-                    Johannesburg, Gauteng 2196<br/>
-                    ZA
+                    Di Loreto Park<br/>
+                    Witchita<br/>
+                    Kansas, 67210<br/>
+                    US
                   </span>
                 </div>
 
                 <div className={ show_phone ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span className='pmpro-member-profile-subheading'>Phone Number</span><br/>
-                  <span className='pmpro-member-profile-content'>(072) 685-8234</span>
+                  <span className='pmpro-member-profile-subheading'>{ __( 'Phone Number', 'pmpro-member-directory' ) }</span><br/>
+                  <span className='pmpro-member-profile-content'>(130) 024-XXX</span>
                 </div>
 
                 <ShowExtraFields
                   fields={fields}
                   type="profile"
                 />
-
+                
+                { isSelected && <em><small style={{color: 'red'}}> {__( 'Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental.', 'pmpro-member-directory' ) }</small></em> }
             </div>
           ];
         },

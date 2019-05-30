@@ -26,6 +26,8 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_startdate' => true,
 	), $atts, "pmpro_member_directory"));
 
+	// var_dump( explode("\n", $fields ) );
+
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
 
 	//some page vars
@@ -166,6 +168,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		if(!empty($fields))
 		{
 			$fields_array = explode(";",$fields);
+			$fields_array = explode("\n", $fields); // For new block editor.
 			if(!empty($fields_array))
 			{
 				for($i = 0; $i < count($fields_array); $i++ )
