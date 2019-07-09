@@ -32,6 +32,20 @@ function pmpromd_profile_preheader()
 				wp_redirect(home_url());
 			exit;
 		}
+
+		// Integrate with Approvals.
+		if ( class_exists( 'PMPro_Approvals' ) ){
+			$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
+
+			if ( ! empty( $status ) && $status != 'approved' ) {
+				if ( ! empty( $pmpro_pages['directory'] ) ) {
+					wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
+				} else {
+					wp_redirect(home_url());
+					exit;
+				}
+			}
+		}
 		
 		/*
 			If a level is required for the profile page, make sure the profile user has it.
