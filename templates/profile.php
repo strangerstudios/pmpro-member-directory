@@ -233,6 +233,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
+				$fields = rtrim( $fields, ';' ); // clear up a stray ;
 				$fields_array = explode(";",$fields);
 				if(!empty($fields_array))
 				{
