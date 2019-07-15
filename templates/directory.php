@@ -24,6 +24,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'show_level' => NULL,
 		'show_search' => NULL,
 		'show_startdate' => NULL,
+		'avatar_align' => NULL
 	), $atts, "pmpro_member_directory"));
 
 	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
@@ -166,6 +167,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 	{
 		if(!empty($fields))
 		{
+			$fields = rtrim( $fields, ';' ); // clear up a stray ;
 			$fields_array = explode(";",$fields);
 			if(!empty($fields_array))
 			{
