@@ -54,8 +54,8 @@ function pmpromd_show_extra_profile_fields($user)
 	global $pmpro_pages;	
 ?>
 	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
-	<table class="form-table"> 
-		<tbody>
+	<table class="form-table">
+        <tbody>
         <tr class="user-hide-directory-wrap">
             <th scope="row"></th>
             <td>
@@ -63,10 +63,14 @@ function pmpromd_show_extra_profile_fields($user)
                     <label for="hide_directory">
                         <input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), get_the_title($pmpro_pages['directory']) ); ?>
                     </label>
+                <?php } else { ?>
+                    <label for="hide_directory">
+                        <input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from Directory?') ); ?>
+                    </label>
                 <?php } ?>
             </td>
         </tr>
-		</tbody>
+        </tbody>
 	</table>
 <?php
 }
