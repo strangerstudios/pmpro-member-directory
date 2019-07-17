@@ -1,0 +1,36 @@
+{
+  "name": "pmpro-member-directory",
+  "version": "1.0.0",
+  "description": "=== Paid Memberships Pro - Member Directory Add On ===\r Contributors: strangerstudios\r Tags: pmpro, paid memberships pro, members, directory\r Requires at least: 4\r Tested up to: 4.7.2\r Stable tag: .5.1",
+  "main": "blocks/index.js",
+  "scripts": {
+    "start": "cross-env webpack --watch",
+    "build": "cross-env NODE_ENV=production webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewlimaza/pmpro-member-directory.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/andrewlimaza/pmpro-member-directory/issues"
+  },
+  "homepage": "https://github.com/andrewlimaza/pmpro-member-directory#readme",
+  "devDependencies": {
+    "@wordpress/babel-preset-default": "^1.2.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "classnames": "^2.2.5",
+    "cross-env": "^5.1.5",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "postcss-loader": "^2.1.5",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.11.0"
+  }
+}

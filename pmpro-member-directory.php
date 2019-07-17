@@ -26,6 +26,7 @@ else
 	require_once($path . "/templates/profile.php");
 
 require_once($path . "/includes/localization.php"); //localization functions
+require_once($path . "/blocks/blocks.php"); //localization functions
 
 function pmpromd_register_styles() {
 	//load stylesheet (check child theme, then parent theme, then plugin folder)

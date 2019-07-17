@@ -16,14 +16,14 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		'level' => NULL,
 		'levels' => NULL,
 		'limit' => NULL,
-		'link' => NULL,
+		'link' => true,
 		'order_by' => 'u.display_name',
 		'order' => 'ASC',
-		'show_avatar' => NULL,
-		'show_email' => NULL,
-		'show_level' => NULL,
-		'show_search' => NULL,
-		'show_startdate' => NULL,
+		'show_avatar' => true,
+		'show_email' => true,
+		'show_level' => true,
+		'show_search' => true,
+		'show_startdate' => true,
 		'avatar_align' => NULL
 	), $atts, "pmpro_member_directory"));
 
@@ -39,7 +39,7 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	}
 
 	//turn 0's into falses
-	if($link === "0" || $link === "false" || $link === "no")
+	if($link === "0" || $link === "false" || $link === "no" || $link === false)
 		$link = false;
 	else
 		$link = true;
@@ -48,27 +48,27 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	if(empty($levels) && !empty($level))
 		$levels = $level;
 
-	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
+	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no"  || $show_avatar === false)
 		$show_avatar = false;
 	else
 		$show_avatar = true;
 
-	if($show_email === "0" || $show_email === "false" || $show_email === "no")
+	if($show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === false )
 		$show_email = false;
 	else
 		$show_email = true;
 
-	if($show_level === "0" || $show_level === "false" || $show_level === "no")
+	if($show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === false)
 		$show_level = false;
 	else
 		$show_level = true;
 
-	if($show_search === "0" || $show_search === "false" || $show_search === "no")
+	if($show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === false )
 		$show_search = false;
 	else
 		$show_search = true;
 
-	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no")
+	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === false )
 		$show_startdate = false;
 	else
 		$show_startdate = true;
@@ -107,7 +107,6 @@ $sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
 if( $s ) {
-	
 	$sql_parts['WHERE'] .= "AND (u.user_login LIKE '%" . esc_sql($s) . "%' OR u.user_email LIKE '%" . esc_sql($s) . "%' OR u.display_name LIKE '%" . esc_sql($s) . "%' OR um.meta_value LIKE '%" . esc_sql($s) . "%') ";
 }
 
@@ -169,6 +168,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		{
 			$fields = rtrim( $fields, ';' ); // clear up a stray ;
 			$fields_array = explode(";",$fields);
+			$fields_array = explode("\n", $fields); // For new block editor.
 			if(!empty($fields_array))
 			{
 				for($i = 0; $i < count($fields_array); $i++ )
