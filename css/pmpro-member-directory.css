@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* CSS Document */
 
 h3#pmpro_member_directory_subheading {clear: none; margin-top: 0; }
@@ -7,112 +6,43 @@ form.pmpro_member_directory_search input[type=text] { }
 form.pmpro_member_directory_search input[type=submit] {background: none; border: none; padding: 0; position: absolute; text-indent: -9999em; }
 
 .pmpro_member_directory {clear: both; }
-.pmpro_member_directory hr {margin: 3rem 0; }
-.pmpro_pagination {margin-bottom: 1em;}
+.pmpro_pagination {margin: 1em 0;}
 .pmpro_pagination .pmpro_prev {float: left; width: 250px;}
 .pmpro_pagination .pmpro_next {float: right; width: 250px; text-align: right;}
 
-/* div/column type layous */
+/* div/column type layouts */
 div.pmpro_member_directory div h3 {clear: none; }
 div.pmpro_member_directory div p {margin: .5rem 0 0 0; } 
 div.pmpro_member_profile strong {display: block; }
 
-/* table type layous */
+/* table type layouts */
 .pmpro_member_directory table h3.pmpro_member_directory_display-name {margin-top: 0; }
 .pmpro_member_directory table tbody td {vertical-align: top; }
 .pmpro_member_directory table tbody td p {margin: 0 0 .5rem 0; }
 
-/* Columns - based on Foundation 5 Grid v5.5.2 by ZURB: http://foundation.zurb.com/docs/components/grid.html */
-.pmpro_member_directory .row {
-  width: auto;
-  margin-left: -1em;
-  margin-right: -1em;
-  margin-top: 0;
-  margin-bottom: 0;
-  max-width: none; }
-  .pmpro_member_directory .row:before, .pmpro_member_directory .row:after {
-    content: " ";
-    display: table; }
-  .pmpro_member_directory .row:after {
-    clear: both; }
-	
-.pmpro_member_directory .column,
-.pmpro_member_directory .columns {
-  box-sizing: border-box;
-  padding-left: 1em;
-  padding-right: 1em;
-  width: 100%;
-  float: left; }
-
-.pmpro_member_directory [class*="column"] + [class*="column"]:last-child {
-  float: right; 
- }
-
-.pmpro_member_directory [class*="column"] + [class*="column"].pmpro_member_directory .end {
-  float: left; 
- }
-
-@media only screen {
-  .pmpro_member_directory .column,
-  .pmpro_member_directory .columns {
-    position: relative;
-    padding-left: 1em;
-    padding-right: 1em;
-    float: left; }
-  .pmpro_member_directory .column.end,
-  .pmpro_member_directory .columns.end {
-	float: left !important;
-  }
+/* column type layouts */
+.pmpro_member_directory.pmpro_member_directory-2col,
+.pmpro_member_directory.pmpro_member_directory-3col,
+.pmpro_member_directory.pmpro_member_directory-4col {
+    display: grid;
+    grid-column-gap: 2.9rem;
+    grid-row-gap: 5.8rem;
+    text-align: center;
 }
-@media only screen and (min-width: 40.063em) {
-  .pmpro_member_directory .column,
-  .pmpro_member_directory .columns {
-    position: relative;
-    padding-left: 1em;
-    padding-right: 1em;
-    float: left; }
-
-  .pmpro_member_directory .medium-1 {
-    width: 8.33333%; }
-
-  .pmpro_member_directory .medium-2 {
-    width: 16.66667%; }
-
-  .pmpro_member_directory .medium-3 {
-    width: 25%; }
-
-  .pmpro_member_directory .medium-4 {
-    width: 33.33333%; }
-
-  .pmpro_member_directory .medium-5 {
-    width: 41.66667%; }
-
-  .pmpro_member_directory .medium-6 {
-    width: 50%; }
-
-  .pmpro_member_directory .medium-7 {
-    width: 58.33333%; }
-
-  .pmpro_member_directory .medium-8 {
-    width: 66.66667%; }
-
-  .pmpro_member_directory .medium-9 {
-    width: 75%; }
-
-  .pmpro_member_directory .medium-10 {
-    width: 83.33333%; }
-
-  .pmpro_member_directory .medium-11 {
-    width: 91.66667%; }
-
-  .pmpro_member_directory .medium-12 {
-    width: 100%; }
+.pmpro_member_directory.pmpro_member_directory-2col {
+    grid-template-columns: 1fr 1fr;
 }
-@media only screen and (min-width: 64.063em) {
-  .pmpro_member_directory .column,
-  .pmpro_member_directory .columns {
-    position: relative;
-    padding-left: 1em;
-    padding-right: 1em;
-    float: left; }
+.pmpro_member_directory.pmpro_member_directory-3col {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.pmpro_member_directory.pmpro_member_directory-4col {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media only screen and (max-width: 767px) {
+    .pmpro_member_directory.pmpro_member_directory-2col,
+    .pmpro_member_directory.pmpro_member_directory-3col,
+    .pmpro_member_directory.pmpro_member_directory-4col {
+        grid-template-columns: 1fr;
+    }
 }

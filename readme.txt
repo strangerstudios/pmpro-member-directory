@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4
 Tested up to: 4.7.2
-Stable tag: .5.1
+Stable tag: .5.3
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .5.3 =
+* BUG FIX: Changed how column layouts are determined, fixing issues with column shortcodes not working properly
+
 = .5.2 =
 * BUG FIX: Removed extra ob_start() in templates/directory.php, which was causing issues sometimes.
 
