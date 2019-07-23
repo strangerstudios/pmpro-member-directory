@@ -206,7 +206,7 @@ export default registerBlockType(
                 <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block', float: 'right'}}>{dummy_data[0].icon}</div> 
 
                 <div className={ show_name ? 'pmpro-member-profile-wrapper' : 'hidden'}>
-                  <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ __( 'August Dibble', 'pmpro-member-directory' )}</span><br/>
+                  <span style={{fontSize: '1.2rem', fontWeight: 'bold'}}>{ __( 'August Dibble', 'pmpro-member-directory' )}</span><br/>
                 </div>
 
                 <div className={ show_bio ? 'pmpro-member-profile-wrapper' : 'hidden'}>

@@ -15,7 +15,7 @@ class Col2 extends Component {
                 <div className="col2">                
                     <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } id="" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>{dummy_data[0].icon}</div>
                     
-                    <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ dummy_data[0].name }</span><br/>
+                    <span style={{fontSize: '1.2rem', fontWeight: 'bold'}}>{ dummy_data[0].name }</span><br/>
                                                 
                     <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                     <span className='pmpro-member-profile-subheading'>Email Address</span> <span className='pmpro-member-profile-content'>{dummy_data[0].email}</span>
@@ -42,7 +42,7 @@ class Col2 extends Component {
                 <div className="col2">                
                     <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } id="" style={{ width: avatar_size + 'px', height: avatar_size + 'px', display:'inline-block', float:'right'}}>{dummy_data[1].icon}</div>
                     
-                    <span style={{fontSize: '24px', fontWeight: 'bold'}}>{ dummy_data[1].name }</span><br/>
+                    <span style={{fontSize: '1.2rem', fontWeight: 'bold'}}>{ dummy_data[1].name }</span><br/>
                                                 
                     <div className={ show_email ? 'pmpro-member-profile-wrapper' : 'hidden'}>
                     <span className='pmpro-member-profile-subheading'>Email Address</span> <span className='pmpro-member-profile-content'>{dummy_data[1].email}</span>
