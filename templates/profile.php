@@ -286,13 +286,13 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_level)) { ?>										
 					<p class="pmpro_member_directory_level">
 						<strong><?php _e('Level', 'pmpromd'); ?></strong>
-						<?php echo $pu->membership_level->name; ?>
+						<?php echo !empty( $pu->membership_level ) ? $pu->membership_level->name : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>										
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
-						<?php echo date(get_option("date_format"), $pu->membership_level->startdate); ?>
+						<?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>										
