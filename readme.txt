@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4
 Tested up to: 5.2.2
-Stable tag: .5.4
+Stable tag: .6
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,7 +90,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
-= .5.4 =
+= .6 =
 * BUG FIX: Show default "Hide From Directory" if no directory page is set.
 * BUG FIX: Strip trailing semi-colon from "fields" attribute.
 * BUG FIX: Redirect non-member profiles back to the directory page.
