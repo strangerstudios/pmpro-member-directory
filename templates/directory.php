@@ -48,6 +48,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	if(empty($levels) && !empty($level))
 		$levels = $level;
 
+	// convert array to string for levels when using the block editor.
+	if ( is_array( $levels ) ) {
+		$levels = implode( ',', $levels );
+	}
+
 	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no"  || $show_avatar === false)
 		$show_avatar = false;
 	else
