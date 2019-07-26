@@ -233,8 +233,16 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
-				$fields = rtrim( $fields, ';' ); // clear up a stray ;
-				$fields_array = explode(";",$fields);
+				
+				// Check to see if the Block Editor is used or the shortcode.
+				if ( strpos( $fields, "\n" ) !== FALSE ) {
+					$fields = rtrim( $fields, "\n" ); // clear up a stray \n
+					$fields_array = explode("\n", $fields); // For new block editor.
+				} else {
+					$fields = rtrim( $fields, ';' ); // clear up a stray ;
+					$fields_array = explode(";",$fields);
+				}
+				
 				if(!empty($fields_array))
 				{
 					for($i = 0; $i < count($fields_array); $i++ )
