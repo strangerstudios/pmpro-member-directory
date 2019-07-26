@@ -19,8 +19,6 @@ const {
   InspectorControls,
 } = wp.editor;
 
-const all_levels = pmpro.all_level_values_and_labels;
-
 export default registerBlockType(
     'pmpro-member-directory/profile',
     {
@@ -44,10 +42,6 @@ export default registerBlockType(
           },
           fields: {
             type: 'string',
-            default: ''
-          },
-          levels: {
-            type: 'array',
             default: ''
           },
           show_avatar: {
@@ -92,32 +86,15 @@ export default registerBlockType(
           },
         },
         edit: props => {
-          const { attributes:  { avatar_size, fields, levels, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id },
+          const { attributes:  { avatar_size, fields, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id },
           className, isSelected, setAttributes } = props;
-
-          function show_levels_selected() {
-            if ( !levels.length ) {
-             return null;
-            }
-             return [
-             <span className="pmpro-member-profile-levels" style={{ fontSize: '12px' }}>{ __( 'Levels Selected: ',  'pmpro-member-directory' ) + levels }</span>,
-             <br/>
-             ]
-           }
 
           return [
             isSelected && <InspectorControls>
               <PanelBody
                 title={ __( 'Display Settings', 'pmpro-member-directory' ) }
               >
-                <SelectControl
-                  multiple
-                  label={ __( 'Select levels', 'pmpro-member-directory' ) }
-                  help={ __('List of level IDs that allow profiles. Default: All', 'pmpro-member-directory') }
-                  value={ levels }
-                  onChange={ levels => { setAttributes( { levels } ) } }
-                  options={ all_levels }
-                />
+
 
                 <CheckboxControl 
                   label='Show Search'
@@ -201,7 +178,6 @@ export default registerBlockType(
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block', float: 'right'}}>Search Members</div>
                 <br/>
-                { show_levels_selected() }
 
                 <div className={ show_avatar ? 'pmpro-member-directory-icon' : 'pmpro-member-directory-hide' } style={{ width: avatar_size + 'px', height: avatar_size + 'px', display: 'inline-block', float: 'right'}}>{dummy_data[0].icon}</div> 
 
