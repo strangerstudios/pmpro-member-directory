@@ -11,7 +11,7 @@ Author URI: http://www.strangerstudios.com
 global $pmpromd_options;
 
 $path = dirname(__FILE__);
-$custom_dir = get_stylesheet_directory()."/paid-memberships-pro/pmpro-member-directory/";
+$custom_dir = apply_filters( 'pmpro_member_directory_templates_directory', get_stylesheet_directory()."/paid-memberships-pro/pmpro-member-directory/" );
 $custom_directory_file = $custom_dir."directory.php";
 $custom_profile_file = $custom_dir."profile.php";
 
