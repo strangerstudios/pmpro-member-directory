@@ -23,14 +23,28 @@ function pmpromd_profile_preheader()
 		else
 			$pu = false;
 		
-		//If no profile user, go to directory or home
-		if(empty($pu) || empty($pu->ID))
+		//If no profile user or membership level, go to directory or home
+		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID))
 		{
 			if(!empty($pmpro_pages['directory']))
 				wp_redirect(get_permalink($pmpro_pages['directory']));
 			else
 				wp_redirect(home_url());
 			exit;
+		}
+
+		// Integrate with Approvals.
+		if ( class_exists( 'PMPro_Approvals' ) ){
+			$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
+
+			if ( ! empty( $status ) && $status != 'approved' ) {
+				if ( ! empty( $pmpro_pages['directory'] ) ) {
+					wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
+				} else {
+					wp_redirect(home_url());
+					exit;
+				}
+			}
 		}
 		
 		/*
@@ -109,15 +123,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	extract(shortcode_atts(array(
 		'avatar_size' => '128',
 		'fields' => NULL,
-		'show_avatar' => NULL,
-		'show_bio' => NULL,
-		'show_billing' => NULL,
-		'show_email' => NULL,
-		'show_level' => NULL,
-		'show_name' => NULL,
-		'show_phone' => NULL,
-		'show_search' => NULL,
-		'show_startdate' => NULL,
+		'show_avatar' => true,
+		'show_bio' => true,
+		'show_billing' => true,
+		'show_email' => true,
+		'show_level' => true,
+		'show_name' => true,
+		'show_phone' => true,
+		'show_search' => true,
+		'show_startdate' => true,
 		'user_id' => NULL
 	), $atts));
 	
@@ -132,47 +146,47 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		$profile_url = get_permalink($pmpro_pages['profile']);
 	
 	//turn 0's into falses
-	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no")
+	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no" || $show_avatar === false )
 		$show_avatar = false;
 	else
 		$show_avatar = true;
 		
-	if($show_billing === "0" || $show_billing === "false" || $show_billing === "no")
+	if($show_billing === "0" || $show_billing === "false" || $show_billing === "no" || $show_billing === false )
 		$show_billing = false;
 	else
 		$show_billing = true;
 		
-	if($show_bio === "0" || $show_bio === "false" || $show_bio === "no")
+	if($show_bio === "0" || $show_bio === "false" || $show_bio === "no" || $show_bio === false )
 		$show_bio = false;
 	else
 		$show_bio = true;
 	
-	if($show_email === "0" || $show_email === "false" || $show_email === "no")
+	if($show_email === "0" || $show_email === "false" || $show_email === "no" || $show_email === false )
 		$show_email = false;
 	else
 		$show_email = true;
 
-	if($show_level === "0" || $show_level === "false" || $show_level === "no")
+	if($show_level === "0" || $show_level === "false" || $show_level === "no" || $show_level === false )
 		$show_level = false;
 	else
 		$show_level = true;
 	
-	if($show_name === "0" || $show_name === "false" || $show_name === "no")
+	if($show_name === "0" || $show_name === "false" || $show_name === "no" || $show_name === false )
 		$show_name = false;
 	else
 		$show_name = true;
 		
-	if($show_phone === "0" || $show_phone === "false" || $show_phone === "no")
+	if($show_phone === "0" || $show_phone === "false" || $show_phone === "no" || $show_phone === false )
 		$show_phone = false;
 	else
 		$show_phone = true;
 
-	if($show_search === "0" || $show_search === "false" || $show_search === "no")
+	if($show_search === "0" || $show_search === "false" || $show_search === "no" || $show_search === false )
 		$show_search = false;
 	else
 		$show_search = true;
 
-	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no")
+	if($show_startdate === "0" || $show_startdate === "false" || $show_startdate === "no" || $show_startdate === false )
 		$show_startdate = false;
 	else
 		$show_startdate = true;
@@ -219,7 +233,16 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
-				$fields_array = explode(";",$fields);
+				
+				// Check to see if the Block Editor is used or the shortcode.
+				if ( strpos( $fields, "\n" ) !== FALSE ) {
+					$fields = rtrim( $fields, "\n" ); // clear up a stray \n
+					$fields_array = explode("\n", $fields); // For new block editor.
+				} else {
+					$fields = rtrim( $fields, ';' ); // clear up a stray ;
+					$fields_array = explode(";",$fields);
+				}
+				
 				if(!empty($fields_array))
 				{
 					for($i = 0; $i < count($fields_array); $i++ )
@@ -228,19 +251,23 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			}
 			else
 				$fields_array = false;
-
+			
 			// Get Register Helper field options
 			$rh_fields = array();
 			if(!empty($pmprorh_registration_fields)) {
 				foreach($pmprorh_registration_fields as $location) {
 					foreach($location as $field) {
-						if(!empty($field->options))
+						if(!empty($field->options)){
 							$rh_fields[$field->name] = $field->options;
+						}
 					}
 				}
 			}
 
+
 			?>
+
+
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
 				<?php if(!empty($show_avatar)) { ?>										
 					<p class="pmpro_member_directory_avatar">
@@ -267,13 +294,13 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_level)) { ?>										
 					<p class="pmpro_member_directory_level">
 						<strong><?php _e('Level', 'pmpromd'); ?></strong>
-						<?php echo $pu->membership_level->name; ?>
+						<?php echo !empty( $pu->membership_level ) ? $pu->membership_level->name : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>										
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
-						<?php echo date(get_option("date_format"), $pu->membership_level->startdate); ?>
+						<?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>										
@@ -304,6 +331,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					{
 						foreach($fields_array as $field)
 						{
+
 							if(empty($field[0]))
 								break;
 							$field_val = $field[1];						
@@ -320,9 +348,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo pmpromd_display_file_field($meta_field); ?>
 										<?php
-									}
-									elseif(is_array($meta_field))
-									{
+									}elseif(is_array($meta_field)){
 										//this is a general array, check for Register Helper options first
 										if(!empty($rh_fields[$field[1]])) {
 											foreach($meta_field as $key => $value)
@@ -331,6 +357,13 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										?>
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo implode(", ",$meta_field); ?>
+										<?php
+									}				
+									elseif(!empty($rh_fields[$field[1]])  && is_array($rh_fields[$field[1]]) )
+									{
+									?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo $rh_fields[$field[1]][$meta_field]; ?>
 										<?php
 									}								
 									else
@@ -347,15 +380,18 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
 												$meta_field_embed = wp_oembed_get($meta_field);
-												if(!empty($meta_field_embed))
+												if(!empty($meta_field_embed)){
 													echo $meta_field_embed;
-												else
+												}else{
 													echo make_clickable($meta_field); 
+												}
 											?>
 											<?php
 										}
 									}
 								?>
+
+
 								</p>
 								<?php
 							}

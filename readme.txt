@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4
-Tested up to: 4.7.2
-Stable tag: .5
+Tested up to: 5.2.2
+Stable tag: .6.1
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -90,6 +90,30 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .6.1 =
+* BUG FIX: Levels select in block not returning any results.
+* BUG FIX: Custom fields from Register Helper not working when multiple fields are set in the shortcode method.
+* BUG FIX: Remove "Levels" attribute from profile block method as profile shortcode does not support this attribute. Set the 'Require Membership' meta box to restrict access to profile pages.
+
+= .6 =
+* BUG FIX: Show default "Hide From Directory" if no directory page is set.
+* BUG FIX: Strip trailing semi-colon from "fields" attribute.
+* BUG FIX: Redirect non-member profiles back to the directory page.
+* ENHANCEMENT: Directory and Profile page now makes use of CSS grid.
+* ENHANCEMENT: Filter added for 'view profile' link on directory ("pmpromd_profile_url").
+* ENHANCEMENT: Improve SQL for directory page. This is now broken into sections making it easier to adjust the query. New filter added for this ("pmpro_member_directory_sql_parts").
+* ENHANCEMENT: Support Approvals Add On. Redirect non-approved member profiles back to the directory page.
+* FEATURE: Support the new WordPress Block Editor for both the directory and profile page. Please note custom page templates need to be updated for this to work with the block editor.
+
+= .5.3 =
+* BUG FIX: Changed how column layouts are determined, fixing issues with column shortcodes not working properly
+
+= .5.2 =
+* BUG FIX: Removed extra ob_start() in templates/directory.php, which was causing issues sometimes.
+
+= .5.1 =
+* BUG/ENHANCEMENT: Improved meta_field code for PHP7 support.
+
 = .5 =
 * BUG: Fixed bug with the fields attribute of the directory shortcode.
 * ENHANCEMENT: Added localization support and French translation. (Thanks, Max Kovalenkov)
