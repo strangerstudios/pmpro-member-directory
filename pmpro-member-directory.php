@@ -73,6 +73,7 @@ function pmpromd_show_extra_profile_fields($user)
 }
 add_action( 'show_user_profile', 'pmpromd_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'pmpromd_show_extra_profile_fields' );
+add_action( 'pmpro_show_user_profile', 'pmpromd_show_extra_profile_fields' );
 
 function pmpromd_save_extra_profile_fields( $user_id )
 {
@@ -83,6 +84,7 @@ function pmpromd_save_extra_profile_fields( $user_id )
 }
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
+add_action( 'pmpro_personal_options_update', 'pmpromd_save_extra_profile_fields' );
 
 
 function pmpromd_display_file_field($meta_field) {
