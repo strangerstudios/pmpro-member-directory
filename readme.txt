@@ -2,7 +2,7 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4
-Tested up to: 5.2.2
+Tested up to: 5.4
 Stable tag: .6.1
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
