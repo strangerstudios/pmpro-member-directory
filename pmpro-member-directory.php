@@ -79,7 +79,7 @@ function pmpromd_show_extra_profile_fields($user)
 	<label for="hide_directory"> 
 		<input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), $directory_page ); ?>
 	</label>
-	</div> <!-- end pmpro_member_profile_edit-field-first_name -->
+	</div> <!-- end pmpro_member_profile_edit-field-hide_directory -->
 <?php
 	}
 }
