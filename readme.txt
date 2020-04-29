@@ -102,6 +102,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * SECURITY/ENHANCEMENT: Update NPM packages to latest version to resolve vulnerability issues.
 * BUG FIX: Stripping slashes when using an apostrophe in search field.
 * BUG FIX: Fixed notice and display bug when a trailing space was left in the shortcode's "fields" attribute.
+* BUG FIX: Added `method="post"` to search form on directory page to avoid errors where sites not using pretty permalinks would break.
 * BUG FIX/ENHANCEMENT: Replicated error_log for field data code in the "table" layout (logging was already in the other layouts).
 * BUG FIX/ENHANCEMENT: Added `word-break` css improvement for cases where a long name or email address was forcing overflow content.
 * BUG FIX/ENHANCEMENT: Fixed case where a user hidden from directory could still have their individual profile accessed through direct URL.
