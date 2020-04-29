@@ -139,10 +139,10 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	?>
 	<?php if(!empty($show_search)) { ?>
-	<form role="search" class="pmpro_member_directory_search search-form">
+	<form role="search" method="post" class="pmpro_member_directory_search search-form">
 		<label>
 			<span class="screen-reader-text"><?php _e('Search for:','pmpromd'); ?></span>
-			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpromd'); ?>" />
+			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo stripslashes( esc_attr($_REQUEST['ps']) );?>" title="<?php _e('Search Members','pmpromd'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
 		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpromd'); ?>">
@@ -151,7 +151,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	<h3 id="pmpro_member_directory_subheading">
 		<?php if(!empty($s)) { ?>
-			<?php printf(__('Profiles Within <em>%s</em>.','pmpromd'), ucwords(esc_html($s))); ?>
+			<?php printf(__('Profiles Within <em>%s</em>.','pmpromd'), stripslashes( ucwords(esc_html($s)))); ?>
 		<?php } else { ?>
 			<?php _e('Viewing All Profiles','pmpromd'); ?>
 		<?php } ?>
@@ -257,9 +257,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php if(!empty($show_avatar)) { ?>
 								<td class="pmpro_member_directory_avatar">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size); ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
 									<?php } else { ?>
-										<?php echo get_avatar($auser->ID, $avatar_size); ?>
+										<?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?>
 									<?php } ?>
 								</td>
 							<?php } ?>
@@ -285,9 +285,14 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 									<?php
 									foreach($fields_array as $field)
 									{
-									    if ( WP_DEBUG ) {
-									        error_log("Content of field data: " . print_r( $field, true));
-                                        }
+										if ( WP_DEBUG ) {
+											error_log("Content of field data: " . print_r( $field, true));
+										}
+
+										// Fix for a trailing space in the 'fields' shortcode attribute.
+										if ( $field[0] === '' ) {
+											break;
+										}
 
 										$meta_field = $auser->{$field[1]};
 										if(!empty($meta_field))
@@ -354,7 +359,26 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							?>
 							<?php if(!empty($show_level)) { ?>
 								<td class="pmpro_member_directory_level">
-									<?php echo $auser->membership_level->name; ?>
+									<?php
+										$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
+										$membership_levels = array();
+										if ( ! isset( $levels ) ) {
+											// Show all the user's levels. 	
+											foreach ( $alluserlevels as $curlevel ) {
+												$membership_levels[] = $curlevel->name;
+											}
+										} else {
+											$levels_array = explode(',', $levels);
+											// Show only the levels included in the directory. 	
+											foreach ( $alluserlevels as $curlevel ) {
+												if ( in_array( $curlevel->id, $levels_array) ) {
+													$membership_levels[] = $curlevel->name;
+												}
+											}
+										}
+										$auser->membership_levels = implode( ', ', $membership_levels );
+										echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
+									?>
 								</td>
 							<?php } ?>
 							<?php if(!empty($show_startdate)) { ?>
@@ -407,7 +431,26 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php if(!empty($show_level)) { ?>
 							<p class="pmpro_member_directory_level">
 								<strong><?php _e('Level', 'pmpromd'); ?></strong>
-								<?php echo $auser->membership_level->name; ?>
+								<?php
+									$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
+									$membership_levels = array();
+									if ( ! isset( $levels ) ) {
+										// Show all the user's levels. 	
+										foreach ( $alluserlevels as $curlevel ) {
+											$membership_levels[] = $curlevel->name;
+										}
+									} else {
+										$levels_array = explode(',', $levels);
+										// Show only the levels included in the directory. 	
+										foreach ( $alluserlevels as $curlevel ) {
+											if ( in_array( $curlevel->id, $levels_array) ) {
+												$membership_levels[] = $curlevel->name;
+											}
+										}
+									}
+									$auser->membership_levels = implode( ', ', $membership_levels );
+									echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
+								?>
 							</p>
 						<?php } ?>
 						<?php if(!empty($show_startdate)) { ?>
@@ -421,6 +464,15 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						{
 							foreach($fields_array as $field)
 							{
+								if ( WP_DEBUG ) {
+									error_log("Content of field data: " . print_r( $field, true));
+								}
+
+								// Fix for a trailing space in the 'fields' shortcode attribute.
+								if ( $field[0] === '' ) {
+									break;
+								}
+
 								$meta_field = $auser->{$field[1]};
 								if(!empty($meta_field))
 								{
@@ -493,7 +545,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			<?php
 			if($s)
 			{
-				printf(__('within <em>%s</em>.','pmpromd'), ucwords(esc_html($s)));
+				printf(__('within <em>%s</em>.','pmpromd'), stripslashes( ucwords(esc_html($s))) );
 				if(!empty($directory_url))
 				{
 					?>
@@ -515,17 +567,27 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 	<div class="pmpro_pagination">
 		<?php
 		//prev
-		if($pn > 1)
-		{
+		if ( $pn > 1 ) {
+			$query_args = array(
+				'ps' => $s,
+				'pn' => $pn-1,
+				'limit' => $limit,
+			);
+			$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'prev' );
 			?>
-			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg(array("ps"=>$s, "pn"=>$pn-1, "limit"=>$limit), get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpromd'); ?></a></span>
+			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg( $query_args, get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpromd'); ?></a></span>
 			<?php
 		}
 		//next
-		if($totalrows > $end)
-		{
+		if ( $totalrows > $end ) {
+			$query_args = array(
+				'ps' => $s,
+				'pn' => $pn+1,
+				'limit' => $limit,
+			);
+			$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'next' );
 			?>
-			<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( array( "ps"=>$s, "pn"=>$pn+1, "limit"=>$limit ), get_permalink( $post->ID ) ) );?>"><?php _e( 'Next', 'pmpromd' ); ?> &raquo;</a></span>
+			<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>"><?php _e( 'Next', 'pmpromd' ); ?> &raquo;</a></span>
 			<?php
 		}
 		?>

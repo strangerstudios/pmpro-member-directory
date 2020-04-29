@@ -39,6 +39,21 @@ div.pmpro_member_profile strong {display: block; }
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+/* single directory item in list */
+.pmpro_member_directory .pmpro_member_directory-item,
+.pmpro_member_directory .pmpro_member_directory_row {
+    word-break: break-word;
+}
+.pmpro_member_directory_link {
+    word-break: normal;
+}
+
+/* single profile item */
+.pmpro_member_profile { }
+.pmpro_member_profile .pmpromd_filename {
+    display: block;
+}
+
 @media only screen and (max-width: 767px) {
     .pmpro_member_directory.pmpro_member_directory-2col,
     .pmpro_member_directory.pmpro_member_directory-3col,

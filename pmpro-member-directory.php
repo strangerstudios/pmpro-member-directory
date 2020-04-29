@@ -1,12 +1,14 @@
 <?php
 /*
 Plugin Name: Paid Memberships Pro - Member Directory Add On
-Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-member-directory/
+Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version:.6.1
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
+Version: 0.7
+Author: Paid Memberships Pro
+Author URI: https://www.paidmembershipspro.com/
 */
+
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '.7' );
 
 global $pmpromd_options;
 
@@ -91,7 +93,7 @@ function pmpromd_display_file_field($meta_field) {
 		case 'image/jpeg':
 		case 'image/png':
 		case 'image/gif':
-			return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . $meta_field['fullurl'] . '"><br />' . $meta_field['filename'] . '</a>'; break;
+			return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . $meta_field['fullurl'] . '"><span class="pmpromd_filename">' . $meta_field['filename'] . '</span></a>'; break;
 	case 'video/mpeg':
 	case 'video/mp4':
 		return do_shortcode('[video src="' . $meta_field['fullurl'] . '"]'); break;
@@ -99,7 +101,7 @@ function pmpromd_display_file_field($meta_field) {
 	case 'audio/wav':
 		return do_shortcode('[audio src="' . $meta_field['fullurl'] . '"]'); break;
 	default:
-		return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . wp_mime_type_icon($meta_field_file_type['type']) . '"><br />' . $meta_field['filename'] . '</a>'; break;
+		return '<a href="' . $meta_field['fullurl'] . '" title="' . $meta_field['filename'] . '" target="_blank"><img class="subtype-' . $meta_field_file_type['ext'] . '" src="' . wp_mime_type_icon($meta_field_file_type['type']) . '"><span class="pmpromd_filename">' . $meta_field['filename'] . '</span></a>'; break;
 	}
 }
 
