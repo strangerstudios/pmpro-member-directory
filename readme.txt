@@ -108,6 +108,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * ENHANCEMENT: Support for Multiple Memberships Per User to display comma-separated list of levels in directory and profile view.
 * ENHANCEMENT: Support for frontend member profile edit in PMPro v2.3+ to allow members to toggle display in directory.
 * ENHANCEMENT: Filter added for previous and next page navigation on directory (`pmpromd_pagination_url`).
+* ENHANCEMENT: Wrapped the filename output on directory or profile with `<span class="pmpromd_filename">` to allow customization or hide via CSS. 
 
 = .6.1 =
 * BUG FIX: Levels select in block not returning any results.
