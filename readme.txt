@@ -98,7 +98,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 
 == Changelog ==
 
-= 0.7 - 2020-04-29 =
+= 0.7 - 2020-04-30 =
 * SECURITY/ENHANCEMENT: Update NPM packages to latest version to resolve vulnerability issues.
 * BUG FIX: Stripping slashes when using an apostrophe in search field.
 * BUG FIX: Fixed notice and display bug when a trailing space was left in the shortcode's "fields" attribute.
