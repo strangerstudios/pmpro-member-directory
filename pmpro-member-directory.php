@@ -55,6 +55,8 @@ add_action('pmpro_extra_page_settings', 'pmpromd_extra_page_settings');
 function pmpromd_show_extra_profile_fields($user)
 {
 	global $pmpro_pages;
+
+	if ( ! is_page( $pmpro_pages['member_profile_edit'] ) ) {
 ?>
 	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
     <table class="form-table">
@@ -72,9 +74,20 @@ function pmpromd_show_extra_profile_fields($user)
         </tbody>
     </table>
 <?php
+	} else { //If we're on the front-end page edit lets use div instead.
+?>
+	<div class="pmpro_member_profile_edit-field pmpro_member_profile_edit-field-hide_directory">
+	<?php $directory_page = !empty( get_the_title($pmpro_pages['directory']) ) ? esc_html( get_the_title($pmpro_pages['directory']) ) : __( 'directory', 'pmpro-member-directory' ); ?>
+	<label for="hide_directory"> 
+		<input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), $directory_page ); ?>
+	</label>
+	</div> <!-- end pmpro_member_profile_edit-field-hide_directory -->
+<?php
+	}
 }
 add_action( 'show_user_profile', 'pmpromd_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'pmpromd_show_extra_profile_fields' );
+add_action( 'pmpro_show_user_profile', 'pmpromd_show_extra_profile_fields' );
 
 function pmpromd_save_extra_profile_fields( $user_id )
 {
@@ -85,6 +98,7 @@ function pmpromd_save_extra_profile_fields( $user_id )
 }
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
+add_action( 'pmpro_personal_options_update', 'pmpromd_save_extra_profile_fields' );
 
 
 function pmpromd_display_file_field($meta_field) {

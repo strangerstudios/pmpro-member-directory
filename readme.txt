@@ -27,7 +27,7 @@ Shortcode attributes for `[pmpro_member_directory]` include:
 1. levels: The level ID or a comma-separated list of level IDs to include in the directory. default: all levels (accepts a single level ID or a comma-separated list of IDs).
 1. limit: the number of members to display per page
 1. link: Optionally link the member directory item to the single member profile page. default: true (accepts 'true' or 'false').
-1. order: Sort the results based on the order_by attribute in ascending or descending order. default: ASC (accepts 'DESC' or 'ASC'). 
+1. order: Sort the results based on the order_by attribute in ascending or descending order. default: ASC (accepts 'DESC' or 'ASC').
 1. order_by: The sort order for the results. default: 'u.display_name' (accepts 'u.user_email', 'u.user_email', 'u.display_name', 'u.user_login', 'u.user_registered', 'mu.membership_id', 'mu.startdate', 'joindate')
 1. show_avatar: Display the user's avatar generated via Gravatar (https://en.gravatar.com) or user-submitted using a plugin like Simple Local Avatars (https://wordpress.org/plugins/simple-local-avatars/); default: true (accepts 'true' or 'false').
 1. show_email: Display the user's email address; default: true (accepts 'true' or 'false').
@@ -35,7 +35,7 @@ Shortcode attributes for `[pmpro_member_directory]` include:
 1. show_search: Display a search form (searches on member display name or email address); default: true (accepts 'true' or 'false').
 1. show_startdate: Display the user's membership start date for their current level; default: true (accepts 'true' or 'false').
 
-Shortcode attributes for `[pmpro_member_profile]` include:	
+Shortcode attributes for `[pmpro_member_profile]` include:
 
 1. avatar_size: The square pixel dimensions of the avatar to display. Requires the "show_avatar" attribute to be set to 'true'. default: '128' (accepts any numerical value).
 1. fields: Display additional user meta fields. default: none (accepts a list of label names and field IDs, i.e. fields="Company,company;Website,user_url").
@@ -109,7 +109,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * ENHANCEMENT: Support for Multiple Memberships Per User to display comma-separated list of levels in directory and profile view.
 * ENHANCEMENT: Support for frontend member profile edit in PMPro v2.3+ to allow members to toggle display in directory.
 * ENHANCEMENT: Filter added for previous and next page navigation on directory (`pmpromd_pagination_url`).
-* ENHANCEMENT: Wrapped the filename output on directory or profile with `<span class="pmpromd_filename">` to allow customization or hide via CSS. 
+* ENHANCEMENT: Wrapped the filename output on directory or profile with `<span class="pmpromd_filename">` to allow customization or hide via CSS.
 
 = .6.1 =
 * BUG FIX: Levels select in block not returning any results.
@@ -160,10 +160,10 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * BUG: Fixed css declaration that was affecting elements outside of the pmpro_member_directory div/table
 * ENHANCEMENT: Added ability to load the theme's (child or parent) custom pmpro-member-directory.css in place of default
 
-= .3 = 
+= .3 =
 * FEATURE: Added [pmpro_member_profile] shortcode
 * ENHANCEMENT: Added additional attributes to the [pmpro_member_directory]
-* ENHANCEMENT: Added ability to define Directory and Profile page under Memberships > Pge Settings 
+* ENHANCEMENT: Added ability to define Directory and Profile page under Memberships > Pge Settings
 * ENHANCEMENT: Added user option to hide profile from diretory.
 
 = .2 =

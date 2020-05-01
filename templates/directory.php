@@ -324,7 +324,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 													<strong><?php echo $field[0]; ?></strong>
 													<?php echo $rh_fields[$field[1]][$meta_field]; ?>
 													<?php
-												}			
+												}
 												else
 												{
 													if($field[1] == 'user_url')
@@ -363,13 +363,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
 										$membership_levels = array();
 										if ( ! isset( $levels ) ) {
-											// Show all the user's levels. 	
+											// Show all the user's levels.
 											foreach ( $alluserlevels as $curlevel ) {
 												$membership_levels[] = $curlevel->name;
 											}
 										} else {
 											$levels_array = explode(',', $levels);
-											// Show only the levels included in the directory. 	
+											// Show only the levels included in the directory.
 											foreach ( $alluserlevels as $curlevel ) {
 												if ( in_array( $curlevel->id, $levels_array) ) {
 													$membership_levels[] = $curlevel->name;
@@ -435,13 +435,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 									$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
 									$membership_levels = array();
 									if ( ! isset( $levels ) ) {
-										// Show all the user's levels. 	
+										// Show all the user's levels.
 										foreach ( $alluserlevels as $curlevel ) {
 											$membership_levels[] = $curlevel->name;
 										}
 									} else {
 										$levels_array = explode(',', $levels);
-										// Show only the levels included in the directory. 	
+										// Show only the levels included in the directory.
 										foreach ( $alluserlevels as $curlevel ) {
 											if ( in_array( $curlevel->id, $levels_array) ) {
 												$membership_levels[] = $curlevel->name;
@@ -503,7 +503,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										<strong><?php echo $field[0]; ?></strong>
 										<?php echo $rh_fields[$field[1]][$meta_field]; ?>
 										<?php
-									}		
+									}
 										elseif($field[1] == 'user_url')
 										{
 											?>

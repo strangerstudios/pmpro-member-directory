@@ -13,7 +13,7 @@ function pmpromd_register_directory_block() {
 	wp_register_script( 
 		'pmpromd-directory-block', 
 		plugins_url( 'block.build.js', __FILE__ ), 
-		array( 'wp-blocks', 'wp-element', 'wp-editor' )
+		array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-api', 'wp-editor', 'pmpro_admin' )
 	);
 
 	register_block_type( 'pmpro-member-directory/directory', array(
