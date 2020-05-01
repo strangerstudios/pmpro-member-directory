@@ -22,10 +22,12 @@ function pmpromd_profile_preheader()
 			$pu = $current_user;
 		else
 			$pu = false;
-		
-		//If no profile user or membership level, go to directory or home
-		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID))
-		{
+
+		// Is this user hidden from directory?
+		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
+
+		// If no profile user, membership level, or hidden, go to directory or home.
+		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
 			if(!empty($pmpro_pages['directory']))
 				wp_redirect(get_permalink($pmpro_pages['directory']));
 			else
@@ -212,8 +214,14 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	elseif(empty($_REQUEST['pu']))
 		$pu = get_userdata($current_user->ID);
 
-	if(!empty($pu))
-		$pu->membership_level = pmpro_getMembershipLevelForUser($pu->ID);
+	if ( ! empty( $pu ) ) {
+		$allmylevels = pmpro_getMembershipLevelsForUser( $pu->ID );
+		$membership_levels = array();
+		foreach ( $allmylevels as $curlevel ) {
+			$membership_levels[] = $curlevel->name;
+		}
+		$pu->membership_levels = implode(', ', $membership_levels);
+	}
 
 	ob_start();
 
@@ -233,8 +241,16 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
-				$fields = rtrim( $fields, ';' ); // clear up a stray ;
-				$fields_array = explode(";",$fields);
+				
+				// Check to see if the Block Editor is used or the shortcode.
+				if ( strpos( $fields, "\n" ) !== FALSE ) {
+					$fields = rtrim( $fields, "\n" ); // clear up a stray \n
+					$fields_array = explode("\n", $fields); // For new block editor.
+				} else {
+					$fields = rtrim( $fields, ';' ); // clear up a stray ;
+					$fields_array = explode(";",$fields);
+				}
+				
 				if(!empty($fields_array))
 				{
 					for($i = 0; $i < count($fields_array); $i++ )
@@ -286,7 +302,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_level)) { ?>										
 					<p class="pmpro_member_directory_level">
 						<strong><?php _e('Level', 'pmpromd'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? $pu->membership_level->name : ''; ?>
+						<?php echo ! empty( $pu->membership_levels ) ? $pu->membership_levels : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>										
@@ -325,7 +341,12 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						{
 
 							if(empty($field[0]))
-								break;		
+								break;
+
+							// Fix for a trailing space in the 'fields' shortcode attribute.
+							if ( $field[0] === ' ' ) {
+								break;
+							}
 			
 							$meta_field = $pu->{$field[1]};
 

@@ -2,14 +2,21 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4
-Tested up to: 5.2.2
-Stable tag: .5.4
+Tested up to: 5.4
+Stable tag: 0.7
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
 == Description ==
 The Member Directory Add On enhances your membership site with a public or private, searchable directory and member profiles.
 
+[Read the full documentation for the Member Directory and Profiles Add On](https://www.paidmembershipspro.com/add-ons/member-directory/)
+
+= Official Paid Memberships Pro Add On =
+
+This is an official Add On for [Paid Memberships Pro](https://www.paidmembershipspro.com), the most complete member management and membership subscriptions plugin for WordPress.
+
+= Shortcodes and Attributes =
 This plugin creates 2 shortcodes for a Member Directory and Member Profile pages, which can be defined in Memberships > Page Settings of the WordPress admin.
 
 Shortcode attributes for `[pmpro_member_directory]` include:
@@ -90,7 +97,26 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
-= .5.4 =
+
+= 0.7 - 2020-04-29 =
+* SECURITY/ENHANCEMENT: Update NPM packages to latest version to resolve vulnerability issues.
+* BUG FIX: Stripping slashes when using an apostrophe in search field.
+* BUG FIX: Fixed notice and display bug when a trailing space was left in the shortcode's "fields" attribute.
+* BUG FIX: Added `method="post"` to search form on directory page to avoid errors where sites not using pretty permalinks would break.
+* BUG FIX/ENHANCEMENT: Replicated error_log for field data code in the "table" layout (logging was already in the other layouts).
+* BUG FIX/ENHANCEMENT: Added `word-break` css improvement for cases where a long name or email address was forcing overflow content.
+* BUG FIX/ENHANCEMENT: Fixed case where a user hidden from directory could still have their individual profile accessed through direct URL.
+* ENHANCEMENT: Support for Multiple Memberships Per User to display comma-separated list of levels in directory and profile view.
+* ENHANCEMENT: Support for frontend member profile edit in PMPro v2.3+ to allow members to toggle display in directory.
+* ENHANCEMENT: Filter added for previous and next page navigation on directory (`pmpromd_pagination_url`).
+* ENHANCEMENT: Wrapped the filename output on directory or profile with `<span class="pmpromd_filename">` to allow customization or hide via CSS. 
+
+= .6.1 =
+* BUG FIX: Levels select in block not returning any results.
+* BUG FIX: Custom fields from Register Helper not working when multiple fields are set in the shortcode method.
+* BUG FIX: Remove "Levels" attribute from profile block method as profile shortcode does not support this attribute. Set the 'Require Membership' meta box to restrict access to profile pages.
+
+= .6 =
 * BUG FIX: Show default "Hide From Directory" if no directory page is set.
 * BUG FIX: Strip trailing semi-colon from "fields" attribute.
 * BUG FIX: Redirect non-member profiles back to the directory page.
