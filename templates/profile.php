@@ -413,8 +413,9 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						}
 					}
 				?>
+				<?php do_action( 'pmpro_member_profile_after', $pu ); ?>
 				<div class="pmpro_clear"></div>
-			</div>
+			</div>			
 			<hr />
 			<?php if(!empty($directory_url)) { ?>
 				<div align="center"><a class="more-link" href="<?php echo $directory_url;?>"><?php _e('View All Members','pmpromd'); ?></a></div>
