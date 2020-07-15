@@ -513,7 +513,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										else
 										{
 											?>
-											<strong><?php echo $field[0]; ?>:</strong>
+											<strong><?php echo $field[0]; ?></strong>
 											<?php echo make_clickable($auser->{$field[1]}); ?>
 											<?php
 										}
