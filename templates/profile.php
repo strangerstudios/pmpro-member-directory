@@ -416,9 +416,51 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<div class="pmpro_clear"></div>
 			</div>
 			<hr />
-			<?php if(!empty($directory_url)) { ?>
-				<div align="center"><a class="more-link" href="<?php echo $directory_url;?>"><?php _e('View All Members','pmpromd'); ?></a></div>
-			<?php } ?>
+			<p class="pmpro_actions_nav">
+				<?php
+					// Build the links to return.
+					$pmpro_member_profile_action_links = array();
+
+					if ( ! empty( $directory_url ) ) {
+						$pmpro_member_profile_action_links['view-directory'] = sprintf( '<a id="pmpro_actionlink-view-all-members" href="%s">%s</a>', esc_url( $directory_url ), esc_html__( 'View All Members', 'pmpromd' ) );
+					}
+
+					if ( ! empty( $pu ) && $pu->ID === $current_user->ID ) {
+						// User viewing their own profile. Show an edit profile link if 'Member Profile Edit Page' is set or dashboard access is allowed.
+						if ( ! empty( pmpro_getOption( 'member_profile_edit_page_id' ) ) ) {
+							$edit_profile_url = pmpro_url( 'member_profile_edit' );
+						} elseif ( ! pmpro_block_dashboard() ) {
+							$edit_profile_url = admin_url( 'profile.php' );
+						}
+
+						if ( ! empty( $edit_profile_url) ) {
+							$pmpro_member_profile_action_links['edit-profile'] = sprintf( '<a id="pmpro_actionlink-profile" href="%s">%s</a>', esc_url( $edit_profile_url ), esc_html__( 'Edit Profile', 'paid-memberships-pro' ) );
+						}
+					}
+
+					/**
+					 * Filter which links are displayed on the single Member Directory Profile page.
+					 *
+					 * @since 1.0
+					 *
+					 * @param array $pmpro_member_profile_action_links Can be view-directory, edit-profile, or or custom.
+					 *
+					 * @return array $pmpro_member_profile_action_links
+					 */
+					$pmpro_member_profile_action_links = apply_filters( 'pmpromd_member_profile_action_links', $pmpro_member_profile_action_links );
+
+					$allowed_html = array(
+						'a' => array (
+							'class' => array(),
+							'href' => array(),
+							'id' => array(),
+							'target' => array(),
+							'title' => array(),
+						),
+					);
+					echo wp_kses( implode( pmpro_actions_nav_separator(), $pmpro_member_profile_action_links ), $allowed_html );
+				?>
+			</p> <!-- end pmpro_actions_nav -->
 			<?php
 		}
 	?>
