@@ -206,6 +206,27 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				echo ' pmpro_member_directory-' . $layout;
 			}
 		?>">
+			<?php 
+			$shortcode_atts = array(
+				'avatar_size' => $avatar_size,
+				'fields' => $fields,
+				'layout' => $layout,
+				'level' => $level,
+				'levels' => $levels,
+				'limit' => $limit,
+				'link' => $link,
+				'order_by' => $order_by,
+				'order' => $order,
+				'show_avatar' => $show_avatar,
+				'show_email' => $show_email,
+				'show_level' => $show_level,
+				'show_search' => $show_search,
+				'show_startdate' => $show_startdate,
+				'avatar_align' => $avatar_align,				
+				'fields_array' => $fields_array
+			);
+
+			do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
 			<?php
 			if($layout == "table")
 			{
@@ -533,6 +554,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				<?php
 			endforeach;
 		?>
+		<?php do_action( 'pmpro_member_directory_after', $sqlQuery, $shortcode_atts ); ?>
 		</div> <!-- end pmpro_member_directory -->
 		<?php
 		}

@@ -277,6 +277,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
+				<?php do_action( 'pmpro_member_profile_before', $pu ); ?>
 				<?php if(!empty($show_avatar)) { ?>
 					<p class="pmpro_member_directory_avatar">
 						<?php echo get_avatar($pu->ID, $avatar_size, NULL, $pu->display_name, array("class"=>"alignright")); ?>
@@ -413,8 +414,9 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						}
 					}
 				?>
+				<?php do_action( 'pmpro_member_profile_after', $pu ); ?>
 				<div class="pmpro_clear"></div>
-			</div>
+			</div>			
 			<hr />
 			<p class="pmpro_actions_nav">
 				<?php
