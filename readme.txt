@@ -1,9 +1,9 @@
 === Paid Memberships Pro - Member Directory Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
-Requires at least: 4
-Tested up to: 5.4.1
-Stable tag: 0.7
+Requires at least: 4.0
+Tested up to: 5.4
+Stable tag: 0.8
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.8 - 2020-07-23 =
+* ENHANCEMENT: Updated webpack configuration to use wp-scripts package.
+* ENHANCEMENT: Added an 'edit' link if user is viewing their own profile. New filter added 'pmpromd_member_profile_action_links'.
+* ENHANCEMENT: New hooks added to templates - 'pmpro_member_profile_before', 'pmpro_member_directory_before' and 'pmpro_member_directory_after'.
+* ENHANCEMENT: Removed semi-colon from field label where it was automatically being displayed. User's now can manually add this in if needed.
 
 = 0.7 - 2020-04-30 =
 * SECURITY/ENHANCEMENT: Update NPM packages to latest version to resolve vulnerability issues.
