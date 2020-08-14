@@ -119,6 +119,23 @@ function pmpromd_display_file_field($meta_field) {
 	}
 }
 
+/**
+ * Function to get the member's displayed name and allow custom code to filter defaults.
+ *
+ */
+function pmpro_member_directory_get_member_display_name( $user ) {
+	/**
+	 * Filters the name to display for the member in the directory or profile page.
+	 *
+	 * @since 1.0
+	 *
+	 * @param object $user The WP_User object for the profile.
+	 * @param string $display_name The name to display for the user.
+	 */
+	$display_name = apply_filters( 'pmpro_member_directory_display_name', $user->display_name, $user );
+	return $display_name;
+}
+
 /*
 Function to add links to the plugin row meta
 */
