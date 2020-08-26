@@ -135,6 +135,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 	if($totalrows < $end)
 		$end = $totalrows;
 
+
+	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers );
+
 	ob_start();
 
 	?>
