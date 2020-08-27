@@ -75,11 +75,13 @@ function pmpromd_profile_preheader()
 				{
 					global $wpdb;
 					$user_nicename = $_REQUEST['pu'];
-					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$display_name = pmpro_member_directory_get_member_display_name( $user );
+
 				}
 				elseif(!empty($current_user))
 				{
-					$display_name = $current_user->display_name;
+					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
 				}
 				if(!empty($display_name))
 					$title = $display_name;
@@ -96,11 +98,12 @@ function pmpromd_profile_preheader()
 				if(!empty($_REQUEST['pu']))
 				{
 					$user_nicename = $_REQUEST['pu'];
-					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$display_name = pmpro_member_directory_get_member_display_name( $user );
 				}
 				elseif(!empty($current_user))
 				{
-					$display_name = $current_user->display_name;
+					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
 				}
 				if(!empty($display_name))
 				{
@@ -277,6 +280,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 
 			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
+				<?php do_action( 'pmpro_member_profile_before', $pu ); ?>
 				<?php if(!empty($show_avatar)) { ?>
 					<p class="pmpro_member_directory_avatar">
 						<?php echo get_avatar($pu->ID, $avatar_size, NULL, $pu->display_name, array("class"=>"alignright")); ?>
@@ -284,7 +288,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_name) && !empty($pu->display_name) ) { ?>
 					<h2 class="pmpro_member_directory_name">
-						<?php echo $pu->display_name; ?>
+						<?php echo esc_html( pmpro_member_directory_get_member_display_name( $pu ) ); ?>
 					</h2>
 				<?php } ?>
 				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>
@@ -413,12 +417,55 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 						}
 					}
 				?>
+				<?php do_action( 'pmpro_member_profile_after', $pu ); ?>
 				<div class="pmpro_clear"></div>
-			</div>
+			</div>			
 			<hr />
-			<?php if(!empty($directory_url)) { ?>
-				<div align="center"><a class="more-link" href="<?php echo $directory_url;?>"><?php _e('View All Members','pmpromd'); ?></a></div>
-			<?php } ?>
+			<p class="pmpro_actions_nav">
+				<?php
+					// Build the links to return.
+					$pmpro_member_profile_action_links = array();
+
+					if ( ! empty( $directory_url ) ) {
+						$pmpro_member_profile_action_links['view-directory'] = sprintf( '<a id="pmpro_actionlink-view-all-members" href="%s">%s</a>', esc_url( $directory_url ), esc_html__( 'View All Members', 'pmpromd' ) );
+					}
+
+					if ( ! empty( $pu ) && $pu->ID === $current_user->ID ) {
+						// User viewing their own profile. Show an edit profile link if 'Member Profile Edit Page' is set or dashboard access is allowed.
+						if ( ! empty( pmpro_getOption( 'member_profile_edit_page_id' ) ) ) {
+							$edit_profile_url = pmpro_url( 'member_profile_edit' );
+						} elseif ( ! pmpro_block_dashboard() ) {
+							$edit_profile_url = admin_url( 'profile.php' );
+						}
+
+						if ( ! empty( $edit_profile_url) ) {
+							$pmpro_member_profile_action_links['edit-profile'] = sprintf( '<a id="pmpro_actionlink-profile" href="%s">%s</a>', esc_url( $edit_profile_url ), esc_html__( 'Edit Profile', 'paid-memberships-pro' ) );
+						}
+					}
+
+					/**
+					 * Filter which links are displayed on the single Member Directory Profile page.
+					 *
+					 * @since 1.0
+					 *
+					 * @param array $pmpro_member_profile_action_links Can be view-directory, edit-profile, or or custom.
+					 *
+					 * @return array $pmpro_member_profile_action_links
+					 */
+					$pmpro_member_profile_action_links = apply_filters( 'pmpromd_member_profile_action_links', $pmpro_member_profile_action_links );
+
+					$allowed_html = array(
+						'a' => array (
+							'class' => array(),
+							'href' => array(),
+							'id' => array(),
+							'target' => array(),
+							'title' => array(),
+						),
+					);
+					echo wp_kses( implode( pmpro_actions_nav_separator(), $pmpro_member_profile_action_links ), $allowed_html );
+				?>
+			</p> <!-- end pmpro_actions_nav -->
 			<?php
 		}
 	?>
