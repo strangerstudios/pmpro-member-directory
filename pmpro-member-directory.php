@@ -3,12 +3,12 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 0.8
+Version: 1.0
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '0.8' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.0' );
 
 global $pmpromd_options;
 
@@ -120,18 +120,14 @@ function pmpromd_display_file_field($meta_field) {
 }
 
 /**
- * Function to get the member's displayed name and allow custom code to filter defaults.
+ * Filters the name to display for the member in the directory or profile page.
  *
+ * @since 1.0
+ *
+ * @param object $user The WP_User object for the profile.
+ * @param string $display_name The name to display for the user.
  */
 function pmpro_member_directory_get_member_display_name( $user ) {
-	/**
-	 * Filters the name to display for the member in the directory or profile page.
-	 *
-	 * @since 1.0
-	 *
-	 * @param object $user The WP_User object for the profile.
-	 * @param string $display_name The name to display for the user.
-	 */
 	$display_name = apply_filters( 'pmpro_member_directory_display_name', $user->display_name, $user );
 	return $display_name;
 }
