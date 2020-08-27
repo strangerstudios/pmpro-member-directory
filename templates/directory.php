@@ -291,9 +291,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<td>
 								<h3 class="pmpro_member_directory_display-name">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo pmpro_member_directory_get_member_display_name( $auser ); ?></a>
 									<?php } else { ?>
-										<?php echo $auser->display_name; ?>
+										<?php echo pmpro_member_directory_get_member_display_name( $auser ); ?>
 									<?php } ?>
 								</h3>
 							</td>
@@ -442,9 +442,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php } ?>
 						<h3 class="pmpro_member_directory_display-name">
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
-								<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo $auser->display_name; ?></a>
+								<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo pmpro_member_directory_get_member_display_name( $auser ); ?></a>
 							<?php } else { ?>
-								<?php echo $auser->display_name; ?>
+								<?php echo pmpro_member_directory_get_member_display_name( $auser ); ?></a>
 							<?php } ?>
 						</h3>
 						<?php if(!empty($show_email)) { ?>
