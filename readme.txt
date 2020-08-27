@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 0.8
+Tested up to: 5.5
+Stable tag: 1.0
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 1.0 - 2020-08-27 =
+* BUG FIX/ENHANCEMENT: Moved `pmpro_member_directory_after` outside div container for better styling with Membership Maps.
+* ENHANCEMENT: Added new filter to adjust user display name on directory and profile page. `pmpro_member_directory_display_name`.
+* ENHANCEMENT: New filter added to allow PHP to adjust the user results further. `pmpromd_user_directory_results`.
 
 = 0.8 - 2020-07-23 =
 * ENHANCEMENT: Updated webpack configuration to use wp-scripts package.
