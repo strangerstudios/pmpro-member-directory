@@ -75,11 +75,13 @@ function pmpromd_profile_preheader()
 				{
 					global $wpdb;
 					$user_nicename = $_REQUEST['pu'];
-					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$display_name = pmpro_member_directory_get_member_display_name( $user );
+
 				}
 				elseif(!empty($current_user))
 				{
-					$display_name = $current_user->display_name;
+					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
 				}
 				if(!empty($display_name))
 					$title = $display_name;
@@ -96,11 +98,12 @@ function pmpromd_profile_preheader()
 				if(!empty($_REQUEST['pu']))
 				{
 					$user_nicename = $_REQUEST['pu'];
-					$display_name = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+					$display_name = pmpro_member_directory_get_member_display_name( $user );
 				}
 				elseif(!empty($current_user))
 				{
-					$display_name = $current_user->display_name;
+					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
 				}
 				if(!empty($display_name))
 				{
@@ -285,7 +288,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_name) && !empty($pu->display_name) ) { ?>
 					<h2 class="pmpro_member_directory_name">
-						<?php echo $pu->display_name; ?>
+						<?php echo esc_html( pmpro_member_directory_get_member_display_name( $pu ) ); ?>
 					</h2>
 				<?php } ?>
 				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>
