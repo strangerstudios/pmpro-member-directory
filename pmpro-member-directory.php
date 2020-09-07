@@ -92,9 +92,17 @@ add_action( 'pmpro_show_user_profile', 'pmpromd_show_extra_profile_fields' );
 function pmpromd_save_extra_profile_fields( $user_id )
 {
 	if ( !current_user_can( 'edit_user', $user_id ) )
-		return false;
+	return false;
 
-	update_user_meta( $user_id, 'pmpromd_hide_directory', ( isset( $_POST['hide_directory'] ) ? sanitize_text_field( $_POST['hide_directory'] ) : null ) );
+global $pmpro_pages;
+
+if ( is_page( $pmpro_pages['member_profile_edit'] ) && ! isset( $_REQUEST['submit'] ) ) {
+	return;
+}
+
+$hide_from_dir = isset( $_REQUEST['hide_directory'] ) ? sanitize_text_field( $_REQUEST['hide_directory'] ) : '';
+
+update_user_meta( $user_id, 'pmpromd_hide_directory', $hide_from_dir );
 }
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
