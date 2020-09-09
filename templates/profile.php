@@ -218,6 +218,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		$pu = get_userdata($current_user->ID);
 
 	if ( ! empty( $pu ) ) {
+		$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );
 		$allmylevels = pmpro_getMembershipLevelsForUser( $pu->ID );
 		$membership_levels = array();
 		foreach ( $allmylevels as $curlevel ) {
