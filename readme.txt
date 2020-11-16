@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4.0
 Tested up to: 5.5
-Stable tag: 1.0
+Stable tag: 1.1
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.1 - 2020-11-16 =
+* BUG FIX: Fixed issue where saving "hide from directory" wasn't saving on the front-end profile page.
+* BUG FIX: Fixed issue where profile page wasn't showing user information (fields) correctly.
 
 = 1.0 - 2020-08-27 =
 * BUG FIX/ENHANCEMENT: Moved `pmpro_member_directory_after` outside div container for better styling with Membership Maps.
