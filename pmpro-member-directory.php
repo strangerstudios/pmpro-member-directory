@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.0
+Version: 1.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 */
@@ -89,12 +89,23 @@ add_action( 'show_user_profile', 'pmpromd_show_extra_profile_fields' );
 add_action( 'edit_user_profile', 'pmpromd_show_extra_profile_fields' );
 add_action( 'pmpro_show_user_profile', 'pmpromd_show_extra_profile_fields' );
 
-function pmpromd_save_extra_profile_fields( $user_id )
-{
-	if ( !current_user_can( 'edit_user', $user_id ) )
-		return false;
+function pmpromd_save_extra_profile_fields( $user_id ) {
 
-	update_user_meta( $user_id, 'pmpromd_hide_directory', ( isset( $_POST['hide_directory'] ) ? sanitize_text_field( $_POST['hide_directory'] ) : null ) );
+	global $pmpro_pages;
+
+	if ( !current_user_can( 'edit_user', $user_id ) ) {
+		return false;
+	}
+		
+
+	if ( is_page( $pmpro_pages['member_profile_edit'] ) ) {
+		if ( ! isset( $_REQUEST['submit'] ) ) {
+			return false;
+		}
+	}
+
+	$hide_from_dir = isset( $_REQUEST['hide_directory'] ) ? sanitize_text_field( $_REQUEST['hide_directory'] ) : null;
+	update_user_meta( $user_id, 'pmpromd_hide_directory', $hide_from_dir );
 }
 add_action( 'personal_options_update', 'pmpromd_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmpromd_save_extra_profile_fields' );
