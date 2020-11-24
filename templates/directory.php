@@ -209,7 +209,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			}
 		?>">
 			<?php 
-			$shortcode_atts = array(
+			$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
 				'avatar_size' => $avatar_size,
 				'fields' => $fields,
 				'layout' => $layout,
@@ -226,9 +226,10 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				'show_startdate' => $show_startdate,
 				'avatar_align' => $avatar_align,				
 				'fields_array' => $fields_array
-			);
+			) );
 
 			do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
+			
 			<?php
 			if($layout == "table")
 			{
