@@ -143,6 +143,19 @@ function pmpro_member_directory_get_member_display_name( $user ) {
 	return $display_name;
 }
 
+/**
+ * Filters the name to display in the profile URL (pu) query string parameter.
+ *
+ * @since 1.2
+ *
+ * @param object $user The WP_User object for the profile.
+ * @param string $profile_url_name The name to display in the profile URL (pu) query string parameter.
+ */
+function pmpro_member_directory_get_member_profile_url_name( $user ) {
+	$profile_url_name = apply_filters( 'pmpro_member_directory_profile_url_name', $user->user_nicename, $user );
+	return $profile_url_name;
+}
+
 /*
 Function to add links to the plugin row meta
 */
