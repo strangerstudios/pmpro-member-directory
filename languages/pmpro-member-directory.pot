@@ -1,0 +1,224 @@
+# Copyright (C) 2021 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.1\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-02-10T19:47:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.3.0\n"
+"X-Domain: pmpro-member-directory\n"
+
+#. Plugin Name of the plugin
+msgid "Paid Memberships Pro - Member Directory Add On"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.paidmembershipspro.com/add-ons/member-directory/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Adds a customizable Member Directory and Member Profiles to your membership site."
+msgstr ""
+
+#. Author of the plugin
+msgid "Paid Memberships Pro"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.paidmembershipspro.com/"
+msgstr ""
+
+#: pmpro-member-directory.php:68
+#: pmpro-member-directory.php:80
+msgid "directory"
+msgstr ""
+
+#: blocks/directory/block.js:31
+msgid "Members Directory"
+msgstr ""
+
+#: blocks/directory/block.js:32
+msgid "Display a directory of members."
+msgstr ""
+
+#: blocks/directory/block.js:148
+msgid "Levels Selected: "
+msgstr ""
+
+#: blocks/directory/block.js:157
+msgid "Display Options"
+msgstr ""
+
+#: blocks/directory/block.js:161
+msgid "Select levels"
+msgstr ""
+
+#: blocks/directory/block.js:162
+msgid "List of level IDs that allow profiles. Default: All"
+msgstr ""
+
+#: blocks/directory/block.js:173
+msgid "div"
+msgstr ""
+
+#: blocks/directory/block.js:174
+msgid "table"
+msgstr ""
+
+#: blocks/directory/block.js:175
+msgid "2col"
+msgstr ""
+
+#: blocks/directory/block.js:176
+msgid "3col"
+msgstr ""
+
+#: blocks/directory/block.js:177
+msgid "4col"
+msgstr ""
+
+#: blocks/directory/block.js:226
+#: blocks/profile/block.js:168
+msgid "Extra Fields"
+msgstr ""
+
+#: blocks/directory/block.js:237
+msgid "Filtering Options"
+msgstr ""
+
+#: blocks/directory/block.js:244
+msgid "Display Name"
+msgstr ""
+
+#: blocks/directory/block.js:245
+msgid "User Email"
+msgstr ""
+
+#: blocks/directory/block.js:246
+msgid "User Login"
+msgstr ""
+
+#: blocks/directory/block.js:247
+msgid "User Registered"
+msgstr ""
+
+#: blocks/directory/block.js:248
+msgid "Membership Level"
+msgstr ""
+
+#: blocks/directory/block.js:249
+msgid "Membership Start Date"
+msgstr ""
+
+#: blocks/directory/block.js:250
+msgid "Join Date"
+msgstr ""
+
+#: blocks/directory/block.js:259
+msgid "ASC"
+msgstr ""
+
+#: blocks/directory/block.js:260
+msgid "DESC"
+msgstr ""
+
+#: blocks/directory/block.js:274
+msgid "Membership Directory"
+msgstr ""
+
+#: blocks/directory/block.js:281
+#: blocks/profile/block.js:228
+msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
+msgstr ""
+
+#: blocks/directory/templates/table.js:15
+msgid "Avatar"
+msgstr ""
+
+#: blocks/directory/templates/table.js:16
+msgid "Member"
+msgstr ""
+
+#: blocks/directory/templates/table.js:17
+#: blocks/profile/block.js:194
+msgid "Email Address"
+msgstr ""
+
+#: blocks/directory/templates/table.js:18
+msgid "More Information"
+msgstr ""
+
+#: blocks/directory/templates/table.js:19
+#: blocks/profile/block.js:199
+msgid "Level"
+msgstr ""
+
+#: blocks/directory/templates/table.js:20
+#: blocks/profile/block.js:204
+msgid "Start Date"
+msgstr ""
+
+#: blocks/directory/templates/table.js:31
+#: blocks/directory/templates/table.js:40
+#: blocks/directory/templates/table.js:49
+#: blocks/directory/templates/table.js:58
+msgid "View Profile"
+msgstr ""
+
+#: blocks/profile/block.js:25
+msgid "Member Profile"
+msgstr ""
+
+#: blocks/profile/block.js:26
+msgid "Display a profile for a Member."
+msgstr ""
+
+#: blocks/profile/block.js:95
+msgid "Display Settings"
+msgstr ""
+
+#: blocks/profile/block.js:163
+msgid "Set this to a user ID to show a profile of a specific user. Leave blank for current user."
+msgstr ""
+
+#: blocks/profile/block.js:174
+msgid "Accepts a list of label names and metakeys per line. (i.e. Label,meta_key)"
+msgstr ""
+
+#: blocks/profile/block.js:179
+msgid "Membership Profile"
+msgstr ""
+
+#: blocks/profile/block.js:185
+msgid "August Dibble"
+msgstr ""
+
+#: blocks/profile/block.js:189
+msgid "Biographical Info"
+msgstr ""
+
+#: blocks/profile/block.js:195
+msgid "August.Dibble@mail.com"
+msgstr ""
+
+#: blocks/profile/block.js:200
+msgid "Free"
+msgstr ""
+
+#: blocks/profile/block.js:205
+msgid "Jan 21, 2019"
+msgstr ""
+
+#: blocks/profile/block.js:209
+msgid "Address"
+msgstr ""
+
+#: blocks/profile/block.js:219
+msgid "Phone Number"
+msgstr ""
