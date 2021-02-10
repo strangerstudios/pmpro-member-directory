@@ -7,6 +7,7 @@ Version: 1.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
+Domain Path: /languages
 */
 
 define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.0' );
