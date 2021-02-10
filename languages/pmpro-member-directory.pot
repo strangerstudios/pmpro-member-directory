@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-10T19:47:53+00:00\n"
+"POT-Creation-Date: 2021-02-10T20:02:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.3.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -34,9 +34,141 @@ msgstr ""
 msgid "https://www.paidmembershipspro.com/"
 msgstr ""
 
-#: pmpro-member-directory.php:68
-#: pmpro-member-directory.php:80
+#: pmpro-member-directory.php:70
+#: pmpro-member-directory.php:82
 msgid "directory"
+msgstr ""
+
+#: pmpro-member-directory.php:72
+#: pmpro-member-directory.php:84
+msgid "Hide from %s?"
+msgstr ""
+
+#: pmpro-member-directory.php:155
+msgid "View Documentation"
+msgstr ""
+
+#: pmpro-member-directory.php:155
+msgid "Docs"
+msgstr ""
+
+#: pmpro-member-directory.php:156
+msgid "Visit Customer Support Forum"
+msgstr ""
+
+#: pmpro-member-directory.php:156
+msgid "Support"
+msgstr ""
+
+#: templates/directory.php:146
+msgid "Search for:"
+msgstr ""
+
+#: templates/directory.php:147
+#: templates/directory.php:150
+#: templates/profile.php:237
+#: templates/profile.php:240
+msgid "Search Members"
+msgstr ""
+
+#: templates/directory.php:156
+msgid "Profiles Within <em>%s</em>."
+msgstr ""
+
+#: templates/directory.php:158
+msgid "Viewing All Profiles"
+msgstr ""
+
+#: templates/directory.php:164
+msgid "Showing 1 Result"
+msgstr ""
+
+#: templates/directory.php:166
+msgid "Showing %s-%s of %s Results"
+msgstr ""
+
+#: templates/directory.php:240
+#: blocks/directory/templates/table.js:15
+msgid "Avatar"
+msgstr ""
+
+#: templates/directory.php:244
+#: blocks/directory/templates/table.js:16
+msgid "Member"
+msgstr ""
+
+#: templates/directory.php:248
+#: templates/directory.php:450
+#: templates/profile.php:303
+#: blocks/directory/templates/table.js:17
+#: blocks/profile/block.js:194
+msgid "Email Address"
+msgstr ""
+
+#: templates/directory.php:253
+#: blocks/directory/templates/table.js:18
+msgid "More Information"
+msgstr ""
+
+#: templates/directory.php:258
+#: templates/directory.php:456
+#: templates/profile.php:309
+#: blocks/directory/templates/table.js:19
+#: blocks/profile/block.js:199
+msgid "Level"
+msgstr ""
+
+#: templates/directory.php:263
+#: templates/directory.php:481
+#: templates/profile.php:315
+#: blocks/directory/templates/table.js:20
+#: blocks/profile/block.js:204
+msgid "Start Date"
+msgstr ""
+
+#: templates/directory.php:414
+#: templates/directory.php:552
+#: blocks/directory/templates/table.js:31
+#: blocks/directory/templates/table.js:40
+#: blocks/directory/templates/table.js:49
+#: blocks/directory/templates/table.js:58
+msgid "View Profile"
+msgstr ""
+
+#: templates/directory.php:570
+msgid "No matching profiles found"
+msgstr ""
+
+#: templates/directory.php:574
+msgid "within <em>%s</em>."
+msgstr ""
+
+#: templates/directory.php:578
+#: templates/profile.php:431
+msgid "View All Members"
+msgstr ""
+
+#: templates/directory.php:604
+msgid "Previous"
+msgstr ""
+
+#: templates/directory.php:616
+msgid "Next"
+msgstr ""
+
+#: templates/profile.php:297
+#: blocks/profile/block.js:189
+msgid "Biographical Info"
+msgstr ""
+
+#: templates/profile.php:321
+#: blocks/profile/block.js:209
+msgid "Address"
+msgstr ""
+
+#: templates/profile.php:335
+#: blocks/profile/block.js:219
+msgid "Phone Number"
 msgstr ""
 
 #: blocks/directory/block.js:31
@@ -137,40 +269,6 @@ msgstr ""
 msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
 msgstr ""
 
-#: blocks/directory/templates/table.js:15
-msgid "Avatar"
-msgstr ""
-
-#: blocks/directory/templates/table.js:16
-msgid "Member"
-msgstr ""
-
-#: blocks/directory/templates/table.js:17
-#: blocks/profile/block.js:194
-msgid "Email Address"
-msgstr ""
-
-#: blocks/directory/templates/table.js:18
-msgid "More Information"
-msgstr ""
-
-#: blocks/directory/templates/table.js:19
-#: blocks/profile/block.js:199
-msgid "Level"
-msgstr ""
-
-#: blocks/directory/templates/table.js:20
-#: blocks/profile/block.js:204
-msgid "Start Date"
-msgstr ""
-
-#: blocks/directory/templates/table.js:31
-#: blocks/directory/templates/table.js:40
-#: blocks/directory/templates/table.js:49
-#: blocks/directory/templates/table.js:58
-msgid "View Profile"
-msgstr ""
-
 #: blocks/profile/block.js:25
 msgid "Member Profile"
 msgstr ""
@@ -199,10 +297,6 @@ msgstr ""
 msgid "August Dibble"
 msgstr ""
 
-#: blocks/profile/block.js:189
-msgid "Biographical Info"
-msgstr ""
-
 #: blocks/profile/block.js:195
 msgid "August.Dibble@mail.com"
 msgstr ""
@@ -213,12 +307,4 @@ msgstr ""
 
 #: blocks/profile/block.js:205
 msgid "Jan 21, 2019"
-msgstr ""
-
-#: blocks/profile/block.js:209
-msgid "Address"
-msgstr ""
-
-#: blocks/profile/block.js:219
-msgid "Phone Number"
 msgstr ""
