@@ -69,6 +69,7 @@ function pmpromd_show_extra_profile_fields($user)
                 <?php
                 $directory_page = !empty( get_the_title($pmpro_pages['directory']) ) ? esc_html( get_the_title($pmpro_pages['directory']) ) : __( 'directory', 'pmpro-member-directory' ); ?>
                 <label for="hide_directory">
+				<?php /* translators: placeholder is for directory page name */ ?>
                     <input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpro-member-directory'), $directory_page ); ?>
                 </label>
             </td>

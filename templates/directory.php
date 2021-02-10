@@ -153,6 +153,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	<h3 id="pmpro_member_directory_subheading">
 		<?php if(!empty($s)) { ?>
+			<?php /* translators: placeholder is for search string entered */ ?>
 			<?php printf(__('Profiles Within <em>%s</em>.','pmpro-member-directory'), stripslashes( ucwords(esc_html($s)))); ?>
 		<?php } else { ?>
 			<?php _e('Viewing All Profiles','pmpro-member-directory'); ?>
@@ -163,7 +164,8 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				if($totalrows == 1)
 					printf(__('Showing 1 Result','pmpro-member-directory'), $start + 1, $end, $totalrows);
 				else
-					printf(__('Showing %s-%s of %s Results','pmpro-member-directory'), $start + 1, $end, $totalrows);
+					/* translators: placeholders are for result numbers */
+					printf(__('Showing %1$s-%2$s of %3$s Results','pmpro-member-directory'), $start + 1, $end, $totalrows);
 				?>)
 			</small>
 		<?php } ?>
@@ -571,6 +573,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			<?php
 			if($s)
 			{
+				/* translators: placeholder is for search string entered */
 				printf(__('within <em>%s</em>.','pmpro-member-directory'), stripslashes( ucwords(esc_html($s))) );
 				if(!empty($directory_url))
 				{
