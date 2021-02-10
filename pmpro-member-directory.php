@@ -6,6 +6,7 @@ Description: Adds a customizable Member Directory and Member Profiles to your me
 Version: 1.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
+Text Domain: pmpro-member-directory
 */
 
 define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.0' );
