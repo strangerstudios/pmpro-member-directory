@@ -29,8 +29,12 @@ if(file_exists($custom_profile_file))
 else
 	require_once($path . "/templates/profile.php");
 
-require_once($path . "/includes/localization.php"); //localization functions
 require_once($path . "/blocks/blocks.php"); //localization functions
+
+function pmpromd_load_textdomain() {
+	load_plugin_textdomain( 'pmpro-member-directory', false, basename( dirname( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'pmpromd_load_textdomain' );
 
 function pmpromd_register_styles() {
 	//load stylesheet (check child theme, then parent theme, then plugin folder)
