@@ -233,7 +233,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	<?php if(!empty($show_search)) { ?>
 	<form action="<?php echo $directory_url; ?>" method="post" role="search" class="pmpro_member_directory_search search-form">
 		<label>
-			<span class="screen-reader-text"><?php _e('Search for:','label'); ?></span>
+			<span class="screen-reader-text"><?php _e('Search for:','pmpro-member-directory'); ?></span>
 			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpro-member-directory'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpro-member-directory'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
