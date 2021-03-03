@@ -313,7 +313,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_startdate)) { ?>
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
+						<?php echo !empty( $pu->membership_level ) ? date_i18n(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>

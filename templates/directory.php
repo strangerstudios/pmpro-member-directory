@@ -408,7 +408,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php } ?>
 							<?php if(!empty($show_startdate)) { ?>
 								<td class="pmpro_member_directory_date">
-									<?php echo date(get_option("date_format"), $auser->membership_level->startdate); ?>
+									<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
 								</td>
 							<?php } ?>
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
@@ -481,7 +481,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php if(!empty($show_startdate)) { ?>
 							<p class="pmpro_member_directory_date">
 								<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
-								<?php echo date(get_option("date_format"), $auser->membership_level->startdate); ?>
+								<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
 							</p>
 						<?php } ?>
 						<?php
