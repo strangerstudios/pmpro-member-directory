@@ -99,7 +99,7 @@ function pmpromd_save_extra_profile_fields( $user_id ) {
 		
 
 	if ( is_page( $pmpro_pages['member_profile_edit'] ) ) {
-		if ( ! isset( $_REQUEST['submit'] ) ) {
+		if ( ! isset( $_REQUEST['action'] ) || $_REQUEST['action'] !== 'update-profile' ) {
 			return false;
 		}
 	}
