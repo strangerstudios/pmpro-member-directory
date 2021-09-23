@@ -302,7 +302,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php } ?>
 							<?php
 							//filter the fields
-							$fields_array = apply_filters('pmpro_member_directory_fields', $fields_array, $auser);
+							$fields_array = apply_filters( 'pmpro_member_directory_fields', $fields_array, $auser );
 
 							if(!empty($fields_array))
 							{
