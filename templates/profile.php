@@ -231,7 +231,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 	?>
 	<?php if(!empty($show_search)) { ?>
-	<form action="<?php echo $directory_url; ?>" method="post" role="search" class="pmpro_member_directory_search search-form">
+	<form action="<?php echo $directory_url; ?>" method="post" role="search" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory_search search-form', 'profile_search' ); ?>">
 		<label>
 			<span class="screen-reader-text"><?php _e('Search for:','label'); ?></span>
 			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpromd'); ?>" />
@@ -280,7 +280,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			?>
 
 
-			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
+			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_profile', 'profile'); ?>">
 				<?php do_action( 'pmpro_member_profile_before', $pu ); ?>
 				<?php if(!empty($show_avatar)) { ?>
 					<p class="pmpro_member_directory_avatar">
