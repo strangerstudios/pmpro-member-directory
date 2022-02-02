@@ -175,7 +175,7 @@ function pmpromd_custom_rewrite_rules() {
 	} else {
 		$profile_base = $slug;
 	}
-	
+
 	add_rewrite_rule(
 		$profile_base.'/([^/]+)/?$',
 		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
@@ -196,3 +196,47 @@ function pmpromd_custom_query_vars( $query_vars ) {
 }
 
 add_filter( 'query_vars', 'pmpromd_custom_query_vars', 10, 1 );
+
+/**
+ * On Page Settings Save, Flush Rewrite Rules
+ */
+function pmpromd_pagesettings_flush(){
+
+	if( 
+		!empty( $_REQUEST['page'] ) && 
+		$_REQUEST['page'] == 'pmpro-pagesettings' && //Are we on the PMPro Page Settings
+		!empty( $_REQUEST['savesettings']) && //Are we hitting the save button
+		( !empty( $_REQUEST['profile_page_id'] ) ) //Is there a profile page present
+	){
+
+		flush_rewrite_rules( true );
+	}
+
+}
+add_action( 'admin_init', 'pmpromd_pagesettings_flush' );
+
+/**
+ * We're saving a page, is it a Profile page
+ */
+function pmpromd_page_save_flush( $post_id ){
+
+	global $pmpro_pages;
+
+	if( !empty( $pmpro_pages['profile'] ) ){
+		if( (int)$pmpro_pages['profile'] == $post_id ){
+			flush_rewrite_rules( true );
+		}
+	}
+
+}
+add_action( 'save_post', 'pmpromd_page_save_flush', 10, 1 );
+
+/**
+ * Flushing rewrite rules on plugin activate as a precautionary measure
+ */
+function pmpromd_flush_on_activate(){
+
+	flush_rewrite_rules( true );
+	
+}
+register_activation_hook( __FILE__, 'pmpromd_flush_on_activate' );
