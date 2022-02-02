@@ -158,3 +158,41 @@ function pmpromd_plugin_row_meta($links, $file) {
 	return $links;
 }
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
+
+/**
+ * We determine that the URL base is for the profile and then set up the rewrite rule
+ */
+function pmpromd_custom_rewrite_rules() {
+
+	global $pmpro_pages;
+
+	$parent_id = get_post_field( 'post_parent', $pmpro_pages['profile'] );
+	$slug = get_post_field( 'post_name',  $pmpro_pages['profile'] );
+
+	if( !empty( $parent_id ) ){
+		$parent_slug = get_post_field( 'post_name',  $parent_id );
+		$profile_base = 'map'.'/'.$slug;
+	} else {
+		$profile_base = $slug;
+	}
+	
+	add_rewrite_rule(
+		$profile_base.'/([^/]+)/?$',
+		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
+		'top'
+	);
+
+}
+add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+
+/**
+ * Adding in the ?pu parameter so that we can retrieve the value from the pretty permalink
+ */
+function pmpromd_custom_query_vars( $query_vars ) {
+
+    $query_vars[] = 'pu';
+    
+    return $query_vars;
+}
+
+add_filter( 'query_vars', 'pmpromd_custom_query_vars', 10, 1 );
