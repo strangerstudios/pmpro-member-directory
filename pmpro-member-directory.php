@@ -41,6 +41,11 @@ function pmpromd_register_styles() {
 	else
 		wp_register_style( 'pmpro-member-directory-styles', plugins_url( 'css/pmpro-member-directory.css', __FILE__ ) );
 	wp_enqueue_style( 'pmpro-member-directory-styles' );
+
+	$custom_css = '#wpadminbar #wp-admin-bar-pmpromd-edit-profile .ab-item:before { content: "\f110"; top: 3px; }';
+
+	wp_add_inline_style( 'pmpro-member-directory-styles', $custom_css );
+
 }
 add_action( 'wp_enqueue_scripts', 'pmpromd_register_styles' );
 
@@ -158,3 +163,41 @@ function pmpromd_plugin_row_meta($links, $file) {
 	return $links;
 }
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
+
+/**
+ * Adds an edit profile link when on the Profile page
+ */
+function pmpromd_add_edit_profile($admin_bar){
+
+	global $pmpro_pages, $post, $wp_query, $current_user;
+
+	if( current_user_can( 'manage_options' ) && !empty( $post ) && $pmpro_pages['profile'] == $post->ID ){
+
+		if( !empty( $wp_query->get( 'pu' ) ) && is_numeric( $wp_query->get( 'pu' ) ) )
+			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
+		elseif( !empty($_REQUEST['pu']))
+			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
+		elseif( !empty( $current_user->ID ) )
+			$pu = $current_user;
+		else
+			$pu = false;
+
+		if( $pu ){
+
+			$edit_link = get_edit_user_link( $pu->ID );
+		    $admin_bar->add_menu( array(
+		        'id'    => 'pmpromd-edit-profile',
+		        'title' => __( 'Edit Profile', 'pmpro-member-directory' ),
+		        'href'  => $edit_link,
+		        'meta'  => array(
+		            'title' => __( 'Edit Profile', 'pmpro-member-directory' ),
+		        ),
+		    ));
+
+		    echo "<style></style>";
+
+		}
+	}
+
+}
+add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
