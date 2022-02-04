@@ -192,9 +192,7 @@ function pmpromd_add_edit_profile($admin_bar){
 		        'meta'  => array(
 		            'title' => __( 'Edit Profile', 'pmpro-member-directory' ),
 		        ),
-		    ));
-
-		    echo "<style></style>";
+		    ));		    
 
 		}
 	}
