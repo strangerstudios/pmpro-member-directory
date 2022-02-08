@@ -297,7 +297,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							</td>
 							<?php if(!empty($show_email)) { ?>
 								<td class="pmpro_member_directory_email">
-									<?php echo $auser->user_email; ?>
+									<?php echo pmpromd_make_clickable( $auser->user_email ); ?>
 								</td>
 							<?php } ?>
 							<?php
@@ -361,11 +361,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 														?>
 														<strong><?php echo $field[0]; ?></strong>
 														<?php
-														$meta_field_embed = wp_oembed_get($meta_field);
-														if(!empty($meta_field_embed))
-															echo $meta_field_embed;
-														else
-															echo make_clickable($meta_field);
+															echo pmpromd_make_clickable( $meta_field );
 														?>
 														<?php
 													}
@@ -448,7 +444,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php if(!empty($show_email)) { ?>
 							<p class="pmpro_member_directory_email">
 								<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
-								<?php echo $auser->user_email; ?>
+								<?php echo pmpromd_make_clickable( $auser->user_email ); ?>
 							</p>
 						<?php } ?>
 						<?php if(!empty($show_level)) { ?>
@@ -530,14 +526,14 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										elseif($field[1] == 'user_url')
 										{
 											?>
-											<a href="<?php echo $auser->{$field[1]}; ?>" target="_blank"><?php echo $field[0]; ?></a>
+											<a href="<?php echo $auser->{$field[1]}; ?>" target="_blank"><?php echo pmpromd_make_clickable( $field[0], $field ); ?></a>
 											<?php
 										}
 										else
 										{
 											?>
 											<strong><?php echo $field[0]; ?></strong>
-											<?php echo make_clickable($auser->{$field[1]}); ?>
+											<?php echo pmpromd_make_clickable( $auser->{$field[1]}, $field ); ?>
 											<?php
 										}
 										?>

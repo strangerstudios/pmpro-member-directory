@@ -158,3 +158,35 @@ function pmpromd_plugin_row_meta($links, $file) {
 	return $links;
 }
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
+
+/**
+ * Should we make something clickable. Filters included
+ */
+function pmpromd_make_clickable( $url, $field = false ){
+
+	/**
+	 * Logic follows:
+	 * 1) Do we want to make it an oembed URL, if yes, do it. If not, check pt2
+	 * 2) Do we want to make it clickable. If yes, do it. If not, check pt3
+	 * 3) Just return a string/URL
+	 */
+	if( apply_filters( 'pmpromd_make_clickable_oembed', true, $field ) ) {
+		
+		$url_embed = wp_oembed_get($url);
+		if( !empty( $url_embed ) ){
+			return $url_embed;
+		}
+
+		return $url;
+
+	} else if ( apply_filters( 'pmpromd_make_clickable', false, $field ) ) {
+
+		return make_clickable($url);
+
+	} else {
+
+		return apply_filters( 'pmpromd_make_clickable_url', $url, $field );
+
+	}
+
+}
