@@ -192,6 +192,10 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		else
 			$fields_array = false;
 
+
+		//filter the fields
+		$fields_array = apply_filters( 'pmpro_member_directory_fields', $fields_array, $pu );
+
 		// Get Register Helper field options
 		$rh_fields = array();
 		if(!empty($pmprorh_registration_fields)) {

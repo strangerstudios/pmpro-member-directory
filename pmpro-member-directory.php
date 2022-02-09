@@ -207,3 +207,4 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
 }
 add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
+add_filter( 'pmpro_member_directory_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
