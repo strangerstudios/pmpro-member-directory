@@ -274,13 +274,14 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					{
 						$auser = get_userdata($auser->ID);
 						$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
+						$user_identifier = apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
 						$count++;
 						?>
 						<tr id="pmpro_member_directory_row-<?php echo $auser->ID; ?>" class="pmpro_member_directory_row<?php if(!empty($link) && !empty($profile_url)) { echo " pmpro_member_directory_linked"; } ?>">
 							<?php if(!empty($show_avatar)) { ?>
 								<td class="pmpro_member_directory_avatar">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
 									<?php } else { ?>
 										<?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?>
 									<?php } ?>
@@ -289,7 +290,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<td>
 								<h3 class="pmpro_member_directory_display-name">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+										<a href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 									<?php } else { ?>
 										<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?>
 									<?php } ?>
@@ -411,7 +412,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php } ?>
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
 								<td class="pmpro_member_directory_link">
-									<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
+									<a href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
 								</td>
 							<?php } ?>
 						</tr>
@@ -426,13 +427,15 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			{
 				foreach($theusers as $auser):
 					$auser = get_userdata($auser->ID);
+					var_dump($auser);
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
+					$user_identifier = apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
 					?>
 					<div id="pmpro_member-<?php echo $auser->ID; ?>" class="pmpro_member_directory-item">
 						<?php if(!empty($show_avatar)) { ?>
 							<div class="pmpro_member_directory_avatar">
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
-									<a class="<?php echo $avatar_align; ?>" href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
+									<a class="<?php echo $avatar_align; ?>" href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
 								<?php } else { ?>
 									<span class="<?php echo $avatar_align; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></span>
 								<?php } ?>
@@ -440,7 +443,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php } ?>
 						<h3 class="pmpro_member_directory_display-name">
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
-								<a href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+								<a href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 							<?php } else { ?>
 								<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 							<?php } ?>
@@ -549,7 +552,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						?>
 						<?php if(!empty($link) && !empty($profile_url)) { ?>
 							<p class="pmpro_member_directory_link">
-								<a class="more-link" href="<?php echo add_query_arg('pu', $auser->user_nicename, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
+								<a class="more-link" href="<?php echo add_query_arg('pu', $auser->{$user_identifier}, $profile_url); ?>"><?php _e('View Profile','pmpromd'); ?></a>
 							</p>
 						<?php } ?>
 					</div> <!-- end pmpro_member_directory-item -->
