@@ -171,7 +171,7 @@ function pmpromd_custom_rewrite_rules() {
 
 	if( !empty( $parent_id ) ){
 		$parent_slug = get_post_field( 'post_name',  $parent_id );
-		$profile_base = 'map'.'/'.$slug;
+		$profile_base = $parent_slug.'/'.$slug;
 	} else {
 		$profile_base = $slug;
 	}
@@ -240,3 +240,21 @@ function pmpromd_flush_on_activate(){
 	
 }
 register_activation_hook( __FILE__, 'pmpromd_flush_on_activate' );
+
+/**
+ * Redirect from the OLD profile URL to the new URL's
+ */
+function pmpromd_redirect_profile_links(){
+
+	if( !empty( $_REQUEST['pu'] ) ){
+
+		global $pmpro_pages;
+
+		$profile_url = get_the_permalink( $pmpro_pages['profile'] );
+
+		wp_redirect( $profile_url.'/'.$_REQUEST['pu'], 302, 'WordPress' );
+		exit();
+	}
+
+}
+add_action( 'init', 'pmpromd_redirect_profile_links' );
