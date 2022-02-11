@@ -428,7 +428,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					$auser = get_userdata($auser->ID);
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
 					?>
-					<div id="pmpro_member-<?php echo $auser->ID; ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
+					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
 						<?php if(!empty($show_avatar)) { ?>
 							<div class="pmpro_member_directory_avatar">
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
