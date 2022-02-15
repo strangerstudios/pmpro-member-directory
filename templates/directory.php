@@ -145,7 +145,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		<label>
 			<span class="screen-reader-text"><?php _e('Search for:','pmpromd'); ?></span>
 			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo stripslashes( esc_attr($_REQUEST['ps']) );?>" title="<?php _e('Search Members','pmpromd'); ?>" />
-		        <input type="hidden" name="pn" value="1" />
+			<input type="hidden" name="pn" value="1" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
 		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpromd'); ?>">
