@@ -611,9 +611,10 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			<span class='pmpro_page_numbers'>
 		<?php
 		$counter = 0;
-		if( empty( $pn ) || $pn != 1 ){
-			echo '<a href="'.esc_url(add_query_arg( $query_args, get_permalink($post->ID))).'" title="'.__( 'Previous', 'pmpromd' ).'">...</a>';
+		if ( empty( $pn ) || $pn != 1 ) {
+			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
 		}
+
 		for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
 			if( $counter <= 6 ){
 				$query_args = array(
