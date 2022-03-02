@@ -160,11 +160,14 @@ function pmpromd_plugin_row_meta($links, $file) {
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 
 /**
- * Filters through the fields we're expecting to show and make sure the user has the required level
+ * Filter the fields we are expecting to show and make sure the user has the required level.
+ *
+ * @since TBD
  * 
- * @param  array $profile_fields The fields we want to display on the page
- * @param  object $pu             The current user object
- * @return array Returns the fields we want to show
+ * @param array  $profile_fields The list of fields we want to display on the page.
+ * @param object $pu             The current user object.
+ *
+ * @return array The list of fields we want to display on the page.
  */
 function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
