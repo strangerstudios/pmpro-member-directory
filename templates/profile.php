@@ -119,8 +119,8 @@ function pmpromd_profile_preheader()
 		 * We're working with the menu now so remove the filters
 		 */
 		function pmpromd_remove_filters_menu_title( $nav_menu, $args ) {	
-		    remove_filter("wp_title", "pmpromd_wp_title", 10, 2);
-		    remove_filter("the_title", "pmpromd_the_title", 10, 2);
+		    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
 		    return $nav_menu;
 		}
 		add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title', 10, 2 );
