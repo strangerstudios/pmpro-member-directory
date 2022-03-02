@@ -526,7 +526,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										elseif($field[1] == 'user_url')
 										{
 											?>
-											<a href="<?php echo $auser->{$field[1]}; ?>" target="_blank"><?php echo pmpromd_make_clickable( $field[0], $field ); ?></a>
+											<a href="<?php echo esc_url( $auser->{$field[1]} ); ?>" target="_blank"><?php echo pmpromd_make_clickable( $field[0], $field ); ?></a>
 											<?php
 										}
 										else
