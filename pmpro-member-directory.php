@@ -222,10 +222,8 @@ function pmpromd_page_save_flush( $post_id ){
 
 	global $pmpro_pages;
 
-	if( !empty( $pmpro_pages['profile'] ) ){
-		if( (int)$pmpro_pages['profile'] == $post_id ){
-			flush_rewrite_rules( true );
-		}
+	if( !empty( $pmpro_pages['profile'] ) && (int)$pmpro_pages['profile'] == $post_id && did_action( 'init' ) ) {
+		flush_rewrite_rules( true );
 	}
 
 }
