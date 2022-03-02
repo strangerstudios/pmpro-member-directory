@@ -130,8 +130,8 @@ function pmpromd_profile_preheader()
 		 */
 		function pmpromd_readd_filters_menu_title( $items, $args ) {
 		    // we are done working with menu, so add the title filter back
-		    add_filter("wp_title", "pmpromd_wp_title", 10, 2);
-		    add_filter("the_title", "pmpromd_the_title", 10, 2);
+		    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
 		    return $items;
 		}
 		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title', 10, 2 );
