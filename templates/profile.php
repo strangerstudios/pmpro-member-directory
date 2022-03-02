@@ -116,9 +116,16 @@ function pmpromd_profile_preheader()
 		add_filter("wp_title", "pmpromd_wp_title", 10, 2);
 
 		/**
-		 * We're working with the menu now so remove the filters
+		 * We're working with the menu now so remove the filters.
+		 *
+		 * @since TBD
+		 *
+		 * @param string|null $output Nav menu output to short-circuit with. Default null.
+		 *
+		 * @return string|null Nav menu output to short-circuit with. Default null.
 		 */
-		function pmpromd_remove_filters_menu_title( $nav_menu, $args ) {	
+		function pmpromd_remove_filters_menu_title( $nav_menu ) {	
+
 		    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
 		    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
 		    return $nav_menu;
