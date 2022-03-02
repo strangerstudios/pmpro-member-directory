@@ -625,7 +625,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 				if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
 				
-				echo '<a href="'. esc_url(add_query_arg( $query_args, get_permalink($post->ID))).'" '.$active_class.' title="'.sprintf( __('Page %s', 'pmpromd' ), $i ).'">'.$i.'</a>';
+				echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
 			}
 			$counter++;
 		}
