@@ -160,7 +160,14 @@ function pmpromd_plugin_row_meta($links, $file) {
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 
 /**
- * Should we make something clickable. Filters included
+ * Should we make something clickable. Filters included.
+ *
+ * @since TBD
+ *
+ * @param string      $url   The URL to maybe make clickable or run oembed for.
+ * @param false|array $field The field array information.
+ *
+ * @return string The output that may have been clickable or embedded.
  */
 function pmpromd_make_clickable( $url, $field = false ){
 
