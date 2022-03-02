@@ -187,7 +187,7 @@ function pmpromd_add_edit_profile($admin_bar){
 			$edit_link = get_edit_user_link( $pu->ID );
 		    $admin_bar->add_menu( array(
 		        'id'    => 'pmpromd-edit-profile',
-		        'title' => __( 'Edit Profile', 'pmpro-member-directory' ),
+		        'title' => esc_html__( 'Edit Profile', 'pmpro-member-directory' ),
 		        'href'  => $edit_link,
 		        'meta'  => array(
 		            'title' => __( 'Edit Profile', 'pmpro-member-directory' ),
