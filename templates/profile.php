@@ -126,9 +126,16 @@ function pmpromd_profile_preheader()
 		add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title', 10, 2 );
 
 		/**
-		 * We're done working with the menu so add those filters back
+		 * We're done working with the menu so add those filters back.
+		 *
+		 * @since TBD
+		 *
+		 * @param string $items The HTML list content for the menu items.
+		 *
+		 * @return string The HTML list content for the menu items.
 		 */
-		function pmpromd_readd_filters_menu_title( $items, $args ) {
+		function pmpromd_readd_filters_menu_title( $items ) {
+
 		    // we are done working with menu, so add the title filter back
 		    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
 		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
