@@ -193,7 +193,6 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			$fields_array = false;
 
 
-		//filter the fields
 		/**
 		 * Allow filtering the fields to include on the member directory list.
 		 *
