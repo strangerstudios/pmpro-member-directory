@@ -166,7 +166,7 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @param string $display_name The name to display for the user.
  */
-function pmpro_member_directory_user_identifier() {
+function pmpro_md_user_identifier() {
 	
 	/**
 	 * Filter to change how user identifiers are presented. Choose between user_nicename and id
@@ -174,4 +174,19 @@ function pmpro_member_directory_user_identifier() {
 	 * @since 1.2.0
 	 */
 	return apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+}
+
+/**
+ * Gets user based on their identifier
+ *
+ * @since 1.2.0
+ *
+ * @param object The user object
+ */
+function pmpromd_get_user_by_identifier( $value ) {
+
+	$user_identifier = pmpro_md_user_identifier();
+
+	return get_user_by( $user_identifier, $value );
+	
 }

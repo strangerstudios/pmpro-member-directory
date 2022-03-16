@@ -274,7 +274,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					{
 						$auser = get_userdata($auser->ID);
 						$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-						$user_identifier = pmpro_member_directory_user_identifier();
+						$user_identifier = pmpro_md_user_identifier();
 						$count++;
 						?>
 						<tr id="pmpro_member_directory_row-<?php echo $auser->ID; ?>" class="pmpro_member_directory_row<?php if(!empty($link) && !empty($profile_url)) { echo " pmpro_member_directory_linked"; } ?>">
@@ -428,7 +428,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				foreach($theusers as $auser):
 					$auser = get_userdata($auser->ID);					
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-					$user_identifier = pmpro_member_directory_user_identifier();
+					$user_identifier = pmpro_md_user_identifier();
 					?>
 					<div id="pmpro_member-<?php echo $auser->ID; ?>" class="pmpro_member_directory-item">
 						<?php if(!empty($show_avatar)) { ?>
