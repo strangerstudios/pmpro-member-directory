@@ -149,7 +149,8 @@ function pmpromd_profile_preheader()
 		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
 		    return $items;
 		}
-		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title', 10, 2 );
+		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
+
 
 	}
 }
