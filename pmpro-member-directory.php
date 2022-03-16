@@ -192,7 +192,9 @@ function pmpromd_make_clickable( $url, $field = false ){
 
 	} else {
 
-		return apply_filters( 'pmpromd_make_clickable_url', $url, $field );
+		$url = apply_filters( 'pmpromd_make_clickable_url', $url, $field );
+
+		return esc_html( $url );
 
 	}
 
