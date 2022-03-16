@@ -14,7 +14,7 @@ function pmpromd_profile_preheader()
 		$main_post_id = $post->ID;
 
 		//Get the profile user
-		$user_identifier = apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+		$user_identifier = pmpro_member_directory_user_identifier();
 
 		if( !empty( $_REQUEST['pu'] ) ) {
 			$pu = get_user_by( $user_identifier, $_REQUEST['pu'] );
@@ -76,7 +76,7 @@ function pmpromd_profile_preheader()
 				{
 					global $wpdb;
 					$user_nicename = $_REQUEST['pu'];
-					$user_identifier = apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+					$user_identifier = pmpro_member_directory_user_identifier();
 					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE `$user_identifier` = '" . esc_sql($user_nicename) . "' LIMIT 1");
 					$display_name = pmpro_member_directory_get_member_display_name( $user );
 
@@ -206,7 +206,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	if(empty($user_id) && !empty($_REQUEST['pu']))
 	{
 		//Get the profile user
-		$user_identifier = apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+		$user_identifier = pmpro_member_directory_user_identifier();
 
 		if( !empty( $_REQUEST['pu'] ) ) {
 			$pu = get_user_by( $user_identifier, $_REQUEST['pu'] );
