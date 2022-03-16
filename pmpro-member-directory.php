@@ -188,7 +188,7 @@ function pmpromd_make_clickable( $url, $field = false ){
 
 	} else if ( apply_filters( 'pmpromd_make_clickable', false, $field ) ) {
 
-		return make_clickable($url);
+		return make_clickable( wp_kses_post( $url ) );
 
 	} else {
 
