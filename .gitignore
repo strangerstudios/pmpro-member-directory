@@ -1,3 +1,6 @@
 node_modules
 .DS_Store
 package-lock.json
+languages/make-pot.sh
+0
+.gitignore
