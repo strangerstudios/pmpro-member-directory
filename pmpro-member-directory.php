@@ -178,7 +178,7 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @param string $display_name The name to display for the user.
  */
-function pmpro_md_user_identifier() {
+function pmpromd_user_identifier() {
 	
 	/**
 	 * Filter to change how user identifiers are presented. Choose between user_nicename and id
