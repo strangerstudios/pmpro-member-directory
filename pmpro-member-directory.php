@@ -6,6 +6,8 @@ Description: Adds a customizable Member Directory and Member Profiles to your me
 Version: 1.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
+Text Domain: pmpro-member-directory
+Domain Path: /languages
 */
 
 define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.0' );
@@ -27,8 +29,12 @@ if(file_exists($custom_profile_file))
 else
 	require_once($path . "/templates/profile.php");
 
-require_once($path . "/includes/localization.php"); //localization functions
 require_once($path . "/blocks/blocks.php"); //localization functions
+
+function pmpromd_load_textdomain() {
+	load_plugin_textdomain( 'pmpro-member-directory', false, basename( dirname( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'pmpromd_load_textdomain' );
 
 function pmpromd_register_styles() {
 	//load stylesheet (check child theme, then parent theme, then plugin folder)
@@ -67,7 +73,8 @@ function pmpromd_show_extra_profile_fields($user)
                 <?php
                 $directory_page = !empty( get_the_title($pmpro_pages['directory']) ) ? esc_html( get_the_title($pmpro_pages['directory']) ) : __( 'directory', 'pmpro-member-directory' ); ?>
                 <label for="hide_directory">
-                    <input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), $directory_page ); ?>
+				<?php /* translators: placeholder is for directory page name */ ?>
+                    <input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpro-member-directory'), $directory_page ); ?>
                 </label>
             </td>
         </tr>
@@ -79,7 +86,7 @@ function pmpromd_show_extra_profile_fields($user)
 	<div class="pmpro_member_profile_edit-field pmpro_member_profile_edit-field-hide_directory">
 	<?php $directory_page = !empty( get_the_title($pmpro_pages['directory']) ) ? esc_html( get_the_title($pmpro_pages['directory']) ) : __( 'directory', 'pmpro-member-directory' ); ?>
 	<label for="hide_directory">
-		<input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpromd'), $directory_page ); ?>
+		<input name="hide_directory" type="checkbox" id="hide_directory" <?php checked( get_user_meta($user->ID, 'pmpromd_hide_directory', true), 1 ); ?> value="1"><?php printf(__('Hide from %s?','pmpro-member-directory'), $directory_page ); ?>
 	</label>
 	</div> <!-- end pmpro_member_profile_edit-field-hide_directory -->
 <?php
@@ -150,8 +157,8 @@ function pmpromd_plugin_row_meta($links, $file) {
 	if(strpos($file, 'pmpro-member-directory.php') !== false)
 	{
 		$new_links = array(
-			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/pmpro-member-directory/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/pmpro-member-directory/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-member-directory' ) ) . '">' . __( 'Docs', 'pmpro-member-directory' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-member-directory' ) ) . '">' . __( 'Support', 'pmpro-member-directory' ) . '</a>',
 		);
 		$links = array_merge($links, $new_links);
 	}
