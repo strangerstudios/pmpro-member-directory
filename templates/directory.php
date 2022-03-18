@@ -141,7 +141,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	?>
 	<?php if(!empty($show_search)) { ?>
-	<form role="search" method="post" class="pmpro_member_directory_search search-form">
+	<form role="search" method="post" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory_search search-form', 'directory_search' ); ?>">
 		<label>
 			<span class="screen-reader-text"><?php _e('Search for:','pmpromd'); ?></span>
 			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo stripslashes( esc_attr($_REQUEST['ps']) );?>" title="<?php _e('Search Members','pmpromd'); ?>" />
@@ -429,7 +429,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					$auser = get_userdata($auser->ID);
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
 					?>
-					<div id="pmpro_member-<?php echo $auser->ID; ?>" class="pmpro_member_directory-item">
+					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
 						<?php if(!empty($show_avatar)) { ?>
 							<div class="pmpro_member_directory_avatar">
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
