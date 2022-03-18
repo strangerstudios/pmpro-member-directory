@@ -116,6 +116,44 @@ function pmpromd_profile_preheader()
 			return $title;
 		}
 		add_filter("wp_title", "pmpromd_wp_title", 10, 2);
+
+		/**
+		 * We're working with the menu now so remove the filters.
+		 *
+		 * @since TBD
+		 *
+		 * @param string|null $output Nav menu output to short-circuit with. Default null.
+		 *
+		 * @return string|null Nav menu output to short-circuit with. Default null.
+		 */
+		function pmpromd_remove_filters_menu_title( $nav_menu ) {	
+
+		    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+		    return $nav_menu;
+		}
+		add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title' );
+
+
+		/**
+		 * We're done working with the menu so add those filters back.
+		 *
+		 * @since TBD
+		 *
+		 * @param string $items The HTML list content for the menu items.
+		 *
+		 * @return string The HTML list content for the menu items.
+		 */
+		function pmpromd_readd_filters_menu_title( $items ) {
+
+		    // we are done working with menu, so add the title filter back
+		    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+		    return $items;
+		}
+		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
+
+
 	}
 }
 add_action("wp", "pmpromd_profile_preheader", 1);
