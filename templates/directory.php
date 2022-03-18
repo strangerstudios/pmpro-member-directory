@@ -624,6 +624,34 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg( $query_args, get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpromd'); ?></a></span>
 			<?php
 		}
+
+		$number_of_pages = $totalrows / $limit;
+		//Page Numbers
+		?>
+			<span class='pmpro_page_numbers'>
+		<?php
+		$counter = 0;
+		if ( empty( $pn ) || $pn != 1 ) {
+			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
+		}
+
+		for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
+			if( $counter <= 6 ){
+				$query_args = array(
+					'ps' => $s,
+					'pn' => $i,
+					'limit' => $limit,
+				);
+
+				if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
+				
+				echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
+			}
+			$counter++;
+		}
+		?>
+		</span>
+		<?php
 		//next
 		if ( $totalrows > $end ) {
 			$query_args = array(
