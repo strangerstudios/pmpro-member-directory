@@ -210,7 +210,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		?>">
 			<?php 
 			/**
-			 * Include the default level billing price at checkout as a radio checkbox.
+			 * Filter to override the attributes passed into the shortcode.
 			 * 
 			 * @param array Contains all of the shortcode attributes used in the directory shortcode
 			 */
