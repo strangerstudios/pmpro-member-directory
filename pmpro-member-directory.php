@@ -160,6 +160,59 @@ function pmpromd_plugin_row_meta($links, $file) {
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 
 /**
+ * Filter the fields we are expecting to show and make sure the user has the required level.
+ *
+ * @since TBD
+ * 
+ * @param array  $profile_fields The list of fields we want to display on the page.
+ * @param object $pu             The current user object.
+ *
+ * @return array The list of fields we want to display on the page.
+ */
+function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
+
+	global $pmprorh_registration_fields;
+
+	$fields_to_hide = array();
+
+	if(!empty($pmprorh_registration_fields)) {
+		
+		//Loop through all of the RH fields
+		foreach($pmprorh_registration_fields as $where => $fields) {
+
+			//cycle through fields
+			foreach($fields as $field){
+				//Check if there are any levels associated with this field	
+				if( !empty( $field->levels ) ){
+					//Check if the member has the required level to view this
+					if( !pmpro_hasMembershipLevel( $field->levels, $pu->ID ) ){
+						//If not, lets hide this field from them
+						$fields_to_hide[] = $field->name;
+					}
+				}
+				
+				
+			}
+
+		}
+	}
+	$fields_to_show = array();
+	//Lets loop through all of the profile fields that we 'should' display
+	foreach( $profile_fields as $field_array ){
+		//Check if the current field is in the fields_to_hide array
+		if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			//It isn't in the array so we want to show this field
+			$fields_to_show[] = $field_array;
+		}
+	}
+
+	return $fields_to_show;
+
+}
+add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
+add_filter( 'pmpro_member_directory_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
+
+/**
  * We determine that the URL base is for the profile and then set up the rewrite rule
  */
 function pmpromd_custom_rewrite_rules() {

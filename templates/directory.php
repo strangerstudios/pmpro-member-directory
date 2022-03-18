@@ -212,6 +212,16 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		else
 			$fields_array = false;
 
+
+		/**
+		 * Allow filtering the fields to include on the member directory list.
+		 *
+		 * @since TBD
+		 *
+		 * @param array $fields_array The list of fields to include.
+		 */
+		$fields_array = apply_filters( 'pmpro_member_directory_fields', $fields_array );
+
 		// Get Register Helper field options
 		$rh_fields = array();
 		if(!empty($pmprorh_registration_fields)) {
