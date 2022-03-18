@@ -466,7 +466,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				foreach($theusers as $auser):
 					$auser = get_userdata($auser->ID);					
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-					$user_identifier = pmpro_md_user_identifier();
+					$user_identifier = pmpromd_user_identifier();
 					?>
 					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
 						<?php if(!empty($show_avatar)) { ?>
