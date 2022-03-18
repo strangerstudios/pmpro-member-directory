@@ -197,7 +197,7 @@ function pmpromd_user_identifier() {
  */
 function pmpromd_get_user_by_identifier( $value ) {
 
-	$user_identifier = pmpro_md_user_identifier();
+	$user_identifier = pmpromd_user_identifier();
 
 	return get_user_by( $user_identifier, $value );
 	
