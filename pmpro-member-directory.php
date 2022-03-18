@@ -169,7 +169,7 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @return array The list of fields we want to display on the page.
  */
-function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
+function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu = false ) {
 
 	global $pmprorh_registration_fields;
 
@@ -185,9 +185,11 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 				//Check if there are any levels associated with this field	
 				if( !empty( $field->levels ) ){
 					//Check if the member has the required level to view this
-					if( !pmpro_hasMembershipLevel( $field->levels, $pu->ID ) ){
-						//If not, lets hide this field from them
-						$fields_to_hide[] = $field->name;
+					if( $pu ) { 
+						if( !pmpro_hasMembershipLevel( $field->levels, $pu->ID ) ){
+							//If not, lets hide this field from them
+							$fields_to_hide[] = $field->name;
+						}
 					}
 				}
 				
