@@ -212,7 +212,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			/**
 			 * Include the default level billing price at checkout as a radio checkbox.
 			 * 
-			 * @param array Contain all of the shortcode attributes used in the directory shortcode
+			 * @param array Contains all of the shortcode attributes used in the directory shortcode
 			 */
 			$shortcode_atts = apply_filters( 'pmpro_member_directory_atts', array(
 				'avatar_size' => $avatar_size,
