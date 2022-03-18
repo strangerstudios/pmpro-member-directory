@@ -10,6 +10,7 @@ function pmpromd_profile_preheader()
 		/*
 			Preheader operations here.
 		*/
+
 		global $main_post_id, $wp_query;
 		$main_post_id = $post->ID;
 
@@ -22,8 +23,9 @@ function pmpromd_profile_preheader()
 			$pu = get_user_by( 'slug', $profile_user );
 		elseif( !empty( $current_user->ID ) )
 			$pu = $current_user;
-		else
+		} else {
 			$pu = false;
+		}
 
 		// Is this user hidden from directory?
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
@@ -76,8 +78,8 @@ function pmpromd_profile_preheader()
 				if( !empty( $wp_query->get( 'pu' ) ) )
 				{
 					global $wpdb;
-					$user_nicename = $wp_query->get( 'pu' );
-					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+          $user_nicename = $wp_query->get( 'pu' );
+          $user = pmpromd_get_user_by_identifier( $user_nicename );
 					$display_name = pmpro_member_directory_get_member_display_name( $user );
 
 				}
@@ -244,11 +246,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	if( empty( $user_id ) && !empty( $wp_query->get( 'pu' ) ) )
 	{
 		//Get the profile user
-		if( is_numeric( $wp_query->get( 'pu' ) ) )
-			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
-		else
-			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
-
+		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
 		$user_id = $pu->ID;
 	}
 
