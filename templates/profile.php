@@ -10,15 +10,17 @@ function pmpromd_profile_preheader()
 		/*
 			Preheader operations here.
 		*/
-		global $main_post_id;
+		global $main_post_id, $wp_query;
 		$main_post_id = $post->ID;
 
 		//Get the profile user
-		if(!empty($_REQUEST['pu']) && is_numeric($_REQUEST['pu']))
-			$pu = get_user_by('id', $_REQUEST['pu']);
-		elseif(!empty($_REQUEST['pu']))
-			$pu = get_user_by('slug', $_REQUEST['pu']);
-		elseif(!empty($current_user->ID))
+		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
+		
+		if( !empty( $profile_user ) && is_numeric( $profile_user ) )
+			$pu = get_user_by( 'id', $profile_user );
+		elseif( !empty( $profile_user ) )
+			$pu = get_user_by( 'slug', $profile_user );
+		elseif( !empty( $current_user->ID ) )
 			$pu = $current_user;
 		else
 			$pu = false;
@@ -68,13 +70,13 @@ function pmpromd_profile_preheader()
 		*/
 		function pmpromd_the_title($title, $post_id = NULL)
 		{
-			global $main_post_id, $current_user;
+			global $main_post_id, $current_user, $wp_query;
 			if($post_id == $main_post_id)
 			{
-				if(!empty($_REQUEST['pu']))
+				if( !empty( $wp_query->get( 'pu' ) ) )
 				{
 					global $wpdb;
-					$user_nicename = $_REQUEST['pu'];
+					$user_nicename = $wp_query->get( 'pu' );
 					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
 					$display_name = pmpro_member_directory_get_member_display_name( $user );
 
@@ -92,12 +94,12 @@ function pmpromd_profile_preheader()
 
 		function pmpromd_wp_title($title, $sep)
 		{
-			global $wpdb, $main_post_id, $post, $current_user;
+			global $wpdb, $main_post_id, $post, $current_user, $wp_query;
 			if($post->ID == $main_post_id)
 			{
-				if(!empty($_REQUEST['pu']))
+				if( !empty( $wp_query->get( 'pu' ) ) )
 				{
-					$user_nicename = $_REQUEST['pu'];
+					$user_nicename = $wp_query->get( 'pu' );
 					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
 					$display_name = pmpro_member_directory_get_member_display_name( $user );
 				}
@@ -114,6 +116,44 @@ function pmpromd_profile_preheader()
 			return $title;
 		}
 		add_filter("wp_title", "pmpromd_wp_title", 10, 2);
+
+		/**
+		 * We're working with the menu now so remove the filters.
+		 *
+		 * @since TBD
+		 *
+		 * @param string|null $output Nav menu output to short-circuit with. Default null.
+		 *
+		 * @return string|null Nav menu output to short-circuit with. Default null.
+		 */
+		function pmpromd_remove_filters_menu_title( $nav_menu ) {	
+
+		    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+		    return $nav_menu;
+		}
+		add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title' );
+
+
+		/**
+		 * We're done working with the menu so add those filters back.
+		 *
+		 * @since TBD
+		 *
+		 * @param string $items The HTML list content for the menu items.
+		 *
+		 * @return string The HTML list content for the menu items.
+		 */
+		function pmpromd_readd_filters_menu_title( $items ) {
+
+		    // we are done working with menu, so add the title filter back
+		    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+		    return $items;
+		}
+		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
+
+
 	}
 }
 add_action("wp", "pmpromd_profile_preheader", 1);
@@ -140,7 +180,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		'user_id' => NULL
 	), $atts));
 
-	global $current_user, $display_name, $wpdb, $pmpro_pages, $pmprorh_registration_fields;
+	global $current_user, $display_name, $wpdb, $pmpro_pages, $pmprorh_registration_fields, $wp_query;
 
 	//some page vars
 	if(!empty($pmpro_pages['directory']))
@@ -201,21 +241,21 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	elseif(empty($limit))
 		$limit = 15;
 
-	if(empty($user_id) && !empty($_REQUEST['pu']))
+	if( empty( $user_id ) && !empty( $wp_query->get( 'pu' ) ) )
 	{
 		//Get the profile user
-		if(is_numeric($_REQUEST['pu']))
-			$pu = get_user_by('id', $_REQUEST['pu']);
+		if( is_numeric( $wp_query->get( 'pu' ) ) )
+			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
 		else
-			$pu = get_user_by('slug', $_REQUEST['pu']);
+			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
 
 		$user_id = $pu->ID;
 	}
 
-	if(!empty($user_id))
+	if( !empty( $user_id ) )
 		$pu = get_userdata($user_id);
-	elseif(empty($_REQUEST['pu']))
-		$pu = get_userdata($current_user->ID);
+	elseif( empty( $wp_query->get( 'pu' ) ) )
+		$pu = get_userdata( $current_user->ID );
 
 	if ( ! empty( $pu ) ) {
 		$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );
@@ -231,10 +271,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 	?>
 	<?php if(!empty($show_search)) { ?>
-	<form action="<?php echo $directory_url; ?>" method="post" role="search" class="pmpro_member_directory_search search-form">
+	<form action="<?php echo esc_url( $directory_url ); ?>" method="post" role="search" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory_search search-form', 'profile_search' ); ?>">
+
 		<label>
 			<span class="screen-reader-text"><?php _e('Search for:','pmpro-member-directory'); ?></span>
-			<input type="search" class="search-field" placeholder="<?php _e('Search Members','pmpro-member-directory'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php _e('Search Members','pmpro-member-directory'); ?>" />
+			<input type="search" class="search-field" placeholder="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
 		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpro-member-directory'); ?>">
@@ -280,7 +321,8 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 			?>
 
 
-			<div id="pmpro_member_profile-<?php echo $pu->ID; ?>" class="pmpro_member_profile">
+			<div id="pmpro_member_profile-<?php echo esc_attr( $pu->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_profile', 'profile'); ?>">
+
 				<?php do_action( 'pmpro_member_profile_before', $pu ); ?>
 				<?php if(!empty($show_avatar)) { ?>
 					<p class="pmpro_member_directory_avatar">
