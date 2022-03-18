@@ -61,3 +61,14 @@ div.pmpro_member_profile strong {display: block; }
         grid-template-columns: 1fr;
     }
 }
+
+/**
+ * Pagination/page numbers
+ */
+.pmpro_page_numbers a {
+    padding: 6px;
+}
+
+.pmpro_page_numbers a.pmpro_page_active {
+    font-weight: bold;
+}

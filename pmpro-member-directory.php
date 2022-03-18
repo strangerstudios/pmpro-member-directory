@@ -199,3 +199,159 @@ function pmpromd_add_edit_profile($admin_bar){
 
 }
 add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
+
+/*
+ * Filter the fields we are expecting to show and make sure the user has the required level.
+ *
+ * @since TBD
+ * 
+ * @param array  $profile_fields The list of fields we want to display on the page.
+ * @param object $pu             The current user object.
+ *
+ * @return array The list of fields we want to display on the page.
+ */
+function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
+
+	global $pmprorh_registration_fields;
+
+	$fields_to_hide = array();
+
+	if(!empty($pmprorh_registration_fields)) {
+		
+		//Loop through all of the RH fields
+		foreach($pmprorh_registration_fields as $where => $fields) {
+
+			//cycle through fields
+			foreach($fields as $field){
+				//Check if there are any levels associated with this field	
+				if( !empty( $field->levels ) ){
+					//Check if the member has the required level to view this
+					if( !pmpro_hasMembershipLevel( $field->levels, $pu->ID ) ){
+						//If not, lets hide this field from them
+						$fields_to_hide[] = $field->name;
+					}
+				}
+				
+				
+			}
+
+		}
+	}
+	$fields_to_show = array();
+	//Lets loop through all of the profile fields that we 'should' display
+	foreach( $profile_fields as $field_array ){
+		//Check if the current field is in the fields_to_hide array
+		if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			//It isn't in the array so we want to show this field
+			$fields_to_show[] = $field_array;
+		}
+	}
+
+	return $fields_to_show;
+
+}
+add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
+add_filter( 'pmpro_member_directory_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
+
+/**
+ * We determine that the URL base is for the profile and then set up the rewrite rule
+ */
+function pmpromd_custom_rewrite_rules() {
+
+	global $pmpro_pages;
+
+	$parent_id = get_post_field( 'post_parent', $pmpro_pages['profile'] );
+	$slug = get_post_field( 'post_name',  $pmpro_pages['profile'] );
+
+	if( !empty( $parent_id ) ){
+		$parent_slug = get_post_field( 'post_name',  $parent_id );
+		$profile_base = $parent_slug.'/'.$slug;
+	} else {
+		$profile_base = $slug;
+	}
+
+	add_rewrite_rule(
+		$profile_base.'/([^/]+)/?$',
+		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
+		'top'
+	);
+
+}
+add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+
+/**
+ * Adding in the ?pu parameter so that we can retrieve the value from the pretty permalink
+ */
+function pmpromd_custom_query_vars( $query_vars ) {
+
+    $query_vars[] = 'pu';
+    
+    return $query_vars;
+}
+
+add_filter( 'query_vars', 'pmpromd_custom_query_vars', 10, 1 );
+
+/**
+ * On Page Settings Save, Flush Rewrite Rules
+ */
+function pmpromd_pagesettings_flush(){
+
+	if( 
+		!empty( $_REQUEST['page'] ) && 
+		$_REQUEST['page'] == 'pmpro-pagesettings' && //Are we on the PMPro Page Settings
+		!empty( $_REQUEST['savesettings']) && //Are we hitting the save button
+		( !empty( $_REQUEST['profile_page_id'] ) ) //Is there a profile page present
+	){
+
+		flush_rewrite_rules( true );
+	}
+
+}
+add_action( 'admin_init', 'pmpromd_pagesettings_flush' );
+
+/**
+ * We're saving a page, is it a Profile page
+ */
+function pmpromd_page_save_flush( $post_id ){
+
+	global $pmpro_pages;
+
+	if( !empty( $pmpro_pages['profile'] ) && (int)$pmpro_pages['profile'] == $post_id && did_action( 'init' ) ) {
+		flush_rewrite_rules( true );
+	}
+
+}
+add_action( 'save_post', 'pmpromd_page_save_flush', 10, 1 );
+
+/**
+ * Redirect from the OLD profile URL to the new URL's
+ */
+function pmpromd_redirect_profile_links(){
+
+	if( !empty( $_REQUEST['pu'] ) ){
+
+		wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+
+		exit();
+	}
+
+}
+add_action( 'init', 'pmpromd_redirect_profile_links' );
+
+/**
+ * Build profile URL
+ */
+function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = false ) { 
+
+	global $pmpro_pages;
+
+	if( !empty( $pmpro_pages['profile'] ) && !$profile_url ) {
+		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
+	}
+
+	if( $separator ) { 
+		return $profile_url . sanitize_title( $pu );
+	} else {
+		return $profile_url . '/'. sanitize_title( $pu );
+	}
+}
