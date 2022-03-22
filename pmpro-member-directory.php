@@ -160,7 +160,7 @@ function pmpromd_plugin_row_meta($links, $file) {
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 
 /**
- * Should we make something clickable. Filters included.
+ * Formatting profile fields based on the field type
  *
  * @since TBD
  *
@@ -169,37 +169,37 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @return string The output that may have been clickable or embedded.
  */
-function pmpromd_make_clickable( $url, $field = false ){
+function pmpromd_format_profile_field( $value, $field = false ){
 
-	/**
-	 * Logic follows:
-	 * 1) Do we want to make it an oembed URL, if yes, do it. If not, check pt2
-	 * 2) Do we want to make it clickable. If yes, do it. If not, check pt3
-	 * 3) Just return a string/URL
-	 */
-	if( apply_filters( 'pmpromd_make_clickable_oembed', true, $field ) ) {
-		
-		$url_embed = wp_oembed_get($url);
+	if( $field == 'user_url' ) {
+		$url_embed = wp_oembed_get( $value );
 		if( !empty( $url_embed ) ){
-			return $url_embed;
+			$r = $url_embed;
 		}
 
-		return $url;
-
-	} else if ( apply_filters( 'pmpromd_make_clickable', false, $field ) ) {
-
-		return make_clickable( wp_kses_post( $url ) );
-
-	} else {
-
-		$url = apply_filters( 'pmpromd_make_clickable_url', $url, $field );
-
-		return esc_html( $url );
+		$r = $value;
 
 	}
 
+	if( $field == 'user_email' ) {
+
+		$r = make_clickable( wp_kses_post( $value ) );
+
+	}
+
+	/**
+	 * Format the profile field
+	 * 
+	 * @param string $r The URL or field string that you want to return
+	 * @param string $value The value or string that you want to format
+	 * @param string $field The type of field your changes should apply to
+	 */
+	$r = apply_filters( 'pmpromd_format_profile_field', $r, $value, $field );
+
+	return esc_html( $r );
+
 }
-/*
+/**
  * Filter the fields we are expecting to show and make sure the user has the required level.
  *
  * @since TBD
