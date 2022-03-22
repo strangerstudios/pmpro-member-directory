@@ -10,6 +10,7 @@ function pmpromd_profile_preheader()
 		/*
 			Preheader operations here.
 		*/
+
 		global $main_post_id, $wp_query;
 		$main_post_id = $post->ID;
 
@@ -22,8 +23,9 @@ function pmpromd_profile_preheader()
 			$pu = get_user_by( 'slug', $profile_user );
 		elseif( !empty( $current_user->ID ) )
 			$pu = $current_user;
-		else
+		} else {
 			$pu = false;
+		}
 
 		// Is this user hidden from directory?
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
@@ -76,8 +78,8 @@ function pmpromd_profile_preheader()
 				if( !empty( $wp_query->get( 'pu' ) ) )
 				{
 					global $wpdb;
-					$user_nicename = $wp_query->get( 'pu' );
-					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+          $user_nicename = $wp_query->get( 'pu' );
+          $user = pmpromd_get_user_by_identifier( $user_nicename );
 					$display_name = pmpro_member_directory_get_member_display_name( $user );
 
 				}
@@ -244,11 +246,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	if( empty( $user_id ) && !empty( $wp_query->get( 'pu' ) ) )
 	{
 		//Get the profile user
-		if( is_numeric( $wp_query->get( 'pu' ) ) )
-			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
-		else
-			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
-
+		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
 		$user_id = $pu->ID;
 	}
 
@@ -274,12 +272,11 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	<form action="<?php echo esc_url( $directory_url ); ?>" method="post" role="search" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory_search search-form', 'profile_search' ); ?>">
 
 		<label>
-			<span class="screen-reader-text"><?php _e('Search for:','label'); ?></span>
-			<input type="search" class="search-field" placeholder="<?php esc_attr_e('Search Members','pmpromd'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php esc_attr_e('Search Members','pmpromd'); ?>" />
-
+			<span class="screen-reader-text"><?php _e('Search for:','pmpro-member-directory'); ?></span>
+			<input type="search" class="search-field" placeholder="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" name="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" />
 			<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
 		</label>
-		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpromd'); ?>">
+		<input type="submit" class="search-submit" value="<?php _e('Search Members','pmpro-member-directory'); ?>">
 	</form>
 	<?php } ?>
 	<?php
@@ -337,31 +334,31 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>
 					<p class="pmpro_member_directory_bio">
-						<strong><?php _e('Biographical Info', 'pmpromd'); ?></strong>
+						<strong><?php _e('Biographical Info', 'pmpro-member-directory'); ?></strong>
 						<?php echo $pu->description; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_email)) { ?>
 					<p class="pmpro_member_directory_email">
-						<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
+						<strong><?php _e('Email Address', 'pmpro-member-directory'); ?></strong>
 						<?php echo $pu->user_email; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_level)) { ?>
 					<p class="pmpro_member_directory_level">
-						<strong><?php _e('Level', 'pmpromd'); ?></strong>
+						<strong><?php _e('Level', 'pmpro-member-directory'); ?></strong>
 						<?php echo ! empty( $pu->membership_levels ) ? $pu->membership_levels : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>
 					<p class="pmpro_member_directory_date">
-						<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
+						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
+						<?php echo !empty( $pu->membership_level ) ? date_i18n(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>
 					<p class="pmpro_member_directory_baddress">
-						<strong><?php _e('Address', 'pmpromd'); ?></strong>
+						<strong><?php _e('Address', 'pmpro-member-directory'); ?></strong>
 						<?php echo $pu->pmpro_baddress1; ?><br />
 						<?php
 							if(!empty($pu->pmpro_baddress2))
@@ -375,7 +372,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_phone) && !empty($pu->pmpro_bphone)) { ?>
 					<p class="pmpro_member_directory_phone">
-						<strong><?php _e('Phone Number','pmpromd'); ?></strong>
+						<strong><?php _e('Phone Number','pmpro-member-directory'); ?></strong>
 						<?php echo formatPhone($pu->pmpro_bphone); ?>
 					</p>
 				<?php } ?>
@@ -471,7 +468,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					$pmpro_member_profile_action_links = array();
 
 					if ( ! empty( $directory_url ) ) {
-						$pmpro_member_profile_action_links['view-directory'] = sprintf( '<a id="pmpro_actionlink-view-all-members" href="%s">%s</a>', esc_url( $directory_url ), esc_html__( 'View All Members', 'pmpromd' ) );
+						$pmpro_member_profile_action_links['view-directory'] = sprintf( '<a id="pmpro_actionlink-view-all-members" href="%s">%s</a>', esc_url( $directory_url ), esc_html__( 'View All Members', 'pmpro-member-directory' ) );
 					}
 
 					if ( ! empty( $pu ) && $pu->ID === $current_user->ID ) {
