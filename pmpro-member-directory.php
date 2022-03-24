@@ -195,7 +195,7 @@ function pmpromd_format_profile_field( $value, $field = false ){
 
 	if( $field == 'user_email' ) {
 
-		$r = make_clickable( wp_kses_post( $value ) );
+		$r = make_clickable( $value );
 
 	}
 
@@ -208,7 +208,7 @@ function pmpromd_format_profile_field( $value, $field = false ){
 	 */
 	$r = apply_filters( 'pmpromd_format_profile_field', $r, $value, $field );
 
-	return esc_html( $r );
+	return pmpro_kses( $r );
 
 }
 /**
