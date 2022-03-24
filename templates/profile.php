@@ -31,13 +31,13 @@ function pmpromd_profile_preheader()
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
 
 		// If no profile user, membership level, or hidden, go to directory or home.
-		// if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
-		// 	if(!empty($pmpro_pages['directory']))
-		// 		wp_redirect(get_permalink($pmpro_pages['directory']));
-		// 	else
-		// 		wp_redirect(home_url());
-		// 	exit;
-		// }
+		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
+			if(!empty($pmpro_pages['directory']))
+		 		wp_redirect(get_permalink($pmpro_pages['directory']));
+		 	else
+		 		wp_redirect(home_url());
+		 	exit;
+		}
 
 		// Integrate with Approvals.
 		if ( class_exists( 'PMPro_Approvals' ) ){
