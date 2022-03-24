@@ -18,14 +18,15 @@ function pmpromd_profile_preheader()
 		//Get the profile user
 		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
 
-		if( !empty( $profile_user ) && is_numeric( $profile_user ) )
+		if( !empty( $profile_user ) && is_numeric( $profile_user ) ) {
 			$pu = get_user_by( 'id', $profile_user );
-		elseif( !empty( $profile_user ) )
+		} elseif( !empty( $profile_user ) ) {
 			$pu = get_user_by( 'slug', $profile_user );
-		elseif( !empty( $current_user->ID ) )
+		} elseif( !empty( $current_user->ID ) ) {
 			$pu = $current_user;
-		else
+		} else {
 			$pu = false;
+		}
 
 		// Is this user hidden from directory?
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
