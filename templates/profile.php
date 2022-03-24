@@ -71,6 +71,7 @@ function pmpromd_profile_preheader()
 	}
 }
 add_action("wp", "pmpromd_profile_preheader", 1);
+
 /*
 	Update the head title and H1
 */
@@ -82,8 +83,8 @@ function pmpromd_the_title($title, $post_id = NULL)
 		if( !empty( $wp_query->get( 'pu' ) ) )
 		{
 			global $wpdb;
-			$user_nicename = $wp_query->get( 'pu' );
-			$user = pmpromd_get_user_by_identifier( $user_nicename );
+      $user_nicename = $wp_query->get( 'pu' );
+      $user = pmpromd_get_user_by_identifier( $user_nicename );
 			$display_name = pmpro_member_directory_get_member_display_name( $user );
 
 		}
@@ -158,10 +159,6 @@ function pmpromd_readd_filters_menu_title( $items ) {
     return $items;
 }
 add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
-
-
-
-
 
 function pmpromd_profile_shortcode($atts, $content=null, $code="")
 {
