@@ -5,6 +5,7 @@
 function pmpromd_profile_preheader()
 {
 	global $post, $pmpro_pages, $current_user;
+
 	if(!empty($post->ID) && $post->ID == $pmpro_pages['profile'])
 	{
 		/*
@@ -16,7 +17,7 @@ function pmpromd_profile_preheader()
 
 		//Get the profile user
 		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
-		
+
 		if( !empty( $profile_user ) && is_numeric( $profile_user ) ) {
 			$pu = get_user_by( 'id', $profile_user );
 		} elseif( !empty( $profile_user ) ) {
@@ -33,10 +34,10 @@ function pmpromd_profile_preheader()
 		// If no profile user, membership level, or hidden, go to directory or home.
 		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
 			if(!empty($pmpro_pages['directory']))
-				wp_redirect(get_permalink($pmpro_pages['directory']));
-			else
-				wp_redirect(home_url());
-			exit;
+		 		wp_redirect(get_permalink($pmpro_pages['directory']));
+		 	else
+		 		wp_redirect(home_url());
+		 	exit;
 		}
 
 		// Integrate with Approvals.
@@ -82,8 +83,8 @@ function pmpromd_the_title($title, $post_id = NULL)
 		if( !empty( $wp_query->get( 'pu' ) ) )
 		{
 			global $wpdb;
-  $user_nicename = $wp_query->get( 'pu' );
-  $user = pmpromd_get_user_by_identifier( $user_nicename );
+      $user_nicename = $wp_query->get( 'pu' );
+      $user = pmpromd_get_user_by_identifier( $user_nicename );
 			$display_name = pmpro_member_directory_get_member_display_name( $user );
 
 		}
@@ -158,7 +159,6 @@ function pmpromd_readd_filters_menu_title( $items ) {
     return $items;
 }
 add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
-	
 
 function pmpromd_profile_shortcode($atts, $content=null, $code="")
 {

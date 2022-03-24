@@ -221,11 +221,11 @@ function pmpromd_format_profile_field( $value, $field = false ){
 function pmpromd_user_identifier() {
 	
 	/**
-	 * Filter to change how user identifiers are presented. Choose between user_nicename and id
+	 * Filter to change how user identifiers are presented. Choose between slug and id
 	 * 
 	 * @since 1.2.0
 	 */
-	return apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+	return apply_filters( 'pmpromd_user_identifier', 'slug' );
 }
 
 /**
