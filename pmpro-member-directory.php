@@ -181,11 +181,11 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 function pmpromd_user_identifier() {
 	
 	/**
-	 * Filter to change how user identifiers are presented. Choose between user_nicename and id
+	 * Filter to change how user identifiers are presented. Choose between slug and id
 	 * 
 	 * @since 1.2.0
 	 */
-	return apply_filters( 'pmpromd_user_identifier', 'user_nicename' );
+	return apply_filters( 'pmpromd_user_identifier', 'slug' );
 }
 
 /**
@@ -290,7 +290,6 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
 }
 add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
-add_filter( 'pmpro_member_directory_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
 
 /**
  * We determine that the URL base is for the profile and then set up the rewrite rule
