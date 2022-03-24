@@ -317,12 +317,16 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		}
 	}
 	$fields_to_show = array();
-	//Lets loop through all of the profile fields that we 'should' display
-	foreach( $profile_fields as $field_array ){
-		//Check if the current field is in the fields_to_hide array
-		if( !in_array( $field_array[1], $fields_to_hide ) ) {
-			//It isn't in the array so we want to show this field
-			$fields_to_show[] = $field_array;
+
+	// Make sure there are profile fields to show.
+	if ( $profile_fields ) {
+		//Lets loop through all of the profile fields that we 'should' display
+		foreach( $profile_fields as $field_array ){
+			//Check if the current field is in the fields_to_hide array
+			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+				//It isn't in the array so we want to show this field
+				$fields_to_show[] = $field_array;
+			}
 		}
 	}
 
