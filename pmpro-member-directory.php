@@ -330,7 +330,6 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
 }
 add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
-add_filter( 'pmpro_member_directory_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
 
 /**
  * We determine that the URL base is for the profile and then set up the rewrite rule

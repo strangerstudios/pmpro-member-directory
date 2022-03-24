@@ -17,11 +17,11 @@ function pmpromd_profile_preheader()
 		//Get the profile user
 		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
 		
-		if( !empty( $profile_user ) && is_numeric( $profile_user ) )
+		if( !empty( $profile_user ) && is_numeric( $profile_user ) ) {
 			$pu = get_user_by( 'id', $profile_user );
-		elseif( !empty( $profile_user ) )
+		} elseif( !empty( $profile_user ) ) {
 			$pu = get_user_by( 'slug', $profile_user );
-		elseif( !empty( $current_user->ID ) )
+		} elseif( !empty( $current_user->ID ) ) {
 			$pu = $current_user;
 		} else {
 			$pu = false;
@@ -67,98 +67,98 @@ function pmpromd_profile_preheader()
 			exit;
 		}
 
-		/*
-			Update the head title and H1
-		*/
-		function pmpromd_the_title($title, $post_id = NULL)
-		{
-			global $main_post_id, $current_user, $wp_query;
-			if($post_id == $main_post_id)
-			{
-				if( !empty( $wp_query->get( 'pu' ) ) )
-				{
-					global $wpdb;
-          $user_nicename = $wp_query->get( 'pu' );
-          $user = pmpromd_get_user_by_identifier( $user_nicename );
-					$display_name = pmpro_member_directory_get_member_display_name( $user );
-
-				}
-				elseif(!empty($current_user))
-				{
-					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-				}
-				if(!empty($display_name))
-					$title = $display_name;
-			}
-			return $title;
-		}
-		add_filter("the_title", "pmpromd_the_title", 10, 2);
-
-		function pmpromd_wp_title($title, $sep)
-		{
-			global $wpdb, $main_post_id, $post, $current_user, $wp_query;
-			if($post->ID == $main_post_id)
-			{
-				if( !empty( $wp_query->get( 'pu' ) ) )
-				{
-					$user_nicename = $wp_query->get( 'pu' );
-					$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
-					$display_name = pmpro_member_directory_get_member_display_name( $user );
-				}
-				elseif(!empty($current_user))
-				{
-					$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-				}
-				if(!empty($display_name))
-				{
-					$title = $display_name . ' ' . $sep . ' ';
-				}
-				$title .= get_bloginfo( 'name' );
-			}
-			return $title;
-		}
-		add_filter("wp_title", "pmpromd_wp_title", 10, 2);
-
-		/**
-		 * We're working with the menu now so remove the filters.
-		 *
-		 * @since TBD
-		 *
-		 * @param string|null $output Nav menu output to short-circuit with. Default null.
-		 *
-		 * @return string|null Nav menu output to short-circuit with. Default null.
-		 */
-		function pmpromd_remove_filters_menu_title( $nav_menu ) {	
-
-		    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
-		    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
-		    return $nav_menu;
-		}
-		add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title' );
-
-
-		/**
-		 * We're done working with the menu so add those filters back.
-		 *
-		 * @since TBD
-		 *
-		 * @param string $items The HTML list content for the menu items.
-		 *
-		 * @return string The HTML list content for the menu items.
-		 */
-		function pmpromd_readd_filters_menu_title( $items ) {
-
-		    // we are done working with menu, so add the title filter back
-		    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
-		    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
-		    return $items;
-		}
-		add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
-
-
 	}
 }
 add_action("wp", "pmpromd_profile_preheader", 1);
+
+/*
+	Update the head title and H1
+*/
+function pmpromd_the_title($title, $post_id = NULL)
+{
+	global $main_post_id, $current_user, $wp_query;
+	if($post_id == $main_post_id)
+	{
+		if( !empty( $wp_query->get( 'pu' ) ) )
+		{
+			global $wpdb;
+  $user_nicename = $wp_query->get( 'pu' );
+  $user = pmpromd_get_user_by_identifier( $user_nicename );
+			$display_name = pmpro_member_directory_get_member_display_name( $user );
+
+		}
+		elseif(!empty($current_user))
+		{
+			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
+		}
+		if(!empty($display_name))
+			$title = $display_name;
+	}
+	return $title;
+}
+add_filter("the_title", "pmpromd_the_title", 10, 2);
+
+function pmpromd_wp_title($title, $sep)
+{
+	global $wpdb, $main_post_id, $post, $current_user, $wp_query;
+	if($post->ID == $main_post_id)
+	{
+		if( !empty( $wp_query->get( 'pu' ) ) )
+		{
+			$user_nicename = $wp_query->get( 'pu' );
+			$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
+			$display_name = pmpro_member_directory_get_member_display_name( $user );
+		}
+		elseif(!empty($current_user))
+		{
+			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
+		}
+		if(!empty($display_name))
+		{
+			$title = $display_name . ' ' . $sep . ' ';
+		}
+		$title .= get_bloginfo( 'name' );
+	}
+	return $title;
+}
+add_filter("wp_title", "pmpromd_wp_title", 10, 2);
+
+/**
+ * We're working with the menu now so remove the filters.
+ *
+ * @since TBD
+ *
+ * @param string|null $output Nav menu output to short-circuit with. Default null.
+ *
+ * @return string|null Nav menu output to short-circuit with. Default null.
+ */
+function pmpromd_remove_filters_menu_title( $nav_menu ) {	
+
+    remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+    remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+    return $nav_menu;
+}
+add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_filters_menu_title' );
+
+
+/**
+ * We're done working with the menu so add those filters back.
+ *
+ * @since TBD
+ *
+ * @param string $items The HTML list content for the menu items.
+ *
+ * @return string The HTML list content for the menu items.
+ */
+function pmpromd_readd_filters_menu_title( $items ) {
+
+    // we are done working with menu, so add the title filter back
+    add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+    add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+    return $items;
+}
+add_filter( 'wp_nav_menu_items', 'pmpromd_readd_filters_menu_title' );
+	
 
 function pmpromd_profile_shortcode($atts, $content=null, $code="")
 {
