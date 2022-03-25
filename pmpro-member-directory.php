@@ -172,6 +172,46 @@ function pmpromd_plugin_row_meta($links, $file) {
 add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 
 /**
+ * Formatting profile fields based on the field type
+ *
+ * @since TBD
+ *
+ * @param string      $url   The URL to maybe make clickable or run oembed for.
+ * @param false|array $field The field array information.
+ *
+ * @return string The output that may have been clickable or embedded.
+ */
+function pmpromd_format_profile_field( $value, $field = false ){
+
+	if( $field == 'user_url' ) {
+		$url_embed = wp_oembed_get( $value );
+		if( !empty( $url_embed ) ){
+			$r = $url_embed;
+		}
+
+		$r = $value;
+
+	}
+
+	if( $field == 'user_email' ) {
+
+		$r = make_clickable( $value );
+
+	}
+
+	/**
+	 * Format the profile field
+	 * 
+	 * @param string $r The URL or field string that you want to return
+	 * @param string $value The value or string that you want to format
+	 * @param string $field The type of field your changes should apply to
+	 */
+	$r = apply_filters( 'pmpromd_format_profile_field', $r, $value, $field );
+
+	return pmpro_kses( $r );
+
+}
+/**
  * Filters the user identifier used in permalinks
  *
  * @since 1.2.0
@@ -277,12 +317,16 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		}
 	}
 	$fields_to_show = array();
-	//Lets loop through all of the profile fields that we 'should' display
-	foreach( $profile_fields as $field_array ){
-		//Check if the current field is in the fields_to_hide array
-		if( !in_array( $field_array[1], $fields_to_hide ) ) {
-			//It isn't in the array so we want to show this field
-			$fields_to_show[] = $field_array;
+
+	// Make sure there are profile fields to show.
+	if ( $profile_fields ) {
+		//Lets loop through all of the profile fields that we 'should' display
+		foreach( $profile_fields as $field_array ){
+			//Check if the current field is in the fields_to_hide array
+			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+				//It isn't in the array so we want to show this field
+				$fields_to_show[] = $field_array;
+			}
 		}
 	}
 
@@ -393,3 +437,4 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 		return $profile_url . '/'. sanitize_title( $pu );
 	}
 }
+
