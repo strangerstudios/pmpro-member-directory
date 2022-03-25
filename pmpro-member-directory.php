@@ -189,13 +189,13 @@ function pmpromd_format_profile_field( $value, $field = false ){
 			$r = $url_embed;
 		}
 
-		$r = $value;
+		$value = $value;
 
 	}
 
 	if( $field == 'user_email' ) {
 
-		$r = make_clickable( $value );
+		$value = make_clickable( wp_kses_post( $value ) );
 
 	}
 
@@ -206,9 +206,9 @@ function pmpromd_format_profile_field( $value, $field = false ){
 	 * @param string $value The value or string that you want to format
 	 * @param string $field The type of field your changes should apply to
 	 */
-	$r = apply_filters( 'pmpromd_format_profile_field', $r, $value, $field );
+	$value = apply_filters( 'pmpromd_format_profile_field', $value, $value, $field );
 
-	return pmpro_kses( $r );
+	return pmpro_kses( $value );
 
 }
 /**
@@ -221,7 +221,8 @@ function pmpromd_format_profile_field( $value, $field = false ){
 function pmpromd_user_identifier() {
 	
 	/**
-	 * Filter to change how user identifiers are presented. Choose between slug and id
+	 * Filter to change how user identifiers are presented. Choose between slug and ID
+	 * Note: Value is case sensitive
 	 * 
 	 * @since 1.2.0
 	 */
@@ -431,10 +432,21 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
 	}
 
+	if( is_object( $pu ) ) {
+		//We can't use 'slug' directly when getting the user nicename
+		$user_identifier = strtolower( pmpromd_user_identifier() );
+
+		if( $user_identifier == 'id' ) {
+			$pu = $pu->ID;
+		} else {
+			$pu = $pu->user_nicename;
+		}
+	}
+
 	if( $separator ) { 
-		return $profile_url . sanitize_title( $pu );
+		return $profile_url . '/' . sanitize_title( $pu );
 	} else {
-		return $profile_url . '/'. sanitize_title( $pu );
+		return $profile_url . sanitize_title( $pu );
 	}
 }
 

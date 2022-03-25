@@ -80,20 +80,16 @@ function pmpromd_the_title($title, $post_id = NULL)
 	global $main_post_id, $current_user, $wp_query;
 	if($post_id == $main_post_id)
 	{
-		if( !empty( $wp_query->get( 'pu' ) ) )
-		{
-			global $wpdb;
-      $user_nicename = $wp_query->get( 'pu' );
-      $user = pmpromd_get_user_by_identifier( $user_nicename );
+		if( !empty( $wp_query->get( 'pu' ) ) ) {
+			$user_nicename = $wp_query->get( 'pu' );
+			$user = pmpromd_get_user_by_identifier( $user_nicename );
 			$display_name = pmpro_member_directory_get_member_display_name( $user );
-
-		}
-		elseif(!empty($current_user))
-		{
+		} elseif( !empty( $current_user ) ) {
 			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
 		}
-		if(!empty($display_name))
+		if( !empty( $display_name ) ){
 			$title = $display_name;
+		}
 	}
 	return $title;
 }
@@ -341,7 +337,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_email)) { ?>
 					<p class="pmpro_member_directory_email">
 						<strong><?php _e('Email Address', 'pmpro-member-directory'); ?></strong>
-						<?php echo $pu->user_email; ?>
+						<?php echo pmpromd_format_profile_field( $pu->user_email, 'user_email' ); ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_level)) { ?>
@@ -431,7 +427,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										if($field[1] == 'user_url')
 										{
 											?>
-											<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo $field[0]; ?></a>
+											<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo pmpromd_format_profile_field( $field[0], $field[1] ); ?></a>
 											<?php
 										}
 										else
@@ -439,12 +435,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 											?>
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
-												$meta_field_embed = wp_oembed_get($meta_field);
-												if(!empty($meta_field_embed)){
-													echo $meta_field_embed;
-												}else{
-													echo make_clickable($meta_field);
-												}
+												echo pmpromd_format_profile_field( $field[1], $field[0] );
 											?>
 											<?php
 										}
