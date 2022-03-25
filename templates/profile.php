@@ -12,21 +12,10 @@ function pmpromd_profile_preheader()
 			Preheader operations here.
 		*/
 
-		global $main_post_id, $wp_query;
+		global $main_post_id;
 		$main_post_id = $post->ID;
 
-		//Get the profile user
-		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
-
-		if( !empty( $profile_user ) && is_numeric( $profile_user ) ) {
-			$pu = get_user_by( 'id', $profile_user );
-		} elseif( !empty( $profile_user ) ) {
-			$pu = get_user_by( 'slug', $profile_user );
-		} elseif( !empty( $current_user->ID ) ) {
-			$pu = $current_user;
-		} else {
-			$pu = false;
-		}
+		$pu = pmpromd_get_user();
 
 		// Is this user hidden from directory?
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
@@ -98,22 +87,16 @@ add_filter("the_title", "pmpromd_the_title", 10, 2);
 function pmpromd_wp_title($title, $sep)
 {
 	global $wpdb, $main_post_id, $post, $current_user, $wp_query;
-	if($post->ID == $main_post_id)
-	{
-		if( !empty( $wp_query->get( 'pu' ) ) )
-		{
-			$user_nicename = $wp_query->get( 'pu' );
-			$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
-			$display_name = pmpro_member_directory_get_member_display_name( $user );
-		}
-		elseif(!empty($current_user))
-		{
-			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-		}
-		if(!empty($display_name))
-		{
+	if( $post->ID == $main_post_id ) {
+
+		$pu = pmpromd_get_user();
+
+		$display_name = pmpro_member_directory_get_member_display_name( $pu );
+
+		if( !empty( $display_name ) ) {
 			$title = $display_name . ' ' . $sep . ' ';
 		}
+
 		$title .= get_bloginfo( 'name' );
 	}
 	return $title;
@@ -239,17 +222,8 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	elseif(empty($limit))
 		$limit = 15;
 
-	if( empty( $user_id ) && !empty( $wp_query->get( 'pu' ) ) )
-	{
-		//Get the profile user
-		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
-		$user_id = $pu->ID;
-	}
 
-	if( !empty( $user_id ) )
-		$pu = get_userdata($user_id);
-	elseif( empty( $wp_query->get( 'pu' ) ) )
-		$pu = get_userdata( $current_user->ID );
+	$pu = pmpromd_get_user();
 
 	if ( ! empty( $pu ) ) {
 		$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );

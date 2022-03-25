@@ -245,22 +245,41 @@ function pmpromd_get_user_by_identifier( $value ) {
 }
 
 /**
+ * Gets a user from the pu URL value
+ *
+ * @since 1.2.0
+ *
+ */
+function pmpromd_get_user(){
+
+	global $wp_query;
+
+	if( !empty( $wp_query->get( 'pu' ) ) ){
+		//Using the new permalinks /profile/user
+		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
+	} elseif( !empty($_REQUEST['pu'] ) ) {
+		//Using old url structure /profile/?pu=user
+		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
+	} elseif( !empty( $current_user->ID ) ) {
+		$pu = $current_user;
+	} else {
+		$pu = false;
+	}
+
+	return $pu;
+
+}
+
+/**
  * Adds an edit profile link when on the Profile page
  */
 function pmpromd_add_edit_profile($admin_bar){
 
-	global $pmpro_pages, $post, $wp_query, $current_user;
+	global $pmpro_pages, $post, $current_user;
 
 	if( current_user_can( 'manage_options' ) && !empty( $post ) && $pmpro_pages['profile'] == $post->ID ){
 
-		if( !empty( $wp_query->get( 'pu' ) ) && is_numeric( $wp_query->get( 'pu' ) ) )
-			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
-		elseif( !empty($_REQUEST['pu']))
-			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
-		elseif( !empty( $current_user->ID ) )
-			$pu = $current_user;
-		else
-			$pu = false;
+		$pu = pmpromd_get_user();
 
 		if( $pu ){
 
