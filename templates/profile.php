@@ -67,15 +67,11 @@ add_action("wp", "pmpromd_profile_preheader", 1);
 function pmpromd_the_title($title, $post_id = NULL)
 {
 	global $main_post_id, $current_user, $wp_query;
-	if($post_id == $main_post_id)
-	{
-		if( !empty( $wp_query->get( 'pu' ) ) ) {
-			$user_nicename = $wp_query->get( 'pu' );
-			$user = pmpromd_get_user_by_identifier( $user_nicename );
-			$display_name = pmpro_member_directory_get_member_display_name( $user );
-		} elseif( !empty( $current_user ) ) {
-			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-		}
+	if( $post_id == $main_post_id ) {
+		$pu = pmpromd_get_user();
+
+		$display_name = pmpro_member_directory_get_member_display_name( $pu );
+
 		if( !empty( $display_name ) ){
 			$title = $display_name;
 		}

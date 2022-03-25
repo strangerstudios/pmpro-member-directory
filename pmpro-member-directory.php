@@ -195,7 +195,7 @@ function pmpromd_format_profile_field( $value, $field = false ){
 
 	if( $field == 'user_email' ) {
 
-		$value = make_clickable( wp_kses_post( $value ) );
+		$value = make_clickable( $value );
 
 	}
 
@@ -257,7 +257,7 @@ function pmpromd_get_user(){
 	if( !empty( $wp_query->get( 'pu' ) ) ){
 		//Using the new permalinks /profile/user
 		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
-	} elseif( !empty($_REQUEST['pu'] ) ) {
+	} elseif( !empty( $_REQUEST['pu'] ) ) {
 		//Using old url structure /profile/?pu=user
 		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
 	} elseif( !empty( $current_user->ID ) ) {
@@ -337,16 +337,12 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		}
 	}
 	$fields_to_show = array();
-
-	// Make sure there are profile fields to show.
-	if ( $profile_fields ) {
-		//Lets loop through all of the profile fields that we 'should' display
-		foreach( $profile_fields as $field_array ){
-			//Check if the current field is in the fields_to_hide array
-			if( !in_array( $field_array[1], $fields_to_hide ) ) {
-				//It isn't in the array so we want to show this field
-				$fields_to_show[] = $field_array;
-			}
+	//Lets loop through all of the profile fields that we 'should' display
+	foreach( $profile_fields as $field_array ){
+		//Check if the current field is in the fields_to_hide array
+		if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			//It isn't in the array so we want to show this field
+			$fields_to_show[] = $field_array;
 		}
 	}
 
@@ -418,7 +414,10 @@ function pmpromd_page_save_flush( $post_id ){
 
 	global $pmpro_pages;
 
-	if( !empty( $pmpro_pages['profile'] ) && (int)$pmpro_pages['profile'] == $post_id && did_action( 'init' ) ) {
+	if( !empty( $pmpro_pages['profile'] ) && 
+		(int)$pmpro_pages['profile'] == $post_id && 
+		did_action( 'init' ) 
+	) {
 		flush_rewrite_rules( true );
 	}
 
@@ -432,9 +431,14 @@ function pmpromd_redirect_profile_links(){
 
 	if( !empty( $_REQUEST['pu'] ) ){
 
-		wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+		$structure = get_option( 'permalink_structure' );	
 
-		exit();
+		if( !empty( $structure ) ) {
+
+			wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+			exit();
+
+		}		
 	}
 
 }
@@ -451,6 +455,8 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
 	}
 
+	$structure = get_option( 'permalink_structure' );	
+
 	if( is_object( $pu ) ) {
 		//We can't use 'slug' directly when getting the user nicename
 		$user_identifier = strtolower( pmpromd_user_identifier() );
@@ -460,6 +466,20 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 		} else {
 			$pu = $pu->user_nicename;
 		}
+	}
+
+	if( empty( $pu ) ) {
+		return '';
+	}
+
+	if( empty( $structure ) ) {
+		//We're using plain permalinks here. Query parameters to the rescue!
+		return add_query_arg( array( 'pu' => $pu ), $profile_url );
+	}
+
+	if( strpos( $structure, 'post_id' ) !== FALSE ) {
+		//Numeric permalinks don't have a trailing slash for some readon
+		$separator = true;
 	}
 
 	if( $separator ) { 
