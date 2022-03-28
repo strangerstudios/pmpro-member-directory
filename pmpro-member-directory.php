@@ -299,7 +299,7 @@ function pmpromd_add_edit_profile($admin_bar){
 }
 add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
 
-/*
+/**
  * Filter the fields we are expecting to show and make sure the user has the required level.
  *
  * @since TBD
@@ -337,13 +337,18 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		}
 	}
 	$fields_to_show = array();
-	//Lets loop through all of the profile fields that we 'should' display
-	foreach( $profile_fields as $field_array ){
-		//Check if the current field is in the fields_to_hide array
-		if( !in_array( $field_array[1], $fields_to_hide ) ) {
-			//It isn't in the array so we want to show this field
-			$fields_to_show[] = $field_array;
+
+	if( !empty( $profile_fields ) ) {
+
+		//Lets loop through all of the profile fields that we 'should' display
+		foreach( $profile_fields as $field_array ){
+			//Check if the current field is in the fields_to_hide array
+			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+				//It isn't in the array so we want to show this field
+				$fields_to_show[] = $field_array;
+			}
 		}
+
 	}
 
 	return $fields_to_show;
@@ -405,7 +410,7 @@ function pmpromd_pagesettings_flush(){
 	}
 
 }
-add_action( 'admin_init', 'pmpromd_pagesettings_flush' );
+add_action( 'admin_init', 'pmpromd_pagesettings_flush', 4 );
 
 /**
  * We're saving a page, is it a Profile page
@@ -489,3 +494,24 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 	}
 }
 
+/**
+ * Run an upgrade check to compare versions and flush rewrite rules
+ *
+ * @since TBD
+ * 
+ * @return void
+ */
+function pmpromd_check_for_upgrade() {
+
+	$pmpromd_db_version = pmpro_getOption("md_db_version");
+
+	if( empty( $pmpromd_db_version ) || version_compare( $pmpromd_db_version, '1.2', '<' ) ) {
+
+		flush_rewrite_rules( true );
+
+		pmpro_setOption("md_db_version", "1.2");
+
+	}
+
+}
+add_action( 'admin_init', 'pmpromd_check_for_upgrade' );

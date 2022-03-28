@@ -655,20 +655,23 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
 		}
 
-		for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
-			if( $counter <= 6 ){
-				$query_args = array(
-					'ps' => $s,
-					'pn' => $i,
-					'limit' => $limit,
-				);
+		if( round( $number_of_pages, 0 ) === 1 ) {
+			//If there's only one page, no need to show the page numbers
+			for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
+				if( $counter <= 6 ){
+					$query_args = array(
+						'ps' => $s,
+						'pn' => $i,
+						'limit' => $limit,
+					);
 
-				if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
-				
-				echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
-			}
-			$counter++;
-		}
+					if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
+					
+					echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
+				}
+				$counter++;
+			}	
+		}		
 		?>
 		</span>
 		<?php
