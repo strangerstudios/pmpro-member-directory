@@ -206,6 +206,7 @@ function pmpromd_format_profile_field( $value, $field ){
 	 * 
 	 * @param string $r The URL or field string that you want to return
 	 * @param string $value The value or string that you want to format
+	 * @param string $original_value The original value before formatting
 	 * @param string $field The type of field your changes should apply to
 	 */
 	$value = apply_filters( 'pmpromd_format_profile_field', $value, $original_value, $field );
