@@ -181,22 +181,24 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @return string The output that may have been clickable or embedded.
  */
-function pmpromd_format_profile_field( $value, $field = false ){
+function pmpromd_format_profile_field( $value, $field ){
+
+	if( empty( $field ) ) {
+		$field = $value;
+	}
+
+	$original_value = $value;
 
 	if( $field == 'user_url' ) {
 		$url_embed = wp_oembed_get( $value );
 		if( !empty( $url_embed ) ){
-			$r = $url_embed;
+			$value = $url_embed;
 		}
-
-		$value = $value;
 
 	}
 
 	if( $field == 'user_email' ) {
-
 		$value = make_clickable( $value );
-
 	}
 
 	/**
@@ -206,9 +208,9 @@ function pmpromd_format_profile_field( $value, $field = false ){
 	 * @param string $value The value or string that you want to format
 	 * @param string $field The type of field your changes should apply to
 	 */
-	$value = apply_filters( 'pmpromd_format_profile_field', $value, $value, $field );
+	$value = apply_filters( 'pmpromd_format_profile_field', $value, $original_value, $field );
 
-	return pmpro_kses( $value );
+	return $value;
 
 }
 /**
