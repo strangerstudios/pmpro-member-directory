@@ -176,8 +176,9 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @since TBD
  *
- * @param string      $url   The URL to maybe make clickable or run oembed for.
- * @param false|array $field The field array information.
+ * @param string      $value   The value of the field
+ * @param string      $field_name   The field ID or name that would be stored in the DB
+ * @param string      $field_label   The field's front-facing label
  *
  * @return string The output that may have been clickable or embedded.
  */
