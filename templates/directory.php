@@ -391,20 +391,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 												}
 												else
 												{
-													if($field[1] == 'user_url')
-													{
-														?>
-														<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo $field[0]; ?></a>
-														<?php
-													}
-													else
-													{
-														?>
-														<strong><?php echo $field[0]; ?></strong>
-														<?php
-															echo pmpromd_format_profile_field( $meta_field, $field[1] );
-														?>
-														<?php
+													if($field[1] == 'user_url') {	
+														echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
+													} else {
+												?>
+													<strong><?php echo $field[0]; ?></strong>
+													<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
+															<?php
 													}
 												}
 												?>
@@ -567,10 +560,8 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										<?php
 									}
 										elseif($field[1] == 'user_url')
-										{
-											?>
-											<a href="<?php echo esc_url( $auser->{$field[1]} ); ?>" target="_blank"><?php echo pmpromd_format_profile_field( $field[0], $field[1] ); ?></a>
-											<?php
+										{											
+											echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
 										}
 										else
 										{

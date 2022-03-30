@@ -181,25 +181,50 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @return string The output that may have been clickable or embedded.
  */
-function pmpromd_format_profile_field( $value, $field ){
+function pmpromd_format_profile_field( $value, $field_name, $field_label = false ){
 
-	if( empty( $field ) ) {
-		$field = $value;
+	if( empty( $field_name ) ) {
+		$field_name = $value;
 	}
 
 	$original_value = $value;
 
-	if( $field == 'user_url' ) {
-		$url_embed = wp_oembed_get( $value );
+	$is_email = false;
+	if( is_email( $value ) ) {
+		$is_email = true;
+		$value = make_clickable( $value );	
+	}
+
+	/**
+	 * Should we wp_oembed the URL that is provided
+	 * 
+	 * @param bool Should this url be sent through oembed to render
+	 * @param string $field The type of field your changes should apply to
+	 */
+	$try_oembed = apply_filters( 'pmpromd_try_oembed_url', true, $field_name );
+
+	//Should we try and run oembed on this link?
+	if( $try_oembed && !$is_email ) {
+		$url_embed = wp_oembed_get( $value );		
 		if( !empty( $url_embed ) ){
+			//Oembed returned a vlue
 			$value = $url_embed;
+		} else { 
+			//Oembed did not return anything. Lets check if we have a label?
+			if( $field_label ) {
+				//We have a label!
+				if ( wp_http_validate_url( $value ) ) {
+					//Lets check if it's a valid URL
+					$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
+				} else {
+					$value = make_clickable( $value );
+				}
+			} else {
+				//We don't have a label (for cases like an email address)
+				$value = make_clickable( $value );
+			}
 		}
-
-	}
-
-	if( $field == 'user_email' ) {
-		$value = make_clickable( $value );
-	}
+	}	
 
 	/**
 	 * Format the profile field
@@ -209,7 +234,7 @@ function pmpromd_format_profile_field( $value, $field ){
 	 * @param string $original_value The original value before formatting
 	 * @param string $field The type of field your changes should apply to
 	 */
-	$value = apply_filters( 'pmpromd_format_profile_field', $value, $original_value, $field );
+	$value = apply_filters( 'pmpromd_format_profile_field', $value, $original_value, $field_name );
 
 	return $value;
 

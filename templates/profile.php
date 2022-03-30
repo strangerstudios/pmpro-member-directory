@@ -376,6 +376,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<?php
 									}elseif(is_array($meta_field)){
 										//this is a general array, check for Register Helper options first
+										echo 'y';
 										if(!empty($rh_fields[$field[1]])) {
 											foreach($meta_field as $key => $value)
 												$meta_field[$key] = $rh_fields[$field[1]][$value];
@@ -396,18 +397,14 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 									{
 										if($field[1] == 'user_url')
 										{
-											?>
-											<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo pmpromd_format_profile_field( $field[0], $field[1] ); ?></a>
-											<?php
+											echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
 										}
 										else
 										{
 											?>
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
-												echo pmpromd_format_profile_field( $field[1], $field[0] );
-											?>
-											<?php
+												echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
 										}
 									}
 								?>
