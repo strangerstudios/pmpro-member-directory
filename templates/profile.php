@@ -404,7 +404,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 											?>
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
-												echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
+												echo pmpromd_format_profile_field( $meta_field, $field[1] );
 										}
 									}
 								?>
