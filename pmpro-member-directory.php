@@ -10,7 +10,7 @@ Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.0' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2' );
 
 global $pmpromd_options;
 
