@@ -176,39 +176,68 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
  *
  * @since TBD
  *
- * @param string      $url   The URL to maybe make clickable or run oembed for.
- * @param false|array $field The field array information.
+ * @param string      $value   The value of the field
+ * @param string      $field_name   The field ID or name that would be stored in the DB
+ * @param string      $field_label   The field's front-facing label
  *
  * @return string The output that may have been clickable or embedded.
  */
-function pmpromd_format_profile_field( $value, $field = false ){
+function pmpromd_format_profile_field( $value, $field_name, $field_label = false ){
 
-	if( $field == 'user_url' ) {
-		$url_embed = wp_oembed_get( $value );
+	if( empty( $field_name ) ) {
+		$field_name = $value;
+	}
+
+	$original_value = $value;
+
+	$is_email = false;
+	if( is_email( $value ) ) {
+		$is_email = true;
+		$value = make_clickable( $value );	
+	}
+
+	/**
+	 * Should we wp_oembed the URL that is provided
+	 * 
+	 * @param bool Should this url be sent through oembed to render
+	 * @param string $field The type of field your changes should apply to
+	 */
+	$try_oembed = apply_filters( 'pmpromd_try_oembed_url', true, $field_name );
+
+	//Should we try and run oembed on this link?
+	if( $try_oembed && !$is_email ) {
+		$url_embed = wp_oembed_get( $value );		
 		if( !empty( $url_embed ) ){
-			$r = $url_embed;
+			//Oembed returned a vlue
+			$value = $url_embed;
+		} else { 
+			//Oembed did not return anything. Lets check if we have a label?
+			if( $field_label ) {
+				//We have a label!
+				if ( wp_http_validate_url( $value ) ) {
+					//Lets check if it's a valid URL
+					$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
+				} else {
+					$value = make_clickable( $value );
+				}
+			} else {
+				//We don't have a label (for cases like an email address)
+				$value = make_clickable( $value );
+			}
 		}
-
-		$r = $value;
-
-	}
-
-	if( $field == 'user_email' ) {
-
-		$r = make_clickable( $value );
-
-	}
+	}	
 
 	/**
 	 * Format the profile field
 	 * 
 	 * @param string $r The URL or field string that you want to return
 	 * @param string $value The value or string that you want to format
+	 * @param string $original_value The original value before formatting
 	 * @param string $field The type of field your changes should apply to
 	 */
-	$r = apply_filters( 'pmpromd_format_profile_field', $r, $value, $field );
+	$value = apply_filters( 'pmpromd_format_profile_field', $value, $original_value, $field_name );
 
-	return pmpro_kses( $r );
+	return $value;
 
 }
 /**
@@ -221,7 +250,8 @@ function pmpromd_format_profile_field( $value, $field = false ){
 function pmpromd_user_identifier() {
 	
 	/**
-	 * Filter to change how user identifiers are presented. Choose between slug and id
+	 * Filter to change how user identifiers are presented. Choose between slug and ID
+	 * Note: Value is case sensitive
 	 * 
 	 * @since 1.2.0
 	 */
@@ -244,22 +274,41 @@ function pmpromd_get_user_by_identifier( $value ) {
 }
 
 /**
+ * Gets a user from the pu URL value
+ *
+ * @since 1.2.0
+ *
+ */
+function pmpromd_get_user(){
+
+	global $wp_query;
+
+	if( !empty( $wp_query->get( 'pu' ) ) ){
+		//Using the new permalinks /profile/user
+		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
+	} elseif( !empty( $_REQUEST['pu'] ) ) {
+		//Using old url structure /profile/?pu=user
+		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
+	} elseif( !empty( $current_user->ID ) ) {
+		$pu = $current_user;
+	} else {
+		$pu = false;
+	}
+
+	return $pu;
+
+}
+
+/**
  * Adds an edit profile link when on the Profile page
  */
 function pmpromd_add_edit_profile($admin_bar){
 
-	global $pmpro_pages, $post, $wp_query, $current_user;
+	global $pmpro_pages, $post, $current_user;
 
 	if( current_user_can( 'manage_options' ) && !empty( $post ) && $pmpro_pages['profile'] == $post->ID ){
 
-		if( !empty( $wp_query->get( 'pu' ) ) && is_numeric( $wp_query->get( 'pu' ) ) )
-			$pu = get_user_by( 'id', $wp_query->get( 'pu' ) );
-		elseif( !empty($_REQUEST['pu']))
-			$pu = get_user_by( 'slug', $wp_query->get( 'pu' ) );
-		elseif( !empty( $current_user->ID ) )
-			$pu = $current_user;
-		else
-			$pu = false;
+		$pu = pmpromd_get_user();
 
 		if( $pu ){
 
@@ -279,7 +328,7 @@ function pmpromd_add_edit_profile($admin_bar){
 }
 add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
 
-/*
+/**
  * Filter the fields we are expecting to show and make sure the user has the required level.
  *
  * @since TBD
@@ -318,8 +367,8 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 	}
 	$fields_to_show = array();
 
-	// Make sure there are profile fields to show.
-	if ( $profile_fields ) {
+	if( !empty( $profile_fields ) ) {
+
 		//Lets loop through all of the profile fields that we 'should' display
 		foreach( $profile_fields as $field_array ){
 			//Check if the current field is in the fields_to_hide array
@@ -328,6 +377,7 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 				$fields_to_show[] = $field_array;
 			}
 		}
+
 	}
 
 	return $fields_to_show;
@@ -389,7 +439,7 @@ function pmpromd_pagesettings_flush(){
 	}
 
 }
-add_action( 'admin_init', 'pmpromd_pagesettings_flush' );
+add_action( 'admin_init', 'pmpromd_pagesettings_flush', 4 );
 
 /**
  * We're saving a page, is it a Profile page
@@ -398,7 +448,10 @@ function pmpromd_page_save_flush( $post_id ){
 
 	global $pmpro_pages;
 
-	if( !empty( $pmpro_pages['profile'] ) && (int)$pmpro_pages['profile'] == $post_id && did_action( 'init' ) ) {
+	if( !empty( $pmpro_pages['profile'] ) && 
+		(int)$pmpro_pages['profile'] == $post_id && 
+		did_action( 'init' ) 
+	) {
 		flush_rewrite_rules( true );
 	}
 
@@ -412,9 +465,14 @@ function pmpromd_redirect_profile_links(){
 
 	if( !empty( $_REQUEST['pu'] ) ){
 
-		wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+		$structure = get_option( 'permalink_structure' );	
 
-		exit();
+		if( !empty( $structure ) ) {
+
+			wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+			exit();
+
+		}		
 	}
 
 }
@@ -431,10 +489,58 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
 	}
 
+	$structure = get_option( 'permalink_structure' );	
+
+	if( is_object( $pu ) ) {
+		//We can't use 'slug' directly when getting the user nicename
+		$user_identifier = strtolower( pmpromd_user_identifier() );
+
+		if( $user_identifier == 'id' ) {
+			$pu = $pu->ID;
+		} else {
+			$pu = $pu->user_nicename;
+		}
+	}
+
+	if( empty( $pu ) ) {
+		return '';
+	}
+
+	if( empty( $structure ) ) {
+		//We're using plain permalinks here. Query parameters to the rescue!
+		return add_query_arg( array( 'pu' => $pu ), $profile_url );
+	}
+
+	if( strpos( $structure, 'post_id' ) !== FALSE ) {
+		//Numeric permalinks don't have a trailing slash for some readon
+		$separator = true;
+	}
+
 	if( $separator ) { 
-		return $profile_url . sanitize_title( $pu );
+		return $profile_url . '/' . sanitize_title( $pu );
 	} else {
-		return $profile_url . '/'. sanitize_title( $pu );
+		return $profile_url . sanitize_title( $pu );
 	}
 }
 
+/**
+ * Run an upgrade check to compare versions and flush rewrite rules
+ *
+ * @since TBD
+ * 
+ * @return void
+ */
+function pmpromd_check_for_upgrade() {
+
+	$pmpromd_db_version = pmpro_getOption("md_db_version");
+
+	if( empty( $pmpromd_db_version ) || version_compare( $pmpromd_db_version, '1.2', '<' ) ) {
+
+		flush_rewrite_rules( true );
+
+		pmpro_setOption("md_db_version", "1.2");
+
+	}
+
+}
+add_action( 'admin_init', 'pmpromd_check_for_upgrade' );

@@ -12,21 +12,10 @@ function pmpromd_profile_preheader()
 			Preheader operations here.
 		*/
 
-		global $main_post_id, $wp_query;
+		global $main_post_id;
 		$main_post_id = $post->ID;
 
-		//Get the profile user
-		$profile_user = $wp_query->get( 'pu' ); //?pu= added to URL's
-
-		if( !empty( $profile_user ) && is_numeric( $profile_user ) ) {
-			$pu = get_user_by( 'id', $profile_user );
-		} elseif( !empty( $profile_user ) ) {
-			$pu = get_user_by( 'slug', $profile_user );
-		} elseif( !empty( $current_user->ID ) ) {
-			$pu = $current_user;
-		} else {
-			$pu = false;
-		}
+		$pu = pmpromd_get_user();
 
 		// Is this user hidden from directory?
 		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
@@ -78,22 +67,14 @@ add_action("wp", "pmpromd_profile_preheader", 1);
 function pmpromd_the_title($title, $post_id = NULL)
 {
 	global $main_post_id, $current_user, $wp_query;
-	if($post_id == $main_post_id)
-	{
-		if( !empty( $wp_query->get( 'pu' ) ) )
-		{
-			global $wpdb;
-      $user_nicename = $wp_query->get( 'pu' );
-      $user = pmpromd_get_user_by_identifier( $user_nicename );
-			$display_name = pmpro_member_directory_get_member_display_name( $user );
+	if( $post_id == $main_post_id ) {
+		$pu = pmpromd_get_user();
 
-		}
-		elseif(!empty($current_user))
-		{
-			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-		}
-		if(!empty($display_name))
+		$display_name = pmpro_member_directory_get_member_display_name( $pu );
+
+		if( !empty( $display_name ) ){
 			$title = $display_name;
+		}
 	}
 	return $title;
 }
@@ -102,22 +83,16 @@ add_filter("the_title", "pmpromd_the_title", 10, 2);
 function pmpromd_wp_title($title, $sep)
 {
 	global $wpdb, $main_post_id, $post, $current_user, $wp_query;
-	if($post->ID == $main_post_id)
-	{
-		if( !empty( $wp_query->get( 'pu' ) ) )
-		{
-			$user_nicename = $wp_query->get( 'pu' );
-			$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_nicename = '" . esc_sql($user_nicename) . "' LIMIT 1");
-			$display_name = pmpro_member_directory_get_member_display_name( $user );
-		}
-		elseif(!empty($current_user))
-		{
-			$display_name = pmpro_member_directory_get_member_display_name( $current_user );
-		}
-		if(!empty($display_name))
-		{
+	if( $post->ID == $main_post_id ) {
+
+		$pu = pmpromd_get_user();
+
+		$display_name = pmpro_member_directory_get_member_display_name( $pu );
+
+		if( !empty( $display_name ) ) {
 			$title = $display_name . ' ' . $sep . ' ';
 		}
+
 		$title .= get_bloginfo( 'name' );
 	}
 	return $title;
@@ -243,17 +218,8 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	elseif(empty($limit))
 		$limit = 15;
 
-	if( empty( $user_id ) && !empty( $wp_query->get( 'pu' ) ) )
-	{
-		//Get the profile user
-		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
-		$user_id = $pu->ID;
-	}
 
-	if( !empty( $user_id ) )
-		$pu = get_userdata($user_id);
-	elseif( empty( $wp_query->get( 'pu' ) ) )
-		$pu = get_userdata( $current_user->ID );
+	$pu = pmpromd_get_user();
 
 	if ( ! empty( $pu ) ) {
 		$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );
@@ -341,7 +307,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_email)) { ?>
 					<p class="pmpro_member_directory_email">
 						<strong><?php _e('Email Address', 'pmpro-member-directory'); ?></strong>
-						<?php echo $pu->user_email; ?>
+						<?php echo pmpromd_format_profile_field( $pu->user_email, 'user_email' ); ?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_level)) { ?>
@@ -410,6 +376,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<?php
 									}elseif(is_array($meta_field)){
 										//this is a general array, check for Register Helper options first
+										echo 'y';
 										if(!empty($rh_fields[$field[1]])) {
 											foreach($meta_field as $key => $value)
 												$meta_field[$key] = $rh_fields[$field[1]][$value];
@@ -430,23 +397,14 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 									{
 										if($field[1] == 'user_url')
 										{
-											?>
-											<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo $field[0]; ?></a>
-											<?php
+											echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
 										}
 										else
 										{
 											?>
 											<strong><?php echo $field[0]; ?></strong>
 											<?php
-												$meta_field_embed = wp_oembed_get($meta_field);
-												if(!empty($meta_field_embed)){
-													echo $meta_field_embed;
-												}else{
-													echo make_clickable($meta_field);
-												}
-											?>
-											<?php
+												echo pmpromd_format_profile_field( $meta_field, $field[1] );
 										}
 									}
 								?>
