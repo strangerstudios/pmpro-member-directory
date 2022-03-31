@@ -8,3 +8,5 @@ package.json export-ignore
 webpack.config.js export-ignore
 blocks/directory/block.js export-ignore
 blocks/profile/block.js export-ignore
+README.MD export-ignore
+pmpro-member-directory-banner.jpg export-ignore

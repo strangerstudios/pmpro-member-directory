@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4.0
-Tested up to: 5.5
-Stable tag: 1.1
+Tested up to: 5.9
+Stable tag: 1.2
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,20 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.2 - 2022-03-31 =
+* ENHANCEMENT: General improvements to localization and translatable strings.
+* ENHANCEMENT: Improvement to profile pretty permalinks structure that's more SEO friendly (e.g. membership-account/profile/admin/). Automatically flush permalinks when needed in admin area.
+* ENHANCEMENT: Improved handling of clickable links, we try to automatically embed custom fields first or fallback to clickable URL fields.
+* ENHANCEMENT: pmpro_get_element_class implemented on directory and profile pages to load HTML classes as needed.
+* ENHANCEMENT: Added "Edit Profile" link for administrators when viewing the profile page. Redirects to the edit profile WordPress page.
+* ENHANCEMENT: New filter `pmpromd_try_oembed_url` added to allow trying to embed possible fields first. Set this false if you don't want to automatically embed embeddable URL's.
+* ENHANCEMENT: New filter `pmpromd_format_profile_field` added to allow how to format any fields that may be clickable and allows custom output for fields.
+* ENHANCEMENT: New filter `pmpromd_user_identifier` added to allow how to identify/retrieve the user information. Defaults to "slug" (user_nicename) or can use user ID to retrieve relevant information in the directory or profile page.
+* ENHANCEMENT: New filter `pmpro_member_directory_sql_search_where` added to allow filtering of search WHERE SQL conditions to offer more specific search results.
+* ENHANCEMENT: Profile page title no longer changes to the user's name.
+* ENHANCEMENTX: Improved the displaying of level dependent custom fields.
+* BUG FIX: Fixed issue where pagination would cause issues with search. (Thanks @jcotter).
+
 = 1.1 - 2020-11-16 =
 * BUG FIX: Fixed issue where saving "hide from directory" wasn't saving on the front-end profile page.
 * BUG FIX: Fixed issue where profile page wasn't showing user information (fields) correctly.
