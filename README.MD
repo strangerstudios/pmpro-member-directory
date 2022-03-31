@@ -1,3 +1,5 @@
+![](pmpro-member-directory-banner.jpg)
+
 # [Member Directory and Profile Pages](https://www.paidmembershipspro.com/add-ons/member-directory/) #
 [comment]: # (Generate badges from shields.io, only works for .org plugins to get other stats etc. We'd have to create our own endpoints for Premium plugins)
 
