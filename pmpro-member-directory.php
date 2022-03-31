@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.1
+Version: 1.2
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
@@ -174,7 +174,7 @@ add_filter('plugin_row_meta', 'pmpromd_plugin_row_meta', 10, 2);
 /**
  * Formatting profile fields based on the field type
  *
- * @since TBD
+ * @since 1.2
  *
  * @param string      $value   The value of the field
  * @param string      $field_name   The field ID or name that would be stored in the DB
@@ -331,7 +331,7 @@ add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
 /**
  * Filter the fields we are expecting to show and make sure the user has the required level.
  *
- * @since TBD
+ * @since 1.2
  * 
  * @param array  $profile_fields The list of fields we want to display on the page.
  * @param object $pu             The current user object.
@@ -526,7 +526,7 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
 /**
  * Run an upgrade check to compare versions and flush rewrite rules
  *
- * @since TBD
+ * @since 1.2
  * 
  * @return void
  */

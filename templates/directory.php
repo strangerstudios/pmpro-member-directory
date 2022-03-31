@@ -112,7 +112,7 @@ $sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
 if( $s ) {
-	$sql_where_search = "
+	$sql_search_where = "
 		AND (
 			u.user_login LIKE '%" . esc_sql( $s ) . "%'
 			OR u.user_email LIKE '%" . esc_sql( $s ) . "%'
@@ -126,12 +126,12 @@ if( $s ) {
 	 *
 	 * @since TBD
 	 *
-	 * @param string $sql_where_search The member directory search SQL to be used.
+	 * @param string $sql_search_where The member directory search SQL to be used.
 	 * @param string $search_text      The search text used.
 	 */
-	$sql_where_search = apply_filters( 'pmpro_member_directory_search_sql', $sql_where_search, $s );
+	$sql_search_where = apply_filters( 'pmpro_member_directory_sql_search_where', $sql_search_where, $s );
 
-	$sql_parts['WHERE'] .= $sql_where_search;
+	$sql_parts['WHERE'] .= $sql_search_where;
 }
 
 // If levels are passed in.
