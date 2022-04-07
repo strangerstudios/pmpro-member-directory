@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2
+Version: 1.2.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.1' );
 
 global $pmpromd_options;
 
@@ -269,7 +269,7 @@ function pmpromd_get_user_by_identifier( $value ) {
 
 	$user_identifier = pmpromd_user_identifier();
 
-	return get_user_by( $user_identifier, $value );
+	return get_user_by( $user_identifier, sanitize_text_field( $value ) );
 	
 }
 
@@ -279,17 +279,20 @@ function pmpromd_get_user_by_identifier( $value ) {
  * @since 1.2.0
  *
  */
-function pmpromd_get_user(){
+function pmpromd_get_user( $user_id = false ){
 
-	global $wp_query;
+	global $wp_query, $current_user;
 
-	if( !empty( $wp_query->get( 'pu' ) ) ){
+	if ( $user_id ) {
+		//We're specifying which user we want to display
+		$pu = get_user_by( 'id', intval( $user_id ) );
+	} elseif ( ! empty( $wp_query->get( 'pu' ) ) ) {
 		//Using the new permalinks /profile/user
 		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
-	} elseif( !empty( $_REQUEST['pu'] ) ) {
+	} elseif ( ! empty( $_REQUEST['pu'] ) ) {
 		//Using old url structure /profile/?pu=user
 		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
-	} elseif( !empty( $current_user->ID ) ) {
+	} elseif ( ! empty( $current_user->ID ) ) {
 		$pu = $current_user;
 	} else {
 		$pu = false;
