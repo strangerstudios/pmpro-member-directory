@@ -218,8 +218,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 	elseif(empty($limit))
 		$limit = 15;
 
-
-	$pu = pmpromd_get_user();
+	$pu = pmpromd_get_user( $user_id );
 
 	if ( ! empty( $pu ) ) {
 		$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );
