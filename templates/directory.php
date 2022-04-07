@@ -112,7 +112,7 @@ $sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
 if( $s ) {
-	$sql_where_search = "
+	$sql_search_where = "
 		AND (
 			u.user_login LIKE '%" . esc_sql( $s ) . "%'
 			OR u.user_email LIKE '%" . esc_sql( $s ) . "%'
@@ -126,12 +126,12 @@ if( $s ) {
 	 *
 	 * @since TBD
 	 *
-	 * @param string $sql_where_search The member directory search SQL to be used.
+	 * @param string $sql_search_where The member directory search SQL to be used.
 	 * @param string $search_text      The search text used.
 	 */
-	$sql_where_search = apply_filters( 'pmpro_member_directory_search_sql', $sql_where_search, $s );
+	$sql_search_where = apply_filters( 'pmpro_member_directory_sql_search_where', $sql_search_where, $s );
 
-	$sql_parts['WHERE'] .= $sql_where_search;
+	$sql_parts['WHERE'] .= $sql_search_where;
 }
 
 // If levels are passed in.
@@ -155,6 +155,8 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		$end = $totalrows;
 
 	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers );
+
+	$user_identifier = pmpromd_user_identifier();
 
 	ob_start();
 
@@ -246,7 +248,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			 * 
 			 * @param array Contains all of the shortcode attributes used in the directory shortcode
 			 */
-			$shortcode_atts = apply_filters( 'pmpro_member_directory_atts', array(
+			$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
 				'avatar_size' => $avatar_size,
 				'fields' => $fields,
 				'layout' => $layout,
@@ -312,7 +314,6 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					{
 						$auser = get_userdata($auser->ID);
 						$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-						$user_identifier = pmpromd_user_identifier();
 						$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
 						$count++;
 						?>
@@ -320,7 +321,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php if(!empty($show_avatar)) { ?>
 								<td class="pmpro_member_directory_avatar">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser->user_nicename ) ); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
+										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
 									<?php } else { ?>
 										<?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?>
 									<?php } ?>
@@ -329,7 +330,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<td>
 								<h3 class="pmpro_member_directory_display-name">
 									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser->user_nicename ) ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ), $profile_url, true ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 									<?php } else { ?>
 										<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?>
 									<?php } ?>
@@ -390,20 +391,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 												}
 												else
 												{
-													if($field[1] == 'user_url')
-													{
-														?>
-														<a href="<?php echo esc_url($meta_field); ?>" target="_blank"><?php echo $field[0]; ?></a>
-														<?php
-													}
-													else
-													{
-														?>
-														<strong><?php echo $field[0]; ?></strong>
-														<?php
-															echo pmpromd_format_profile_field( $meta_field, $field[1] );
-														?>
-														<?php
+													if($field[1] == 'user_url') {	
+														echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
+													} else {
+												?>
+													<strong><?php echo $field[0]; ?></strong>
+													<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
+															<?php
 													}
 												}
 												?>
@@ -447,7 +441,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php } ?>
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
 								<td class="pmpro_member_directory_link">
-									<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser->user_nicename ) ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
+									<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url, true ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
 								</td>
 							<?php } ?>
 						</tr>
@@ -470,7 +464,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php if(!empty($show_avatar)) { ?>
 							<div class="pmpro_member_directory_avatar">
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
-									<a class="<?php echo $avatar_align; ?>" href="<?php echo $profile_url.$auser->user_nicename; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
+									<a class="<?php echo $avatar_align; ?>" href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
 								<?php } else { ?>
 									<span class="<?php echo $avatar_align; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></span>
 								<?php } ?>
@@ -478,7 +472,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<?php } ?>
 						<h3 class="pmpro_member_directory_display-name">
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
-								<a href="<?php echo $profile_url.$auser->user_nicename; ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+								<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 							<?php } else { ?>
 								<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
 							<?php } ?>
@@ -566,10 +560,8 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 										<?php
 									}
 										elseif($field[1] == 'user_url')
-										{
-											?>
-											<a href="<?php echo esc_url( $auser->{$field[1]} ); ?>" target="_blank"><?php echo pmpromd_format_profile_field( $field[0], $field[1] ); ?></a>
-											<?php
+										{											
+											echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
 										}
 										else
 										{
@@ -587,7 +579,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						?>
 						<?php if(!empty($link) && !empty($profile_url)) { ?>
 							<p class="pmpro_member_directory_link">
-								<a class="more-link" href="<?php echo $profile_url.$auser->user_nicename; ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
+								<a class="more-link" href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
 							</p>
 						<?php } ?>
 					</div> <!-- end pmpro_member_directory-item -->
@@ -654,20 +646,23 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
 		}
 
-		for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
-			if( $counter <= 6 ){
-				$query_args = array(
-					'ps' => $s,
-					'pn' => $i,
-					'limit' => $limit,
-				);
+		if( round( $number_of_pages, 0 ) === 1 ) {
+			//If there's only one page, no need to show the page numbers
+			for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
+				if( $counter <= 6 ){
+					$query_args = array(
+						'ps' => $s,
+						'pn' => $i,
+						'limit' => $limit,
+					);
 
-				if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
-				
-				echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
-			}
-			$counter++;
-		}
+					if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
+					
+					echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
+				}
+				$counter++;
+			}	
+		}		
 		?>
 		</span>
 		<?php
