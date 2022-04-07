@@ -279,17 +279,20 @@ function pmpromd_get_user_by_identifier( $value ) {
  * @since 1.2.0
  *
  */
-function pmpromd_get_user(){
+function pmpromd_get_user( $user_id = false){
 
-	global $wp_query;
+	global $wp_query, $current_user;
 
-	if( !empty( $wp_query->get( 'pu' ) ) ){
+	if( $user_id ) {
+		//We're specifying which user we want to display
+		$pu = get_user_by('id', intval( $user_id ) );
+	} else if( !empty( $wp_query->get( 'pu' ) ) ){
 		//Using the new permalinks /profile/user
 		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
 	} elseif( !empty( $_REQUEST['pu'] ) ) {
 		//Using old url structure /profile/?pu=user
 		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
-	} elseif( !empty( $current_user->ID ) ) {
+	} elseif( !empty( $current_user->ID ) ) {		
 		$pu = $current_user;
 	} else {
 		$pu = false;
