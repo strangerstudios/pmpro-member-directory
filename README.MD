@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg?style=flat-square)
 
 ### Welcome to the Member Directory and Profile Pages GitHub Repository
-Add a description of the product here.
+Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
 For more information please visit [paidmembershipspro.com/add-ons/member-directory/](https://www.paidmembershipspro.com/add-ons/member-directory/)
 
