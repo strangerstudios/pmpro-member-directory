@@ -376,7 +376,6 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										<?php
 									}elseif(is_array($meta_field)){
 										//this is a general array, check for Register Helper options first
-										echo 'y';
 										if(!empty($rh_fields[$field[1]])) {
 											foreach($meta_field as $key => $value)
 												$meta_field[$key] = $rh_fields[$field[1]][$value];
