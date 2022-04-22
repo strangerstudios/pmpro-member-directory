@@ -269,6 +269,9 @@ function pmpromd_get_user_by_identifier( $value ) {
 
 	$user_identifier = pmpromd_user_identifier();
 
+	//Handles spaces that are turned into dashes
+	$value = str_replace( "-", " ", $value );
+
 	return get_user_by( $user_identifier, sanitize_text_field( $value ) );
 	
 }
