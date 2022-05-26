@@ -395,6 +395,10 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
+	if( empty( $pmpro_pages ) ) {
+		return;
+	}
+
 	$parent_id = get_post_field( 'post_parent', $pmpro_pages['profile'] );
 	$slug = get_post_field( 'post_name',  $pmpro_pages['profile'] );
 
@@ -534,6 +538,10 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  * @return void
  */
 function pmpromd_check_for_upgrade() {
+
+	if( !function_exists( 'pmpro_getOption' ) ) {
+		return;
+	}
 
 	$pmpromd_db_version = pmpro_getOption("md_db_version");
 
