@@ -395,7 +395,7 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	if( empty( $pmpro_pages ) ) {
+	if ( empty( $pmpro_pages ) ) {
 		return;
 	}
 
@@ -539,7 +539,7 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  */
 function pmpromd_check_for_upgrade() {
 
-	if( !function_exists( 'pmpro_getOption' ) ) {
+	if ( ! function_exists( 'pmpro_getOption' ) ) {
 		return;
 	}
 
