@@ -395,24 +395,25 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	$parent_id = get_post_field( 'post_parent', $pmpro_pages['profile'] );
-	$slug = get_post_field( 'post_name',  $pmpro_pages['profile'] );
-
-	if( !empty( $parent_id ) ){
-		$parent_slug = get_post_field( 'post_name',  $parent_id );
-		$profile_base = $parent_slug.'/'.$slug;
-	} else {
-		$profile_base = $slug;
+	if( empty( $pmpro_pages ) ) {
+		return;
 	}
 
+	$profile_permalink = get_the_permalink( $pmpro_pages['profile'] );
+
+	$base_site_url = get_site_url();
+
+	$profile_base = str_replace( $base_site_url.'/', '', $profile_permalink );
+
 	add_rewrite_rule(
-		$profile_base.'/([^/]+)/?$',
+		$profile_base.'([^/]+)/?$',
 		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
 		'top'
 	);
 
 }
 add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+
 
 /**
  * Adding in the ?pu parameter so that we can retrieve the value from the pretty permalink
