@@ -18,7 +18,11 @@ function pmpromd_profile_preheader()
 		$pu = pmpromd_get_user();
 
 		// Is this user hidden from directory?
-		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
+		if ( ! empty( $pu ) ) {
+			$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
+		} else {
+			$pmpromd_hide_directory = false;
+		}
 
 		// If no profile user, membership level, or hidden, go to directory or home.
 		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
