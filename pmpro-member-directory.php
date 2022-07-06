@@ -229,8 +229,7 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 
 	/**
 	 * Format the profile field
-	 * 
-	 * @param string $r The URL or field string that you want to return
+	 *
 	 * @param string $value The value or string that you want to format
 	 * @param string $original_value The original value before formatting
 	 * @param string $field The type of field your changes should apply to
@@ -535,6 +534,10 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  * @return void
  */
 function pmpromd_check_for_upgrade() {
+
+	if ( ! function_exists( 'pmpro_getOption' ) ) {
+		return;
+	}
 
 	$pmpromd_db_version = pmpro_getOption("md_db_version");
 
