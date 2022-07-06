@@ -97,6 +97,13 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.2.2 - 2022-07-07 =
+* BUG FIX: Fixed issue when profile page was nested within a nested page (Thanks @JarrydLong)
+* BUG FIX: Fixed fatal error when Paid Memberships Pro plugin wasn't active. (Thanks @JarrydLong)
+* BUG FIX: Fixed a layout issue conflict on the directory page for the Membership Maps Add On being included in the div container and now displays it correctly. (Thanks @JarrydLong)
+* BUG FIX: Fixed warnings of undefined variables when navigating to a profile page of a non-existing user. (Thanks @ipokkel)
+* REFACTOR: Adjusted incorrect docblock variable for the format the profile field method. (Thanks @ipokkel)
+
 = 1.2.1 - 2022-04-07 =
 * ENHANCEMENT: Added small sanitization check for query parameter values.
 * BUG FIX: Fixed issue where passing "user_id" attribute in shortcode was returning empty results.
