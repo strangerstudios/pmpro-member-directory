@@ -395,7 +395,7 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	if( empty( $pmpro_pages ) ) {
+	if ( empty( $pmpro_pages ) ) {
 		return;
 	}
 
@@ -403,11 +403,11 @@ function pmpromd_custom_rewrite_rules() {
 
 	$base_site_url = get_site_url();
 
-	$profile_base = str_replace( $base_site_url.'/', '', $profile_permalink );
+	$profile_base = str_replace( $base_site_url . '/', '', $profile_permalink );
 
 	add_rewrite_rule(
 		$profile_base.'([^/]+)/?$',
-		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
+		'index.php?pagename=' . $profile_base . '&pu=$matches[1]',
 		'top'
 	);
 
