@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2.1
+Version: 1.2.2
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.1' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.2' );
 
 global $pmpromd_options;
 
@@ -229,8 +229,7 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 
 	/**
 	 * Format the profile field
-	 * 
-	 * @param string $r The URL or field string that you want to return
+	 *
 	 * @param string $value The value or string that you want to format
 	 * @param string $original_value The original value before formatting
 	 * @param string $field The type of field your changes should apply to
@@ -395,24 +394,25 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	$parent_id = get_post_field( 'post_parent', $pmpro_pages['profile'] );
-	$slug = get_post_field( 'post_name',  $pmpro_pages['profile'] );
-
-	if( !empty( $parent_id ) ){
-		$parent_slug = get_post_field( 'post_name',  $parent_id );
-		$profile_base = $parent_slug.'/'.$slug;
-	} else {
-		$profile_base = $slug;
+	if ( empty( $pmpro_pages ) ) {
+		return;
 	}
 
+	$profile_permalink = get_the_permalink( $pmpro_pages['profile'] );
+
+	$base_site_url = get_site_url();
+
+	$profile_base = str_replace( $base_site_url . '/', '', $profile_permalink );
+
 	add_rewrite_rule(
-		$profile_base.'/([^/]+)/?$',
-		'index.php?pagename='.$profile_base.'&pu=$matches[1]',
+		$profile_base.'([^/]+)/?$',
+		'index.php?pagename=' . $profile_base . '&pu=$matches[1]',
 		'top'
 	);
 
 }
 add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+
 
 /**
  * Adding in the ?pu parameter so that we can retrieve the value from the pretty permalink
@@ -534,6 +534,10 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  * @return void
  */
 function pmpromd_check_for_upgrade() {
+
+	if ( ! function_exists( 'pmpro_getOption' ) ) {
+		return;
+	}
 
 	$pmpromd_db_version = pmpro_getOption("md_db_version");
 

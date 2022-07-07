@@ -237,37 +237,39 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			}
 		}
 		?>
+
+		<?php 
+		/**
+		 * Filter to override the attributes passed into the shortcode.
+		 * 
+		 * @param array Contains all of the shortcode attributes used in the directory shortcode
+		 */
+		$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
+			'avatar_size' => $avatar_size,
+			'fields' => $fields,
+			'layout' => $layout,
+			'level' => $level,
+			'levels' => $levels,
+			'limit' => $limit,
+			'link' => $link,
+			'order_by' => $order_by,
+			'order' => $order,
+			'show_avatar' => $show_avatar,
+			'show_email' => $show_email,
+			'show_level' => $show_level,
+			'show_search' => $show_search,
+			'show_startdate' => $show_startdate,
+			'avatar_align' => $avatar_align,				
+			'fields_array' => $fields_array
+		) );
+
+		do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
+		
 		<div class="pmpro_member_directory<?php
 			if ( ! empty( $layout ) ) {
 				echo ' pmpro_member_directory-' . $layout;
 			}
-		?>">
-			<?php 
-			/**
-			 * Filter to override the attributes passed into the shortcode.
-			 * 
-			 * @param array Contains all of the shortcode attributes used in the directory shortcode
-			 */
-			$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
-				'avatar_size' => $avatar_size,
-				'fields' => $fields,
-				'layout' => $layout,
-				'level' => $level,
-				'levels' => $levels,
-				'limit' => $limit,
-				'link' => $link,
-				'order_by' => $order_by,
-				'order' => $order,
-				'show_avatar' => $show_avatar,
-				'show_email' => $show_email,
-				'show_level' => $show_level,
-				'show_search' => $show_search,
-				'show_startdate' => $show_startdate,
-				'avatar_align' => $avatar_align,				
-				'fields_array' => $fields_array
-			) );
-
-			do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
+		?>">			
 			
 			<?php
 			if($layout == "table")
