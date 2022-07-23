@@ -394,7 +394,7 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	if ( empty( $pmpro_pages ) ) {
+	if ( empty( $pmpro_pages ) || empty( $pmpro_pages['profile'] ) ) {
 		return;
 	}
 
@@ -411,7 +411,7 @@ function pmpromd_custom_rewrite_rules() {
 	);
 
 }
-add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+add_action( 'init', 'pmpromd_custom_rewrite_rules', 10 );
 
 
 /**
