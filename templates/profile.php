@@ -6,61 +6,61 @@ function pmpromd_profile_preheader()
 {
 	global $post, $pmpro_pages, $current_user;
 
-	if(!empty($post->ID) && $post->ID == $pmpro_pages['profile'])
-	{
-		/*
-			Preheader operations here.
-		*/
+	// Bail if we're not on the profile page.
+	if ( empty( $pmpro_pages['profile'] ) || ! is_page( $pmpro_pages['profile'] ) ) {
+		return;
+	}
+		
+	/*
+		Preheader operations here.
+	*/
+	global $main_post_id;
+	$main_post_id = $post->ID;
 
-		global $main_post_id;
-		$main_post_id = $post->ID;
+	$pu = pmpromd_get_user();
 
-		$pu = pmpromd_get_user();
+	// Is this user hidden from directory?
+	if ( ! empty( $pu ) ) {
+		$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
+	} else {
+		$pmpromd_hide_directory = false;
+	}
 
-		// Is this user hidden from directory?
-		if ( ! empty( $pu ) ) {
-			$pmpromd_hide_directory = get_user_meta( $pu->ID, 'pmpromd_hide_directory', true );
-		} else {
-			$pmpromd_hide_directory = false;
-		}
+	// If no profile user, membership level, or hidden, go to directory or home.
+	if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
+		if(!empty($pmpro_pages['directory']))
+	 		wp_redirect(get_permalink($pmpro_pages['directory']));
+	 	else
+	 		wp_redirect(home_url());
+	 	exit;
+	}
 
-		// If no profile user, membership level, or hidden, go to directory or home.
-		if(empty($pu) || empty($pu->ID) || !pmpro_hasMembershipLevel(null, $pu->ID) || $pmpromd_hide_directory == '1' ) {
-			if(!empty($pmpro_pages['directory']))
-		 		wp_redirect(get_permalink($pmpro_pages['directory']));
-		 	else
-		 		wp_redirect(home_url());
-		 	exit;
-		}
+	// Integrate with Approvals.
+	if ( class_exists( 'PMPro_Approvals' ) ){
+		$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
 
-		// Integrate with Approvals.
-		if ( class_exists( 'PMPro_Approvals' ) ){
-			$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
-
-			if ( ! empty( $status ) && $status != 'approved' ) {
-				if ( ! empty( $pmpro_pages['directory'] ) ) {
-					wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
-				} else {
-					wp_redirect(home_url());
-					exit;
-				}
+		if ( ! empty( $status ) && $status != 'approved' ) {
+			if ( ! empty( $pmpro_pages['directory'] ) ) {
+				wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
+			} else {
+				wp_redirect(home_url());
+				exit;
 			}
 		}
+	}
 
-		/*
-			If a level is required for the profile page, make sure the profile user has it.
-		*/
-		//check is levels are required
-		$levels = pmpro_getMatches("/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true);
-		if(!empty($levels) && !pmpro_hasMembershipLevel(explode(",", $levels), $pu->ID))
-		{
-			if(!empty($pmpro_pages['directory']))
-				wp_redirect(get_permalink($pmpro_pages['directory']));
-			else
-				wp_redirect(home_url());
-			exit;
-		}
-
+	/*
+		If a level is required for the profile page, make sure the profile user has it.
+	*/
+	//check is levels are required
+	$levels = pmpro_getMatches("/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true);
+	if(!empty($levels) && !pmpro_hasMembershipLevel(explode(",", $levels), $pu->ID))
+	{
+		if(!empty($pmpro_pages['directory']))
+			wp_redirect(get_permalink($pmpro_pages['directory']));
+		else
+			wp_redirect(home_url());
+		exit;
 	}
 }
 add_action("wp", "pmpromd_profile_preheader", 1);
