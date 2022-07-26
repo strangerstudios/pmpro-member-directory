@@ -342,14 +342,24 @@ add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
  */
 function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
-	global $pmprorh_registration_fields;
+	global $pmprorh_registration_fields, $pmpro_user_fields;
+
+	if( ! empty( $pmpro_user_fields ) ) {
+
+		$user_fields = $pmpro_user_fields;
+
+	} else {
+
+		$user_fields = $pmprorh_registration_fields;
+
+	}
 
 	$fields_to_hide = array();
 
-	if(!empty($pmprorh_registration_fields)) {
+	if( ! empty( $user_fields ) ) {
 		
 		//Loop through all of the RH fields
-		foreach($pmprorh_registration_fields as $where => $fields) {
+		foreach( $user_fields as $where => $fields) {
 
 			//cycle through fields
 			foreach($fields as $field){
@@ -367,6 +377,7 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 
 		}
 	}
+	
 	$fields_to_show = array();
 
 	if( !empty( $profile_fields ) ) {
