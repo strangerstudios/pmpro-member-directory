@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2.2
+Version: 1.2.3
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.2' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.3' );
 
 global $pmpromd_options;
 
@@ -394,7 +394,7 @@ function pmpromd_custom_rewrite_rules() {
 
 	global $pmpro_pages;
 
-	if ( empty( $pmpro_pages ) ) {
+	if ( empty( $pmpro_pages ) || empty( $pmpro_pages['profile'] ) ) {
 		return;
 	}
 
@@ -411,7 +411,7 @@ function pmpromd_custom_rewrite_rules() {
 	);
 
 }
-add_action('init', 'pmpromd_custom_rewrite_rules', 10 );
+add_action( 'init', 'pmpromd_custom_rewrite_rules', 10 );
 
 
 /**
