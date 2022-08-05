@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 4.0
-Tested up to: 5.9
-Stable tag: 1.2.1
+Tested up to: 6.0
+Stable tag: 1.2.3
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.2.3 - 2022-08-05 =
+* BUG FIX/ENHANCEMENT: Better profile page checks prevent issues with rewrite rules. (@ideadude & @kimcoleman)
+
 = 1.2.2 - 2022-07-07 =
 * BUG FIX: Fixed issue when profile page was nested within a nested page (Thanks @JarrydLong)
 * BUG FIX: Fixed fatal error when Paid Memberships Pro plugin wasn't active. (Thanks @JarrydLong)
