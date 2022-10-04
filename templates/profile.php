@@ -37,9 +37,19 @@ function pmpromd_profile_preheader()
 
 	// Integrate with Approvals.
 	if ( class_exists( 'PMPro_Approvals' ) ){
-		$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
+		// Check that either the user has a membership level that does not require approval
+		// or that the user has a membership level that does require approval and has been approved.
+		$user_levels = pmpro_getMembershipLevelsForUser( $pu->ID );
+		$approval_levels = PMPro_Approvals::getApprovalLevels();
+		$okay = false;
+		foreach ( $user_levels as $level ) {
+			if ( ! in_array( $level->id, $approval_levels ) || PMPro_Approvals::isApproved( $pu->ID, $level->id ) ) {
+				$okay = true;
+				break;
+			}
+		}
 
-		if ( ! empty( $status ) && $status != 'approved' ) {
+		if ( ! $okay ) {
 			if ( ! empty( $pmpro_pages['directory'] ) ) {
 				wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
 			} else {
@@ -322,7 +332,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_startdate)) { ?>
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? date_i18n(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
+						<?php
+						$min_startdate = null;
+						foreach($allmylevels as $level) {
+							if ( empty( $min_startdate ) || $level->startdate < $min_startdate ) {
+								$min_startdate = $level->startdate;
+							}
+						}
+						echo ! empty( $min_startdate ) ? date_i18n( get_option( 'date_format' ), $min_startdate ) : '';
+						?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>

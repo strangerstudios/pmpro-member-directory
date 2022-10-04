@@ -438,7 +438,15 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							<?php } ?>
 							<?php if(!empty($show_startdate)) { ?>
 								<td class="pmpro_member_directory_date">
-									<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
+								<?php
+								$min_startdate = null;
+								foreach($alluserlevels as $level) {
+									if ( empty( $min_startdate ) || $level->startdate < $min_startdate ) {
+										$min_startdate = $level->startdate;
+									}
+								}
+								echo ! empty( $min_startdate ) ? date_i18n( get_option( 'date_format' ), $min_startdate ) : '';
+								?>
 								</td>
 							<?php } ?>
 							<?php if(!empty($link) && !empty($profile_url)) { ?>
