@@ -151,7 +151,14 @@ function pmpromd_display_file_field($meta_field) {
  * @param string $display_name The name to display for the user.
  */
 function pmpro_member_directory_get_member_display_name( $user ) {
+	// Make sure we have a user.
+	if ( ! $user instanceof WP_User ) {
+		return '';
+	}
+
+	// Get their display name.
 	$display_name = apply_filters( 'pmpro_member_directory_display_name', $user->display_name, $user );
+	
 	return $display_name;
 }
 
