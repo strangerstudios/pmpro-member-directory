@@ -366,7 +366,20 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 											?>
 											<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
 												<?php
-												if(is_array($meta_field) && !empty($meta_field['filename']) )
+												if( taxonomy_exists( $field[1] ) ){
+													//This is a custom user taxonomy
+													$user_taxonomies = wp_get_object_terms( $auser->ID, $field[1] );
+													if( ! empty( $user_taxonomies ) ) {
+														?>
+														<strong><?php echo $field[0]; ?></strong>
+														<?php
+														$ut_names = array();
+														foreach( $user_taxonomies as $ut ) {
+															$ut_names[] = $ut->name;
+														}
+														echo implode( ", ", $ut_names );
+													}
+												} else if(is_array($meta_field) && !empty($meta_field['filename']) )
 												{
 													//this is a file field
 													?>
@@ -536,8 +549,20 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 									?>
 									<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
 										<?php
-										if(is_array($meta_field) && !empty($meta_field['filename']) )
-										{
+										if( taxonomy_exists( $field[1] ) ){
+											//This is a custom user taxonomy
+											$user_taxonomies = wp_get_object_terms( $auser->ID, $field[1] );
+											if( ! empty( $user_taxonomies ) ) {
+												?>
+												<strong><?php echo $field[0]; ?></strong>
+												<?php
+												$ut_names = array();
+												foreach( $user_taxonomies as $ut ) {
+													$ut_names[] = $ut->name;
+												}
+												echo implode( ", ", $ut_names );
+											}
+										} else if ( is_array( $meta_field) && ! empty( $meta_field['filename'] ) ) {
 											//this is a file field
 											?>
 											<strong><?php echo $field[0]; ?></strong>
