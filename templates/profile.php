@@ -369,8 +369,21 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							{
 								?>
 								<p class="pmpro_member_directory_<?php echo esc_attr($field[1]); ?>">
-								<?php
-									if(is_array($meta_field) && !empty($meta_field['filename']) )
+								<?php								
+									if( taxonomy_exists( $field[1] ) ){
+										//This is a custom user taxonomy
+										$user_taxonomies = wp_get_object_terms( $pu->ID, $field[1] );
+										if( ! empty( $user_taxonomies ) ) {
+											?>
+											<strong><?php echo $field[0]; ?></strong>
+											<?php
+											$ut_names = array();
+											foreach( $user_taxonomies as $ut ) {
+												$ut_names[] = $ut->name;
+											}
+											echo implode( ", ", $ut_names );
+										}
+									} else if(is_array($meta_field) && !empty($meta_field['filename']) )
 									{
 										//this is a file field
 										?>
