@@ -648,7 +648,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
 		}
 
-		if( round( $number_of_pages, 0 ) === 1 ) {
+		if( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
 			//If there's only one page, no need to show the page numbers
 			for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
 				if( $counter <= 6 ){
