@@ -650,7 +650,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 		if( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
 			//If there's only one page, no need to show the page numbers
-			for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
+			for( $i = $pn; $i <= $number_of_pages; $i++ ){
 				if( $counter <= 6 ){
 					$query_args = array(
 						'ps' => $s,
