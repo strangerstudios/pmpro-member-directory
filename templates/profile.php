@@ -347,7 +347,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php
 					//filter the fields
-					$fields_array = apply_filters('pmpro_member_profile_fields', $fields_array, $pu);
+					$fields_array = apply_filters( 'pmpro_member_profile_fields', $fields_array, $pu );
 
 					if(!empty($fields_array))
 					{
@@ -362,16 +362,21 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 								break;
 							}
 
-							$field_val = $field[1];						
+							// Get the field name and value here.
+							$field_val = $field[1];
 							$meta_field = $pu->$field_val;
+
+							// If using PMPro 2.10, try use User Field function to display labels.
+							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) ) {
+								$meta_field = pmpro_get_label_for_user_field_value( $field_val, $meta_field );
+							}
 
 							if(!empty($meta_field))
 							{
 								?>
 								<p class="pmpro_member_directory_<?php echo esc_attr($field[1]); ?>">
 								<?php
-									if(is_array($meta_field) && !empty($meta_field['filename']) )
-									{
+									if(is_array($meta_field) && !empty($meta_field['filename']) ) {
 										//this is a file field
 										?>
 										<strong><?php echo $field[0]; ?></strong>

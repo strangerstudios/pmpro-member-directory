@@ -227,6 +227,9 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 		}
 	}	
 
+	if ( function_exists( 'pmpro_get_label_for_user_field_value' ) ) { 
+		$value = pmpro_get_label_for_user_field_value( $field_name, $value );
+	}
 	/**
 	 * Format the profile field
 	 *
