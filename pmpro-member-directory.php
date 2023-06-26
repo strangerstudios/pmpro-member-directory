@@ -230,6 +230,14 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 	if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_name ) ) { 
 		$value = pmpro_get_label_for_user_field_value( $field_name, $value );
 	}
+
+	// Let's support checkboxes here instead.
+	if ( $value === '1' ) {
+		$value = esc_html__( 'Yes', 'pmpro-member-directory' );
+	} elseif ( $value === '0' ) {
+		$value = esc_html__( 'No', 'pmpro-member-directory' );
+	}
+	
 	/**
 	 * Format the profile field
 	 *
