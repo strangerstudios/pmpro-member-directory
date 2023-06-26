@@ -253,7 +253,6 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
-
 				// Check to see if the Block Editor is used or the shortcode.
 				if ( strpos( $fields, "\n" ) !== FALSE ) {
 					$fields = rtrim( $fields, "\n" ); // clear up a stray \n
@@ -263,14 +262,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					$fields_array = explode(";",$fields);
 				}
 
-				if(!empty($fields_array))
-				{
-					for($i = 0; $i < count($fields_array); $i++ )
+				if( ! empty( $fields_array ) ) {
+					for($i = 0; $i < count($fields_array); $i++ ) {
 						$fields_array[$i] = explode(",", $fields_array[$i]);
+					}
 				}
 			}
 			else
 				$fields_array = false;
+
 
 			// Get Register Helper field options
 			$rh_fields = array();
@@ -367,7 +367,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							$meta_field = $pu->$field_val;
 
 							// If using PMPro 2.10, try use User Field function to display labels.
-							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) ) {
+							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_val ) ) {
 								$meta_field = pmpro_get_label_for_user_field_value( $field_val, $meta_field );
 							}
 
