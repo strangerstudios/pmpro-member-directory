@@ -1,17 +1,17 @@
-# Copyright (C) 2022 Paid Memberships Pro
+# Copyright (C) 2023 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.2\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-05T11:11:02+00:00\n"
+"POT-Creation-Date: 2023-06-28T10:08:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: pmpro-member-directory\n"
 
 #. Plugin Name of the plugin
@@ -45,36 +45,44 @@ msgstr ""
 msgid "Hide from %s?"
 msgstr ""
 
-#: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "View Documentation"
 msgstr ""
 
-#: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "Docs"
 msgstr ""
 
-#: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Visit Customer Support Forum"
 msgstr ""
 
-#: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Support"
 msgstr ""
 
-#: pmpro-member-directory.php:320
-#: pmpro-member-directory.php:323
+#: pmpro-member-directory.php:242
+msgid "Yes"
+msgstr ""
+
+#: pmpro-member-directory.php:244
+msgid "No"
+msgstr ""
+
+#: pmpro-member-directory.php:337
+#: pmpro-member-directory.php:340
 msgid "Edit Profile"
 msgstr ""
 
 #: templates/directory.php:167
-#: templates/profile.php:244
+#: templates/profile.php:260
 msgid "Search for:"
 msgstr ""
 
 #: templates/directory.php:168
 #: templates/directory.php:172
-#: templates/profile.php:245
-#: templates/profile.php:248
+#: templates/profile.php:261
+#: templates/profile.php:264
 msgid "Search Members"
 msgstr ""
 
@@ -107,7 +115,7 @@ msgid "Member"
 msgstr ""
 
 #: templates/directory.php:290
-#: templates/profile.php:312
+#: templates/profile.php:328
 #: blocks/directory/templates/table.js:17
 #: blocks/profile/block.js:194
 msgid "Email Address"
@@ -119,23 +127,23 @@ msgid "More Information"
 msgstr ""
 
 #: templates/directory.php:300
-#: templates/directory.php:490
-#: templates/profile.php:318
+#: templates/directory.php:498
+#: templates/profile.php:334
 #: blocks/directory/templates/table.js:19
 #: blocks/profile/block.js:199
 msgid "Level"
 msgstr ""
 
 #: templates/directory.php:305
-#: templates/directory.php:515
-#: templates/profile.php:324
+#: templates/directory.php:523
+#: templates/profile.php:340
 #: blocks/directory/templates/table.js:20
 #: blocks/profile/block.js:204
 msgid "Start Date"
 msgstr ""
 
-#: templates/directory.php:446
-#: templates/directory.php:584
+#: templates/directory.php:454
+#: templates/directory.php:592
 #: blocks/directory/templates/table.js:31
 #: blocks/directory/templates/table.js:40
 #: blocks/directory/templates/table.js:49
@@ -143,39 +151,39 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: templates/directory.php:602
+#: templates/directory.php:610
 msgid "No matching profiles found"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:607
+#: templates/directory.php:615
 msgid "within <em>%s</em>."
 msgstr ""
 
-#: templates/directory.php:611
-#: templates/profile.php:431
+#: templates/directory.php:619
+#: templates/profile.php:460
 msgid "View All Members"
 msgstr ""
 
-#: templates/directory.php:637
+#: templates/directory.php:645
 msgid "Previous"
 msgstr ""
 
-#: templates/directory.php:680
+#: templates/directory.php:688
 msgid "Next"
 msgstr ""
 
-#: templates/profile.php:306
+#: templates/profile.php:322
 #: blocks/profile/block.js:189
 msgid "Biographical Info"
 msgstr ""
 
-#: templates/profile.php:330
+#: templates/profile.php:354
 #: blocks/profile/block.js:209
 msgid "Address"
 msgstr ""
 
-#: templates/profile.php:344
+#: templates/profile.php:368
 #: blocks/profile/block.js:219
 msgid "Phone Number"
 msgstr ""

@@ -1,17 +1,17 @@
-# Copyright (C) 2022 Paid Memberships Pro
+# Copyright (C) 2023 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.2\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-05T11:11:02+00:00\n"
+"POT-Creation-Date: 2023-06-28T10:08:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: pmpro-member-directory\n"
 
 #. Plugin Name of the plugin
@@ -51,21 +51,25 @@ msgstr ""
 
 #: pmpro-member-directory.php:160
 #: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "View Documentation"
 msgstr ""
 
 #: pmpro-member-directory.php:160
 #: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "Docs"
 msgstr ""
 
 #: pmpro-member-directory.php:161
 #: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Visit Customer Support Forum"
 msgstr ""
 
 #: pmpro-member-directory.php:161
 #: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Support"
 msgstr ""
 
@@ -74,6 +78,7 @@ msgstr ""
 #: templates/directory.php:167
 #: templates/profile.php:241
 #: templates/profile.php:244
+#: templates/profile.php:260
 msgid "Search for:"
 msgstr ""
 
@@ -86,6 +91,8 @@ msgstr ""
 #: templates/profile.php:242
 #: templates/profile.php:245
 #: templates/profile.php:248
+#: templates/profile.php:261
+#: templates/profile.php:264
 msgid "Search Members"
 msgstr ""
 
@@ -134,6 +141,7 @@ msgstr ""
 #: templates/profile.php:309
 #: templates/directory.php:290
 #: templates/profile.php:312
+#: templates/profile.php:328
 msgid "Email Address"
 msgstr ""
 
@@ -155,6 +163,8 @@ msgstr ""
 #: templates/directory.php:300
 #: templates/directory.php:490
 #: templates/profile.php:318
+#: templates/directory.php:498
+#: templates/profile.php:334
 msgid "Level"
 msgstr ""
 
@@ -169,6 +179,8 @@ msgstr ""
 #: templates/directory.php:305
 #: templates/directory.php:515
 #: templates/profile.php:324
+#: templates/directory.php:523
+#: templates/profile.php:340
 msgid "Start Date"
 msgstr ""
 
@@ -182,12 +194,15 @@ msgstr ""
 #: templates/directory.php:582
 #: templates/directory.php:446
 #: templates/directory.php:584
+#: templates/directory.php:454
+#: templates/directory.php:592
 msgid "View Profile"
 msgstr ""
 
 #: templates/directory.php:572
 #: templates/directory.php:600
 #: templates/directory.php:602
+#: templates/directory.php:610
 msgid "No matching profiles found"
 msgstr ""
 
@@ -195,6 +210,7 @@ msgstr ""
 #: templates/directory.php:577
 #: templates/directory.php:605
 #: templates/directory.php:607
+#: templates/directory.php:615
 msgid "within <em>%s</em>."
 msgstr ""
 
@@ -203,18 +219,22 @@ msgstr ""
 #: templates/directory.php:609
 #: templates/profile.php:429
 #: templates/directory.php:611
+#: templates/directory.php:619
+#: templates/profile.php:460
 msgid "View All Members"
 msgstr ""
 
 #: templates/directory.php:607
 #: templates/directory.php:635
 #: templates/directory.php:637
+#: templates/directory.php:645
 msgid "Previous"
 msgstr ""
 
 #: templates/directory.php:619
 #: templates/directory.php:678
 #: templates/directory.php:680
+#: templates/directory.php:688
 msgid "Next"
 msgstr ""
 
@@ -222,6 +242,7 @@ msgstr ""
 #: blocks/profile/block.js:189
 #: templates/profile.php:303
 #: templates/profile.php:306
+#: templates/profile.php:322
 msgid "Biographical Info"
 msgstr ""
 
@@ -229,6 +250,7 @@ msgstr ""
 #: blocks/profile/block.js:209
 #: templates/profile.php:327
 #: templates/profile.php:330
+#: templates/profile.php:354
 msgid "Address"
 msgstr ""
 
@@ -236,6 +258,7 @@ msgstr ""
 #: blocks/profile/block.js:219
 #: templates/profile.php:341
 #: templates/profile.php:344
+#: templates/profile.php:368
 msgid "Phone Number"
 msgstr ""
 
@@ -381,5 +404,15 @@ msgstr ""
 #: pmpro-member-directory.php:321
 #: pmpro-member-directory.php:320
 #: pmpro-member-directory.php:323
+#: pmpro-member-directory.php:337
+#: pmpro-member-directory.php:340
 msgid "Edit Profile"
+msgstr ""
+
+#: pmpro-member-directory.php:242
+msgid "Yes"
+msgstr ""
+
+#: pmpro-member-directory.php:244
+msgid "No"
 msgstr ""
