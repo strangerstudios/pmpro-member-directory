@@ -552,11 +552,11 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  */
 function pmpromd_check_for_upgrade() {
 
-	if ( ! function_exists( 'pmpro_getOption' ) ) {
+	if ( ! function_exists( 'pmpro_init' ) ) {
 		return;
 	}
 
-	$pmpromd_db_version = pmpro_getOption("md_db_version");
+	$pmpromd_db_version = get_option("pmpro_md_db_version");
 
 	if( empty( $pmpromd_db_version ) || version_compare( $pmpromd_db_version, '1.2', '<' ) ) {
 
