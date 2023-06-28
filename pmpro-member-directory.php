@@ -234,6 +234,17 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 		}
 	}	
 
+	if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_name ) ) { 
+		$value = pmpro_get_label_for_user_field_value( $field_name, $value );
+	}
+
+	// Let's support checkboxes here instead.
+	if ( $value === '1' ) {
+		$value = esc_html__( 'Yes', 'pmpro-member-directory' );
+	} elseif ( $value === '0' ) {
+		$value = esc_html__( 'No', 'pmpro-member-directory' );
+	}
+	
 	/**
 	 * Format the profile field
 	 *
@@ -381,7 +392,7 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		//Lets loop through all of the profile fields that we 'should' display
 		foreach( $profile_fields as $field_array ){
 			//Check if the current field is in the fields_to_hide array
-			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			if( ! in_array( $field_array[1], $fields_to_hide ) ) {
 				//It isn't in the array so we want to show this field
 				$fields_to_show[] = $field_array;
 			}
