@@ -213,20 +213,19 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 
 	//Should we try and run oembed on this link?
 	if( $try_oembed && !$is_email ) {
-		$url_embed = wp_oembed_get( $value );		
+		
+		// Only try to embed if the URL is valid.
+		if ( wp_http_validate_url( $value ) ) {
+			$url_embed = wp_oembed_get( $value );		
+		}
+
 		if( !empty( $url_embed ) ){
 			//Oembed returned a vlue
 			$value = $url_embed;
 		} else { 
 			//Oembed did not return anything. Lets check if we have a label?
 			if( $field_label ) {
-				//We have a label!
-				if ( wp_http_validate_url( $value ) ) {
-					//Lets check if it's a valid URL
-					$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
-				} else {
-					$value = make_clickable( $value );
-				}
+				$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
 			} else {
 				//We don't have a label (for cases like an email address)
 				$value = make_clickable( $value );
