@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2.3
+Version: 1.2.4
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.3' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.4' );
 
 global $pmpromd_options;
 
@@ -151,7 +151,14 @@ function pmpromd_display_file_field($meta_field) {
  * @param string $display_name The name to display for the user.
  */
 function pmpro_member_directory_get_member_display_name( $user ) {
+	// Make sure we have a user.
+	if ( ! $user instanceof WP_User ) {
+		return '';
+	}
+
+	// Get their display name.
 	$display_name = apply_filters( 'pmpro_member_directory_display_name', $user->display_name, $user );
+	
 	return $display_name;
 }
 
@@ -206,20 +213,19 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 
 	//Should we try and run oembed on this link?
 	if( $try_oembed && !$is_email ) {
-		$url_embed = wp_oembed_get( $value );		
+		
+		// Only try to embed if the URL is valid.
+		if ( wp_http_validate_url( $value ) ) {
+			$url_embed = wp_oembed_get( $value );		
+		}
+
 		if( !empty( $url_embed ) ){
 			//Oembed returned a vlue
 			$value = $url_embed;
 		} else { 
 			//Oembed did not return anything. Lets check if we have a label?
 			if( $field_label ) {
-				//We have a label!
-				if ( wp_http_validate_url( $value ) ) {
-					//Lets check if it's a valid URL
-					$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
-				} else {
-					$value = make_clickable( $value );
-				}
+				$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
 			} else {
 				//We don't have a label (for cases like an email address)
 				$value = make_clickable( $value );
@@ -227,6 +233,17 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 		}
 	}	
 
+	if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_name ) ) { 
+		$value = pmpro_get_label_for_user_field_value( $field_name, $value );
+	}
+
+	// Let's support checkboxes here instead.
+	if ( $value === '1' ) {
+		$value = esc_html__( 'Yes', 'pmpro-member-directory' );
+	} elseif ( $value === '0' ) {
+		$value = esc_html__( 'No', 'pmpro-member-directory' );
+	}
+	
 	/**
 	 * Format the profile field
 	 *
@@ -374,7 +391,7 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		//Lets loop through all of the profile fields that we 'should' display
 		foreach( $profile_fields as $field_array ){
 			//Check if the current field is in the fields_to_hide array
-			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			if( ! in_array( $field_array[1], $fields_to_hide ) ) {
 				//It isn't in the array so we want to show this field
 				$fields_to_show[] = $field_array;
 			}
