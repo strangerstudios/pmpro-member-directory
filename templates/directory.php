@@ -316,7 +316,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					{
 						$auser = get_userdata($auser->ID);
 						$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-						$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
+						$user_fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
 						$count++;
 						?>
 						<tr id="pmpro_member_directory_row-<?php echo $auser->ID; ?>" class="pmpro_member_directory_row<?php if(!empty($link) && !empty($profile_url)) { echo " pmpro_member_directory_linked"; } ?>">
@@ -344,12 +344,12 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 								</td>
 							<?php } ?>
 							<?php
-							if(!empty($fields_array))
+							if(!empty($user_fields_array))
 							{
 								?>
 								<td class="pmpro_member_directory_additional">
 									<?php
-									foreach($fields_array as $field)
+									foreach($user_fields_array as $field)
 									{
 										if ( WP_DEBUG ) {
 											error_log("Content of field data: " . print_r( $field, true));
@@ -460,7 +460,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					$auser = get_userdata($auser->ID);					
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
 					$user_identifier = pmpromd_user_identifier();
-					$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
+					$user_fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
 					?>
 					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
 						<?php if(!empty($show_avatar)) { ?>
@@ -517,9 +517,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 							</p>
 						<?php } ?>
 						<?php
-						if(!empty($fields_array))
+						if(!empty($user_fields_array))
 						{
-							foreach($fields_array as $field)
+							foreach($user_fields_array as $field)
 							{
 								if ( WP_DEBUG ) {
 									error_log("Content of field data: " . print_r( $field, true));
