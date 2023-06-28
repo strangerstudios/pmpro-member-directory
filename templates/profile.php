@@ -62,7 +62,13 @@ function pmpromd_profile_preheader()
 	/*
 		If a level is required for the profile page, make sure the profile user has it.
 	*/
-	//check is levels are required
+
+	// Check to see if the page's content is restricted by shortcode, if so we don't have to redirect away.
+	if ( has_shortcode( $post->post_content, 'membership' ) || has_block( 'pmpro/membership', $post->post_content ) ) {
+		return;
+	}
+
+	//check is levels are required within the profile's shortcode, if they don't have that level redirect away.
 	$levels = pmpro_getMatches("/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true);
 	if(!empty($levels) && !pmpro_hasMembershipLevel(explode(",", $levels), $pu->ID))
 	{
