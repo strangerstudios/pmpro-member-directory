@@ -391,7 +391,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							$meta_field = $pu->$field_val;
 
 							// If using PMPro 2.10, try use User Field function to display labels.
-							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_val ) ) {
+							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_val ) && ! empty( $meta_field ) ) {
 								$meta_field = pmpro_get_label_for_user_field_value( $field_val, $meta_field );
 							}
 
