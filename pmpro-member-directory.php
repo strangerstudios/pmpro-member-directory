@@ -576,7 +576,7 @@ add_action( 'admin_init', 'pmpromd_check_for_upgrade' );
  *
  * @return mixed The content with the shortcode removed. Will be the same type as the input.
  */
-function pmpromd_maybe_strip_member_shortcode( $content ) {
+function pmpromd_maybe_strip_shortcodes( $content ) {
 	// If the user can edit users, we don't need to strip the shortcode.
 	if ( current_user_can( 'edit_users' ) ) {
 		return $content;
@@ -585,7 +585,7 @@ function pmpromd_maybe_strip_member_shortcode( $content ) {
 	// If an array is passed in, filter all elements recursively.
 	if ( is_array( $content ) ) {
 		foreach ( $content as $key => $value ) {
-			$content[ $key ] = pmpromd_maybe_strip_member_shortcode( $value );
+			$content[ $key ] = pmpromd_maybe_strip_shortcodes( $value );
 		}
 		return $content;
 	}
@@ -610,9 +610,9 @@ function pmpromd_maybe_strip_member_shortcode( $content ) {
 
 	return $content;
 }
-add_filter( 'content_save_pre', 'pmpromd_maybe_strip_member_shortcode' );
-add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_member_shortcode' );
-add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_member_shortcode' );
+add_filter( 'content_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_shortcodes' );
 
 /**
  * Only allow those with the edit_users capability
@@ -625,18 +625,18 @@ add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_member_shortcode' );
  * @param mixed  $_meta_value Meta value.
  * @return void
  */
-function pmpromd_maybe_strip_member_shortcode_from_post_meta( $meta_id, $object_id, $meta_key, $_meta_value ) {
+function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $meta_key, $_meta_value ) {
 	// Bail if the value is not a string or array.
 	if ( ! is_string( $_meta_value ) && ! is_array( $_meta_value ) ) {
 		return;
 	}
 
 	// Strip the shortcode from the meta value.
-	$stripped_value = pmpromd_maybe_strip_member_shortcode( $_meta_value );
+	$stripped_value = pmpromd_maybe_strip_shortcodes( $_meta_value );
 
 	// If there was a change, save our stripped version.
 	if ( $stripped_value !== $_meta_value ) {
 		update_post_meta( $object_id, $meta_key, $stripped_value );
 	}
 }
-add_action( 'updated_post_meta', 'pmpromd_maybe_strip_member_shortcode_from_post_meta', 10, 4 );
+add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
