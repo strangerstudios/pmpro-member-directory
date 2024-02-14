@@ -462,7 +462,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 					if ( ! empty( $pu ) && $pu->ID === $current_user->ID ) {
 						// User viewing their own profile. Show an edit profile link if 'Member Profile Edit Page' is set or dashboard access is allowed.
-						if ( ! empty( pmpro_getOption( 'member_profile_edit_page_id' ) ) ) {
+						if ( ! empty( get_option( 'pmpro_member_profile_edit_page_id' ) ) ) {
 							$edit_profile_url = pmpro_url( 'member_profile_edit' );
 						} elseif ( ! pmpro_block_dashboard() ) {
 							$edit_profile_url = admin_url( 'profile.php' );
