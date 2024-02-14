@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2.4
+Version: 1.2.5
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.4' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.5' );
 
 global $pmpromd_options;
 
@@ -69,7 +69,7 @@ function pmpromd_show_extra_profile_fields($user)
 
 	if ( empty( $pmpro_pages['member_profile_edit'] ) || ! is_page( $pmpro_pages['member_profile_edit'] ) ) {
 ?>
-	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
+	<h2><?php echo get_the_title($pmpro_pages['directory']); ?></h2>
     <table class="form-table">
         <tbody>
         <tr class="user-hide-directory-wrap">
@@ -552,11 +552,11 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  */
 function pmpromd_check_for_upgrade() {
 
-	if ( ! function_exists( 'pmpro_getOption' ) ) {
+	if ( ! function_exists( 'pmpro_init' ) ) {
 		return;
 	}
 
-	$pmpromd_db_version = pmpro_getOption("md_db_version");
+	$pmpromd_db_version = get_option("pmpro_md_db_version");
 
 	if( empty( $pmpromd_db_version ) || version_compare( $pmpromd_db_version, '1.2', '<' ) ) {
 
@@ -568,3 +568,77 @@ function pmpromd_check_for_upgrade() {
 
 }
 add_action( 'admin_init', 'pmpromd_check_for_upgrade' );
+
+/**
+ * Strip the [pmpro_member_directory] or [pmpro_member_profile] shortcode and blocks from content if the current user can't edit users.
+ *
+ * @since TBD
+ *
+ * @return mixed The content with the shortcode removed. Will be the same type as the input.
+ */
+function pmpromd_maybe_strip_shortcodes( $content ) {
+	// If the user can edit users, we don't need to strip the shortcode.
+	if ( current_user_can( 'edit_users' ) ) {
+		return $content;
+	}
+
+	// If an array is passed in, filter all elements recursively.
+	if ( is_array( $content ) ) {
+		foreach ( $content as $key => $value ) {
+			$content[ $key ] = pmpromd_maybe_strip_shortcodes( $value );
+		}
+		return $content;
+	}
+
+	// If we're not looking at a string, just return it.
+	if ( ! is_string( $content ) ) {
+		return $content;
+	}
+	
+	// Okay, we have a string, figure out the regex.
+	$shortcodeRegex = get_shortcode_regex( array( 'pmpro_member_directory', 'pmpro_member_profile' ) );	
+
+	// Remove various blocks.
+	$blockWrapperPatterns = array(
+		"<!-- wp:pmpro-member-directory/directory /-->",
+		"<!-- wp:pmpro-member-directory/profile /-->",
+		"/<!--\s*wp:pmpro-member-directory\/directory\s*{[^}]*}\s*\/-->/",
+		"/<!--\s*wp:pmpro-member-directory\/profile\s*{[^}]*}\s*\/-->/",
+		"/<!-- wp:shortcode -->\s*$shortcodeRegex\s*<!-- \/wp:shortcode -->/s",
+		"/$shortcodeRegex/"
+	);
+
+	$content = preg_replace( $blockWrapperPatterns, '', $content );
+
+	return $content;
+}
+add_filter( 'content_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_shortcodes' );
+
+/**
+ * Only allow those with the edit_users capability
+ * to use the Directory or Profile shortcodes in post_meta.
+ *
+ * @since TBD
+ * @param int    $meta_id     ID of the meta data entry.
+ * @param int    $object_id   ID of the object the meta is attached to.
+ * @param string $meta_key    Meta key.
+ * @param mixed  $_meta_value Meta value.
+ * @return void
+ */
+function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $meta_key, $_meta_value ) {
+	// Bail if the value is not a string or array.
+	if ( ! is_string( $_meta_value ) && ! is_array( $_meta_value ) ) {
+		return;
+	}
+
+	// Strip the shortcode from the meta value.
+	$stripped_value = pmpromd_maybe_strip_shortcodes( $_meta_value );
+
+	// If there was a change, save our stripped version.
+	if ( $stripped_value !== $_meta_value ) {
+		update_post_meta( $object_id, $meta_key, $stripped_value );
+	}
+}
+add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
