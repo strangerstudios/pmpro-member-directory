@@ -1,36 +1,41 @@
-# Copyright (C) 2023 Paid Memberships Pro
+# Copyright (C) 2024 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.4\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.5\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-06-28T10:08:20+00:00\n"
+"POT-Creation-Date: 2024-02-14T14:03:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pmpro-member-directory\n"
 
 #. Plugin Name of the plugin
+#: pmpro-member-directory.php
 msgid "Paid Memberships Pro - Member Directory Add On"
 msgstr "Paid Memberships Pro - Member Directory Add On"
 
 #. Plugin URI of the plugin
+#: pmpro-member-directory.php
 msgid "https://www.paidmembershipspro.com/add-ons/member-directory/"
 msgstr "https://www.paidmembershipspro.com/add-ons/member-directory/"
 
 #. Description of the plugin
+#: pmpro-member-directory.php
 msgid "Adds a customizable Member Directory and Member Profiles to your membership site."
 msgstr "Adds a customizable Member Directory and Member Profiles to your membership site."
 
 #. Author of the plugin
+#: pmpro-member-directory.php
 msgid "Paid Memberships Pro"
 msgstr "Paid Memberships Pro"
 
 #. Author URI of the plugin
+#: pmpro-member-directory.php
 msgid "https://www.paidmembershipspro.com/"
 msgstr "https://www.paidmembershipspro.com/"
 
