@@ -602,6 +602,8 @@ function pmpromd_maybe_strip_shortcodes( $content ) {
 	$blockWrapperPatterns = array(
 		"<!-- wp:pmpro-member-directory/directory /-->",
 		"<!-- wp:pmpro-member-directory/profile /-->",
+		"/<!--\s*wp:pmpro-member-directory\/directory\s*{[^}]*}\s*\/-->/",
+		"/<!--\s*wp:pmpro-member-directory\/profile\s*{[^}]*}\s*\/-->/",
 		"/<!-- wp:shortcode -->\s*$shortcodeRegex\s*<!-- \/wp:shortcode -->/s",
 		"/$shortcodeRegex/"
 	);
