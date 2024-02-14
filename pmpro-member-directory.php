@@ -69,7 +69,7 @@ function pmpromd_show_extra_profile_fields($user)
 
 	if ( empty( $pmpro_pages['member_profile_edit'] ) || ! is_page( $pmpro_pages['member_profile_edit'] ) ) {
 ?>
-	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
+	<h2><?php echo get_the_title($pmpro_pages['directory']); ?></h2>
     <table class="form-table">
         <tbody>
         <tr class="user-hide-directory-wrap">
