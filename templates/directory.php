@@ -53,7 +53,6 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 		$levels = implode( ',', $levels );
 	}
 
-
 	if($show_avatar === "0" || $show_avatar === "false" || $show_avatar === "no"  || $show_avatar === false)
 		$show_avatar = false;
 	else
