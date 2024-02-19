@@ -83,6 +83,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	else
 		$s = "";
 
+	// Set the default order value to be either ASC or DESC.
+	if ( $order !== 'DESC' ) {
+		$order = 'ASC';
+	}
+
 	if(isset($_REQUEST['pn']))
 		$pn = intval($_REQUEST['pn']);
 	else
@@ -107,7 +112,9 @@ $sql_parts['WHERE'] = "WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR
 
 $sql_parts['GROUP'] = "GROUP BY u.ID ";
 
-$sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
+// Clean up order_by to only include text, underscores and periods.
+$order_by = preg_replace( '/[^a-z._]/', '', $order_by );
+$sql_parts['ORDER'] = "ORDER BY ". esc_sql( $order_by ) . " " . esc_sql( $order ) . " ";
 
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
@@ -136,6 +143,7 @@ if( $s ) {
 
 // If levels are passed in.
 if ( $levels ) {
+	$levels = preg_replace('/[^0-9,]/', '', $levels ); // Only allow commas and numeric values.
 	$sql_parts['WHERE'] .= "AND mu.membership_id IN(" . esc_sql($levels) . ") ";
 }
 
