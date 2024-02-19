@@ -114,7 +114,7 @@ $sql_parts['GROUP'] = "GROUP BY u.ID ";
 
 // Clean up order_by to only include text, underscores and periods.
 $order_by = preg_replace( '/[^a-z._]/', '', $order_by );
-$sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
+$sql_parts['ORDER'] = "ORDER BY ". esc_sql( $order_by ) . " " . esc_sql( $order ) . " ";
 
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
