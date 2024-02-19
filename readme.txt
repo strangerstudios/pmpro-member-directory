@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 6.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.2.6 - 2024-02-19 =
+* SECURITY: Improved security around shortcode attributes to prevent SQL injection.
+
 = 1.2.5 - 2024-02-14 =
 * SECURITY: Improved security around using the Directory and Profile shortcode or block to only be used by users that have are able to edit the relevant content and edit_users capability. (@andrewlimaza)
 * REFACTOR: Moved from pmpro_getOption to get_option for better compatibility. (@JarrydLong)
