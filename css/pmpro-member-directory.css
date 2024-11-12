@@ -119,15 +119,6 @@ div.pmpro_member_profile strong {
 	word-break: normal;
 }
 
-.pmpro_member_directory_elements {
-
-	.pmpro_card_title {
-		padding-left: 0;
-	}
-
-}
-
-
 /* single profile item */
 .pmpro_member_profile {
 
@@ -142,14 +133,6 @@ div.pmpro_member_profile strong {
 
 .pmpro_member_profile .pmpromd_filename {
 	display: block;
-}
-
-.pmpro_member_profile_elements {
-
-	.pmpro_card_title {
-		padding-left: 0;
-	}
-
 }
 
 @media only screen and (max-width: 767px) {

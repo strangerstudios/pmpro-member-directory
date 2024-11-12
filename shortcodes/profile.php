@@ -254,7 +254,6 @@ function pmpromd_profile_shortcode_elements($atts, $content=null, $code="")
 						if ( $element_name === 'display_name' && ! empty( $pu->display_name ) ) { 
 
 							$heading_classes = array();
-							$heading_classes[] = 'pmpro_card_title';
 							$heading_classes[] = 'pmpro_font-x-large';
 							$heading_classes = implode( ' ', $heading_classes );
 							?>
@@ -271,7 +270,6 @@ function pmpromd_profile_shortcode_elements($atts, $content=null, $code="")
 						<?php } elseif ( $element_name === 'avatar_name' ) {
 
 							$heading_classes = array();
-							$heading_classes[] = 'pmpro_card_title';
 							$heading_classes[] = 'pmpro_font-x-large';
 							$heading_classes[] = 'pmpro_heading-with-avatar';
 							$heading_classes = implode( ' ', $heading_classes );

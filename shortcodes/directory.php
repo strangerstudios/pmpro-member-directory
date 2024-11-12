@@ -646,7 +646,6 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 										<?php
 										$heading_classes = array();
-										$heading_classes[] = 'pmpro_card_title';
 										$heading_classes[] = 'pmpro_font-large';
 										$heading_classes[] = 'pmpro_member_directory_display-name';
 										$heading_classes[] = 'pmpro_heading-with-avatar';
