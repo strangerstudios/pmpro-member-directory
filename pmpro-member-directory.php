@@ -31,6 +31,9 @@ else
 
 require_once($path . "/blocks/blocks.php"); //localization functions
 
+require_once($path . "/shortcodes/directory.php");
+require_once($path . "/shortcodes/profile.php");
+
 function pmpromd_load_textdomain() {
 	load_plugin_textdomain( 'pmpro-member-directory', false, basename( dirname( __FILE__ ) ) . '/languages' );
 }
