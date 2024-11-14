@@ -83,6 +83,11 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	else
 		$s = "";
 
+	// Set the default order value to be either ASC or DESC.
+	if ( $order !== 'DESC' ) {
+		$order = 'ASC';
+	}
+
 	if(isset($_REQUEST['pn']))
 		$pn = intval($_REQUEST['pn']);
 	else
@@ -107,7 +112,9 @@ $sql_parts['WHERE'] = "WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR
 
 $sql_parts['GROUP'] = "GROUP BY u.ID ";
 
-$sql_parts['ORDER'] = "ORDER BY ". esc_sql($order_by) . " " . $order . " ";
+// Clean up order_by to only include text, underscores and periods.
+$order_by = preg_replace( '/[^a-z._]/', '', $order_by );
+$sql_parts['ORDER'] = "ORDER BY ". esc_sql( $order_by ) . " " . esc_sql( $order ) . " ";
 
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
@@ -136,6 +143,7 @@ if( $s ) {
 
 // If levels are passed in.
 if ( $levels ) {
+	$levels = preg_replace('/[^0-9,]/', '', $levels ); // Only allow commas and numeric values.
 	$sql_parts['WHERE'] .= "AND mu.membership_id IN(" . esc_sql($levels) . ") ";
 }
 
@@ -173,7 +181,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 	</form>
 	<?php } ?>
 
-	<h3 id="pmpro_member_directory_subheading">
+	<h2 id="pmpro_member_directory_subheading">
 		<?php if(!empty($s)) { ?>
 			<?php /* translators: placeholder is for search string entered */ ?>
 			<?php printf(__('Profiles Within <em>%s</em>.','pmpro-member-directory'), stripslashes( ucwords(esc_html($s)))); ?>
@@ -191,7 +199,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 				?>)
 			</small>
 		<?php } ?>
-	</h3>
+	</h2>
 	<?php
 	if ( empty( $theusers ) ) {
 		// If there are no users, display a message and bail early.
@@ -342,7 +350,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		foreach($theusers as $auser) {
 			$auser = get_userdata($auser->ID);
 			$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-			$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
+			$user_fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
 			$count++;
 
 			// Show the header for the user.
@@ -463,20 +471,26 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
 						<?php
 					}
-					echo date_i18n( get_option( 'date_format' ), $auser->membership_level->startdate );
+					$min_startdate = null;
+					foreach($alluserlevels as $level) {
+						if ( empty( $min_startdate ) || $level->startdate < $min_startdate ) {
+							$min_startdate = $level->startdate;
+						}
+					}
+					echo ! empty( $min_startdate ) ? date_i18n( get_option( 'date_format' ), $min_startdate ) : '';
 					?>
 				</<?php echo $data_wrapper; ?>>
 				<?php
 			}
 
 			// Show additional fields.
-			if ( ! empty( $fields_array ) ) {
+			if ( ! empty( $user_fields_array ) ) {
 				// If the layout is a table, open the td.
 				if ( $layout == 'table' ) {
 					?><td class="pmpro_member_directory_additional"><?php
 				}
 
-				foreach($fields_array as $field) {
+				foreach( $user_fields_array as $field ) {
 					// Fix for a trailing space in the 'fields' shortcode attribute.
 					if ( $field[0] === '' ) {
 						break;
@@ -589,9 +603,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
 		}
 
-		if( round( $number_of_pages, 0 ) === 1 ) {
+		if( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
 			//If there's only one page, no need to show the page numbers
-			for( $i = $pn; $i <= $number_of_pages+1; $i++ ){
+			for( $i = $pn; $i <= $number_of_pages; $i++ ){
 				if( $counter <= 6 ){
 					$query_args = array(
 						'ps' => $s,

@@ -1,36 +1,41 @@
-# Copyright (C) 2022 Paid Memberships Pro
+# Copyright (C) 2024 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.2\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.6\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-05T11:11:02+00:00\n"
+"POT-Creation-Date: 2024-02-19T11:00:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pmpro-member-directory\n"
 
 #. Plugin Name of the plugin
+#: pmpro-member-directory.php
 msgid "Paid Memberships Pro - Member Directory Add On"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: pmpro-member-directory.php
 msgid "https://www.paidmembershipspro.com/add-ons/member-directory/"
 msgstr ""
 
 #. Description of the plugin
+#: pmpro-member-directory.php
 msgid "Adds a customizable Member Directory and Member Profiles to your membership site."
 msgstr ""
 
 #. Author of the plugin
+#: pmpro-member-directory.php
 msgid "Paid Memberships Pro"
 msgstr ""
 
 #. Author URI of the plugin
+#: pmpro-member-directory.php
 msgid "https://www.paidmembershipspro.com/"
 msgstr ""
 
@@ -45,97 +50,105 @@ msgstr ""
 msgid "Hide from %s?"
 msgstr ""
 
-#: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "View Documentation"
 msgstr ""
 
-#: pmpro-member-directory.php:165
+#: pmpro-member-directory.php:172
 msgid "Docs"
 msgstr ""
 
-#: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Visit Customer Support Forum"
 msgstr ""
 
-#: pmpro-member-directory.php:166
+#: pmpro-member-directory.php:173
 msgid "Support"
 msgstr ""
 
-#: pmpro-member-directory.php:320
-#: pmpro-member-directory.php:323
+#: pmpro-member-directory.php:242
+msgid "Yes"
+msgstr ""
+
+#: pmpro-member-directory.php:244
+msgid "No"
+msgstr ""
+
+#: pmpro-member-directory.php:337
+#: pmpro-member-directory.php:340
 msgid "Edit Profile"
 msgstr ""
 
-#: templates/directory.php:167
-#: templates/profile.php:244
+#: templates/directory.php:175
+#: templates/profile.php:260
 msgid "Search for:"
 msgstr ""
 
-#: templates/directory.php:168
-#: templates/directory.php:172
-#: templates/profile.php:245
-#: templates/profile.php:248
+#: templates/directory.php:176
+#: templates/directory.php:180
+#: templates/profile.php:261
+#: templates/profile.php:264
 msgid "Search Members"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:179
+#: templates/directory.php:187
 msgid "Profiles Within <em>%s</em>."
 msgstr ""
 
-#: templates/directory.php:181
+#: templates/directory.php:189
 msgid "Viewing All Profiles"
 msgstr ""
 
-#: templates/directory.php:187
+#: templates/directory.php:195
 msgid "Showing 1 Result"
 msgstr ""
 
 #. translators: placeholders are for result numbers
-#: templates/directory.php:190
+#: templates/directory.php:198
 msgid "Showing %1$s-%2$s of %3$s Results"
 msgstr ""
 
-#: templates/directory.php:282
+#: templates/directory.php:290
 #: blocks/directory/templates/table.js:15
 msgid "Avatar"
 msgstr ""
 
-#: templates/directory.php:286
+#: templates/directory.php:294
 #: blocks/directory/templates/table.js:16
 msgid "Member"
 msgstr ""
 
-#: templates/directory.php:290
-#: templates/profile.php:312
+#: templates/directory.php:298
+#: templates/profile.php:328
 #: blocks/directory/templates/table.js:17
 #: blocks/profile/block.js:194
 msgid "Email Address"
 msgstr ""
 
-#: templates/directory.php:295
+#: templates/directory.php:303
 #: blocks/directory/templates/table.js:18
 msgid "More Information"
 msgstr ""
 
-#: templates/directory.php:300
-#: templates/directory.php:490
-#: templates/profile.php:318
+#: templates/directory.php:308
+#: templates/directory.php:506
+#: templates/profile.php:334
 #: blocks/directory/templates/table.js:19
 #: blocks/profile/block.js:199
 msgid "Level"
 msgstr ""
 
-#: templates/directory.php:305
-#: templates/directory.php:515
-#: templates/profile.php:324
+#: templates/directory.php:313
+#: templates/directory.php:531
+#: templates/profile.php:340
 #: blocks/directory/templates/table.js:20
 #: blocks/profile/block.js:204
 msgid "Start Date"
 msgstr ""
 
-#: templates/directory.php:446
-#: templates/directory.php:584
+#: templates/directory.php:462
+#: templates/directory.php:600
 #: blocks/directory/templates/table.js:31
 #: blocks/directory/templates/table.js:40
 #: blocks/directory/templates/table.js:49
@@ -143,39 +156,39 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: templates/directory.php:602
+#: templates/directory.php:618
 msgid "No matching profiles found"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:607
+#: templates/directory.php:623
 msgid "within <em>%s</em>."
 msgstr ""
 
-#: templates/directory.php:611
-#: templates/profile.php:431
+#: templates/directory.php:627
+#: templates/profile.php:460
 msgid "View All Members"
 msgstr ""
 
-#: templates/directory.php:637
+#: templates/directory.php:653
 msgid "Previous"
 msgstr ""
 
-#: templates/directory.php:680
+#: templates/directory.php:696
 msgid "Next"
 msgstr ""
 
-#: templates/profile.php:306
+#: templates/profile.php:322
 #: blocks/profile/block.js:189
 msgid "Biographical Info"
 msgstr ""
 
-#: templates/profile.php:330
+#: templates/profile.php:354
 #: blocks/profile/block.js:209
 msgid "Address"
 msgstr ""
 
-#: templates/profile.php:344
+#: templates/profile.php:368
 #: blocks/profile/block.js:219
 msgid "Phone Number"
 msgstr ""

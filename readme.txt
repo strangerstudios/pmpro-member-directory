@@ -1,9 +1,9 @@
 === Paid Memberships Pro - Member Directory Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
-Requires at least: 4.0
-Tested up to: 6.0
-Stable tag: 1.2.3
+Requires at least: 5.2
+Tested up to: 6.4
+Stable tag: 1.2.6
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -97,6 +97,22 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 1.2.6 - 2024-02-19 =
+* SECURITY: Improved security around shortcode attributes to prevent SQL injection.
+
+= 1.2.5 - 2024-02-14 =
+* SECURITY: Improved security around using the Directory and Profile shortcode or block to only be used by users that have are able to edit the relevant content and edit_users capability. (@andrewlimaza)
+* REFACTOR: Moved from pmpro_getOption to get_option for better compatibility. (@JarrydLong)
+* REFACTOR: Improved accessibility for screen readers by adjusting the HTML header sizes. (@kimwhite)
+* BUG FIX: Fixed an issue where fields that had default blank values would show up on the profile page (@ipokkel)
+
+= 1.2.4 - 2023-06-28 =
+* ENHANCEMENT: Improved pagination style to display page numbers instead of ... (@JarrydLong)
+* ENHANCEMENT: Improved output on custom fields label values for value => label type of fields. (@andrewlimaza)
+* ENHANCEMENT: Improved compatibility with Multiple Memberships Per User. Shows the oldest start date if a user has multiple levels (@dparker1005)
+* BUG FIX: Fixed an issue where using the [membership] shortcode would redirect to the directory page. (@andrewlimaza)
+* BUG FIX: Fixed an issue where the auto embedding functionality would incorrectly embed custom fields.(@andrewlimaza)
+
 = 1.2.3 - 2022-08-05 =
 * BUG FIX/ENHANCEMENT: Better profile page checks prevent issues with rewrite rules. (@ideadude & @kimcoleman)
 

@@ -37,9 +37,19 @@ function pmpromd_profile_preheader()
 
 	// Integrate with Approvals.
 	if ( class_exists( 'PMPro_Approvals' ) ){
-		$status = PMPro_Approvals::getUserApprovalStatus( $pu->ID );
+		// Check that either the user has a membership level that does not require approval
+		// or that the user has a membership level that does require approval and has been approved.
+		$user_levels = pmpro_getMembershipLevelsForUser( $pu->ID );
+		$approval_levels = PMPro_Approvals::getApprovalLevels();
+		$okay = false;
+		foreach ( $user_levels as $level ) {
+			if ( ! in_array( $level->id, $approval_levels ) || PMPro_Approvals::isApproved( $pu->ID, $level->id ) ) {
+				$okay = true;
+				break;
+			}
+		}
 
-		if ( ! empty( $status ) && $status != 'approved' ) {
+		if ( ! $okay ) {
 			if ( ! empty( $pmpro_pages['directory'] ) ) {
 				wp_redirect( get_permalink( $pmpro_pages['directory'] ) );
 			} else {
@@ -52,7 +62,13 @@ function pmpromd_profile_preheader()
 	/*
 		If a level is required for the profile page, make sure the profile user has it.
 	*/
-	//check is levels are required
+
+	// Check to see if the page's content is restricted by shortcode, if so we don't have to redirect away.
+	if ( has_shortcode( $post->post_content, 'membership' ) || has_block( 'pmpro/membership', $post->post_content ) ) {
+		return;
+	}
+
+	//check is levels are required within the profile's shortcode, if they don't have that level redirect away.
 	$levels = pmpro_getMatches("/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true);
 	if(!empty($levels) && !pmpro_hasMembershipLevel(explode(",", $levels), $pu->ID))
 	{
@@ -253,7 +269,6 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 		{
 			if(!empty($fields))
 			{
-
 				// Check to see if the Block Editor is used or the shortcode.
 				if ( strpos( $fields, "\n" ) !== FALSE ) {
 					$fields = rtrim( $fields, "\n" ); // clear up a stray \n
@@ -263,14 +278,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 					$fields_array = explode(";",$fields);
 				}
 
-				if(!empty($fields_array))
-				{
-					for($i = 0; $i < count($fields_array); $i++ )
+				if( ! empty( $fields_array ) ) {
+					for($i = 0; $i < count($fields_array); $i++ ) {
 						$fields_array[$i] = explode(",", $fields_array[$i]);
+					}
 				}
 			}
 			else
 				$fields_array = false;
+
 
 			// Get Register Helper field options
 			$rh_fields = array();
@@ -322,7 +338,15 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_startdate)) { ?>
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? date_i18n(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
+						<?php
+						$min_startdate = null;
+						foreach($allmylevels as $level) {
+							if ( empty( $min_startdate ) || $level->startdate < $min_startdate ) {
+								$min_startdate = $level->startdate;
+							}
+						}
+						echo ! empty( $min_startdate ) ? date_i18n( get_option( 'date_format' ), $min_startdate ) : '';
+						?>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>
@@ -347,7 +371,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php
 					//filter the fields
-					$fields_array = apply_filters('pmpro_member_profile_fields', $fields_array, $pu);
+					$fields_array = apply_filters( 'pmpro_member_profile_fields', $fields_array, $pu );
 
 					if(!empty($fields_array))
 					{
@@ -362,16 +386,21 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 								break;
 							}
 
-							$field_val = $field[1];						
+							// Get the field name and value here.
+							$field_val = $field[1];
 							$meta_field = $pu->$field_val;
+
+							// If using PMPro 2.10, try use User Field function to display labels.
+							if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_val ) && ! empty( $meta_field ) ) {
+								$meta_field = pmpro_get_label_for_user_field_value( $field_val, $meta_field );
+							}
 
 							if(!empty($meta_field))
 							{
 								?>
 								<p class="pmpro_member_directory_<?php echo esc_attr($field[1]); ?>">
 								<?php
-									if(is_array($meta_field) && !empty($meta_field['filename']) )
-									{
+									if(is_array($meta_field) && !empty($meta_field['filename']) ) {
 										//this is a file field
 										?>
 										<strong><?php echo $field[0]; ?></strong>
@@ -433,7 +462,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 
 					if ( ! empty( $pu ) && $pu->ID === $current_user->ID ) {
 						// User viewing their own profile. Show an edit profile link if 'Member Profile Edit Page' is set or dashboard access is allowed.
-						if ( ! empty( pmpro_getOption( 'member_profile_edit_page_id' ) ) ) {
+						if ( ! empty( get_option( 'pmpro_member_profile_edit_page_id' ) ) ) {
 							$edit_profile_url = pmpro_url( 'member_profile_edit' );
 						} elseif ( ! pmpro_block_dashboard() ) {
 							$edit_profile_url = admin_url( 'profile.php' );

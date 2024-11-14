@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Member Directory Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/member-directory/
 Description: Adds a customizable Member Directory and Member Profiles to your membership site.
-Version: 1.2.3
+Version: 1.2.6
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com/
 Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
-define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.3' );
+define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.6' );
 
 global $pmpromd_options;
 
@@ -69,7 +69,7 @@ function pmpromd_show_extra_profile_fields($user)
 
 	if ( empty( $pmpro_pages['member_profile_edit'] ) || ! is_page( $pmpro_pages['member_profile_edit'] ) ) {
 ?>
-	<h3><?php echo get_the_title($pmpro_pages['directory']); ?></h3>
+	<h2><?php echo get_the_title($pmpro_pages['directory']); ?></h2>
     <table class="form-table">
         <tbody>
         <tr class="user-hide-directory-wrap">
@@ -151,7 +151,14 @@ function pmpromd_display_file_field($meta_field) {
  * @param string $display_name The name to display for the user.
  */
 function pmpro_member_directory_get_member_display_name( $user ) {
+	// Make sure we have a user.
+	if ( ! $user instanceof WP_User ) {
+		return '';
+	}
+
+	// Get their display name.
 	$display_name = apply_filters( 'pmpro_member_directory_display_name', $user->display_name, $user );
+	
 	return $display_name;
 }
 
@@ -206,20 +213,19 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 
 	//Should we try and run oembed on this link?
 	if( $try_oembed && !$is_email ) {
-		$url_embed = wp_oembed_get( $value );		
+		
+		// Only try to embed if the URL is valid.
+		if ( wp_http_validate_url( $value ) ) {
+			$url_embed = wp_oembed_get( $value );		
+		}
+
 		if( !empty( $url_embed ) ){
 			//Oembed returned a vlue
 			$value = $url_embed;
 		} else { 
 			//Oembed did not return anything. Lets check if we have a label?
 			if( $field_label ) {
-				//We have a label!
-				if ( wp_http_validate_url( $value ) ) {
-					//Lets check if it's a valid URL
-					$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
-				} else {
-					$value = make_clickable( $value );
-				}
+				$value = sprintf( "<a href='%1s' title='%2s' target='_BLANK'>%3s</a>", $value, $field_label, $field_label );	
 			} else {
 				//We don't have a label (for cases like an email address)
 				$value = make_clickable( $value );
@@ -227,6 +233,17 @@ function pmpromd_format_profile_field( $value, $field_name, $field_label = false
 		}
 	}	
 
+	if ( function_exists( 'pmpro_get_label_for_user_field_value' ) && ! empty( $field_name ) ) { 
+		$value = pmpro_get_label_for_user_field_value( $field_name, $value );
+	}
+
+	// Let's support checkboxes here instead.
+	if ( $value === '1' ) {
+		$value = esc_html__( 'Yes', 'pmpro-member-directory' );
+	} elseif ( $value === '0' ) {
+		$value = esc_html__( 'No', 'pmpro-member-directory' );
+	}
+	
 	/**
 	 * Format the profile field
 	 *
@@ -374,7 +391,7 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 		//Lets loop through all of the profile fields that we 'should' display
 		foreach( $profile_fields as $field_array ){
 			//Check if the current field is in the fields_to_hide array
-			if( !in_array( $field_array[1], $fields_to_hide ) ) {
+			if( ! in_array( $field_array[1], $fields_to_hide ) ) {
 				//It isn't in the array so we want to show this field
 				$fields_to_show[] = $field_array;
 			}
@@ -535,11 +552,11 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  */
 function pmpromd_check_for_upgrade() {
 
-	if ( ! function_exists( 'pmpro_getOption' ) ) {
+	if ( ! function_exists( 'pmpro_init' ) ) {
 		return;
 	}
 
-	$pmpromd_db_version = pmpro_getOption("md_db_version");
+	$pmpromd_db_version = get_option("pmpro_md_db_version");
 
 	if( empty( $pmpromd_db_version ) || version_compare( $pmpromd_db_version, '1.2', '<' ) ) {
 
@@ -551,3 +568,77 @@ function pmpromd_check_for_upgrade() {
 
 }
 add_action( 'admin_init', 'pmpromd_check_for_upgrade' );
+
+/**
+ * Strip the [pmpro_member_directory] or [pmpro_member_profile] shortcode and blocks from content if the current user can't edit users.
+ *
+ * @since TBD
+ *
+ * @return mixed The content with the shortcode removed. Will be the same type as the input.
+ */
+function pmpromd_maybe_strip_shortcodes( $content ) {
+	// If the user can edit users, we don't need to strip the shortcode.
+	if ( current_user_can( 'edit_users' ) ) {
+		return $content;
+	}
+
+	// If an array is passed in, filter all elements recursively.
+	if ( is_array( $content ) ) {
+		foreach ( $content as $key => $value ) {
+			$content[ $key ] = pmpromd_maybe_strip_shortcodes( $value );
+		}
+		return $content;
+	}
+
+	// If we're not looking at a string, just return it.
+	if ( ! is_string( $content ) ) {
+		return $content;
+	}
+	
+	// Okay, we have a string, figure out the regex.
+	$shortcodeRegex = get_shortcode_regex( array( 'pmpro_member_directory', 'pmpro_member_profile' ) );	
+
+	// Remove various blocks.
+	$blockWrapperPatterns = array(
+		"<!-- wp:pmpro-member-directory/directory /-->",
+		"<!-- wp:pmpro-member-directory/profile /-->",
+		"/<!--\s*wp:pmpro-member-directory\/directory\s*{[^}]*}\s*\/-->/",
+		"/<!--\s*wp:pmpro-member-directory\/profile\s*{[^}]*}\s*\/-->/",
+		"/<!-- wp:shortcode -->\s*$shortcodeRegex\s*<!-- \/wp:shortcode -->/s",
+		"/$shortcodeRegex/"
+	);
+
+	$content = preg_replace( $blockWrapperPatterns, '', $content );
+
+	return $content;
+}
+add_filter( 'content_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_shortcodes' );
+
+/**
+ * Only allow those with the edit_users capability
+ * to use the Directory or Profile shortcodes in post_meta.
+ *
+ * @since TBD
+ * @param int    $meta_id     ID of the meta data entry.
+ * @param int    $object_id   ID of the object the meta is attached to.
+ * @param string $meta_key    Meta key.
+ * @param mixed  $_meta_value Meta value.
+ * @return void
+ */
+function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $meta_key, $_meta_value ) {
+	// Bail if the value is not a string or array.
+	if ( ! is_string( $_meta_value ) && ! is_array( $_meta_value ) ) {
+		return;
+	}
+
+	// Strip the shortcode from the meta value.
+	$stripped_value = pmpromd_maybe_strip_shortcodes( $_meta_value );
+
+	// If there was a change, save our stripped version.
+	if ( $stripped_value !== $_meta_value ) {
+		update_post_meta( $object_id, $meta_key, $stripped_value );
+	}
+}
+add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
