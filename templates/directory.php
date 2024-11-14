@@ -193,90 +193,112 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		<?php } ?>
 	</h3>
 	<?php
-	if(!empty($theusers))
-	{
-
-		if(!empty($fields))
-		{
-			// Check to see if the Block Editor is used or the shortcode.
-			if ( strpos( $fields, "\n" ) !== FALSE ) {
-				$fields = rtrim( $fields, "\n" ); // clear up a stray \n
-				$fields_array = explode("\n", $fields); // For new block editor.
-			} else {
-				$fields = rtrim( $fields, ';' ); // clear up a stray ;
-				$fields_array = explode(";",$fields);
-			}
-
-			if(!empty($fields_array))
-			{
-				for($i = 0; $i < count($fields_array); $i++ )
-					$fields_array[$i] = explode(",", trim($fields_array[$i]));
-			}
-		}
-		else
-			$fields_array = false;
-
-
-		/**
-		 * Allow filtering the fields to include on the member directory list.
-		 *
-		 * @since TBD
-		 *
-		 * @param array $fields_array The list of fields to include.
-		 */
-		$fields_array = apply_filters( 'pmpro_member_directory_fields', $fields_array );
-
-		// Get Register Helper field options
-		$rh_fields = array();
-		if(!empty($pmprorh_registration_fields)) {
-			foreach($pmprorh_registration_fields as $location) {
-				foreach($location as $field) {
-					if(!empty($field->options))
-						$rh_fields[$field->name] = $field->options;
-				}
-			}
-		}
+	if ( empty( $theusers ) ) {
+		// If there are no users, display a message and bail early.
 		?>
-
-		<?php 
-		/**
-		 * Filter to override the attributes passed into the shortcode.
-		 * 
-		 * @param array Contains all of the shortcode attributes used in the directory shortcode
-		 */
-		$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
-			'avatar_size' => $avatar_size,
-			'fields' => $fields,
-			'layout' => $layout,
-			'level' => $level,
-			'levels' => $levels,
-			'limit' => $limit,
-			'link' => $link,
-			'order_by' => $order_by,
-			'order' => $order,
-			'show_avatar' => $show_avatar,
-			'show_email' => $show_email,
-			'show_level' => $show_level,
-			'show_search' => $show_search,
-			'show_startdate' => $show_startdate,
-			'avatar_align' => $avatar_align,				
-			'fields_array' => $fields_array
-		) );
-
-		do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
-		
-		<div class="pmpro_member_directory<?php
-			if ( ! empty( $layout ) ) {
-				echo ' pmpro_member_directory-' . $layout;
-			}
-		?>">			
-			
+		<p class="pmpro_member_directory_message pmpro_message pmpro_error">
 			<?php
-			if($layout == "table")
-			{
-				?>
-				<table width="100%" cellpadding="0" cellspacing="0" border="0">
-					<thead>
+			if ( $s ) {
+				/* translators: placeholder is for search string entered */
+				echo wp_kses_post( sprintf( __( 'No matching profiles found within <em>%s</em>.', 'pmpro-member-directory' ), stripslashes( ucwords( esc_html( $s ) ) ) ) );
+
+				// If there is a directory URL, display a link to view all members.
+				if ( ! empty( $directory_url ) ) {
+					?>
+					<a class="more-link" href="<?php echo $directory_url; ?>"><?php _e( 'View All Members','pmpro-member-directory' ); ?></a>
+					<?php
+				}
+			} else {
+				esc_html_e( 'No matching profiles found.', 'pmpro-member-directory' );
+			}
+			?>
+		</p>
+		<?php
+		$temp_content = ob_get_contents();
+		ob_end_clean();
+		return $temp_content;
+	}
+
+	if(!empty($fields))
+	{
+		// Check to see if the Block Editor is used or the shortcode.
+		if ( strpos( $fields, "\n" ) !== FALSE ) {
+			$fields = rtrim( $fields, "\n" ); // clear up a stray \n
+			$fields_array = explode("\n", $fields); // For new block editor.
+		} else {
+			$fields = rtrim( $fields, ';' ); // clear up a stray ;
+			$fields_array = explode(";",$fields);
+		}
+
+		if(!empty($fields_array))
+		{
+			for($i = 0; $i < count($fields_array); $i++ )
+				$fields_array[$i] = explode(",", trim($fields_array[$i]));
+		}
+	}
+	else
+		$fields_array = false;
+
+
+	/**
+	 * Allow filtering the fields to include on the member directory list.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $fields_array The list of fields to include.
+	 */
+	$fields_array = apply_filters( 'pmpro_member_directory_fields', $fields_array );
+
+	// Get Register Helper field options
+	$rh_fields = array();
+	if(!empty($pmprorh_registration_fields)) {
+		foreach($pmprorh_registration_fields as $location) {
+			foreach($location as $field) {
+				if(!empty($field->options))
+					$rh_fields[$field->name] = $field->options;
+			}
+		}
+	}
+	?>
+
+	<?php 
+	/**
+	 * Filter to override the attributes passed into the shortcode.
+	 * 
+	 * @param array Contains all of the shortcode attributes used in the directory shortcode
+	 */
+	$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
+		'avatar_size' => $avatar_size,
+		'fields' => $fields,
+		'layout' => $layout,
+		'level' => $level,
+		'levels' => $levels,
+		'limit' => $limit,
+		'link' => $link,
+		'order_by' => $order_by,
+		'order' => $order,
+		'show_avatar' => $show_avatar,
+		'show_email' => $show_email,
+		'show_level' => $show_level,
+		'show_search' => $show_search,
+		'show_startdate' => $show_startdate,
+		'avatar_align' => $avatar_align,				
+		'fields_array' => $fields_array
+	) );
+
+	do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
+	
+	<div class="pmpro_member_directory<?php
+		if ( ! empty( $layout ) ) {
+			echo ' pmpro_member_directory-' . $layout;
+		}
+	?>">			
+		
+		<?php
+		if($layout == "table") {
+			?>
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<thead>
 					<?php if(!empty($show_avatar)) { ?>
 						<th class="pmpro_member_directory_avatar">
 							<?php _e('Avatar', 'pmpro-member-directory'); ?>
@@ -308,186 +330,112 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 					<?php if(!empty($link) && !empty($profile_url)) { ?>
 						<th class="pmpro_member_directory_link">&nbsp;</th>
 					<?php } ?>
-					</thead>
-					<tbody>
-					<?php
-					$count = 0;
-					foreach($theusers as $auser)
-					{
-						$auser = get_userdata($auser->ID);
-						$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-						$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
-						$count++;
-						?>
-						<tr id="pmpro_member_directory_row-<?php echo $auser->ID; ?>" class="pmpro_member_directory_row<?php if(!empty($link) && !empty($profile_url)) { echo " pmpro_member_directory_linked"; } ?>">
-							<?php if(!empty($show_avatar)) { ?>
-								<td class="pmpro_member_directory_avatar">
-									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
-									<?php } else { ?>
-										<?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?>
-									<?php } ?>
-								</td>
-							<?php } ?>
-							<td>
-								<h3 class="pmpro_member_directory_display-name">
-									<?php if(!empty($link) && !empty($profile_url)) { ?>
-										<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ), $profile_url, true ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
-									<?php } else { ?>
-										<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?>
-									<?php } ?>
-								</h3>
-							</td>
-							<?php if(!empty($show_email)) { ?>
-								<td class="pmpro_member_directory_email">
-									<?php echo pmpromd_format_profile_field( $auser->user_email, 'user_email' ); ?>
-								</td>
-							<?php } ?>
-							<?php
-							if(!empty($fields_array))
-							{
-								?>
-								<td class="pmpro_member_directory_additional">
-									<?php
-									foreach($fields_array as $field)
-									{
-										if ( WP_DEBUG ) {
-											error_log("Content of field data: " . print_r( $field, true));
-										}
-
-										// Fix for a trailing space in the 'fields' shortcode attribute.
-										if ( $field[0] === '' ) {
-											break;
-										}
-
-										$meta_field = $auser->{$field[1]};
-										if(!empty($meta_field))
-										{
-											?>
-											<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
-												<?php
-												if(is_array($meta_field) && !empty($meta_field['filename']) )
-												{
-													//this is a file field
-													?>
-													<strong><?php echo $field[0]; ?></strong>
-													<?php echo pmpromd_display_file_field($meta_field); ?>
-													<?php
-												}
-												elseif(is_array($meta_field))
-												{
-													//this is a general array, check for Register Helper options first
-													if(!empty($rh_fields[$field[1]])) {
-														foreach($meta_field as $key => $value)
-															$meta_field[$key] = $rh_fields[$field[1]][$value];
-													}
-													?>
-													<strong><?php echo $field[0]; ?></strong>
-													<?php echo implode(", ",$meta_field); ?>
-													<?php
-												}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]])  ) {
-												?>
-													<strong><?php echo $field[0]; ?></strong>
-													<?php echo $rh_fields[$field[1]][$meta_field]; ?>
-													<?php
-												}
-												else
-												{
-													if($field[1] == 'user_url') {	
-														echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
-													} else {
-												?>
-													<strong><?php echo $field[0]; ?></strong>
-													<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
-															<?php
-													}
-												}
-												?>
-											</p>
-											<?php
-										}
-									}
-									?>
-								</td>
-								<?php
-							}
-							?>
-							<?php if(!empty($show_level)) { ?>
-								<td class="pmpro_member_directory_level">
-									<?php
-										$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
-										$membership_levels = array();
-										if ( ! isset( $levels ) ) {
-											// Show all the user's levels.
-											foreach ( $alluserlevels as $curlevel ) {
-												$membership_levels[] = $curlevel->name;
-											}
-										} else {
-											$levels_array = explode(',', $levels);
-											// Show only the levels included in the directory.
-											foreach ( $alluserlevels as $curlevel ) {
-												if ( in_array( $curlevel->id, $levels_array) ) {
-													$membership_levels[] = $curlevel->name;
-												}
-											}
-										}
-										$auser->membership_levels = implode( ', ', $membership_levels );
-										echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
-									?>
-								</td>
-							<?php } ?>
-							<?php if(!empty($show_startdate)) { ?>
-								<td class="pmpro_member_directory_date">
-									<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
-								</td>
-							<?php } ?>
-							<?php if(!empty($link) && !empty($profile_url)) { ?>
-								<td class="pmpro_member_directory_link">
-									<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url, true ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
-								</td>
-							<?php } ?>
-						</tr>
-						<?php
-					}
-					?>
-					</tbody>
-				</table>
+				</thead>
+				<tbody>
 				<?php
-			}
-			else
-			{
-				foreach($theusers as $auser):
-					$auser = get_userdata($auser->ID);					
+				$count = 0;
+				foreach($theusers as $auser)
+				{
+					$auser = get_userdata($auser->ID);
 					$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
-					$user_identifier = pmpromd_user_identifier();
 					$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
+					$count++;
 					?>
-					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
+					<tr id="pmpro_member_directory_row-<?php echo $auser->ID; ?>" class="pmpro_member_directory_row<?php if(!empty($link) && !empty($profile_url)) { echo " pmpro_member_directory_linked"; } ?>">
 						<?php if(!empty($show_avatar)) { ?>
-							<div class="pmpro_member_directory_avatar">
+							<td class="pmpro_member_directory_avatar">
 								<?php if(!empty($link) && !empty($profile_url)) { ?>
-									<a class="<?php echo $avatar_align; ?>" href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
+									<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?></a>
 								<?php } else { ?>
-									<span class="<?php echo $avatar_align; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></span>
+									<?php echo get_avatar( $auser->ID, $avatar_size, NULL, $auser->user_nicename ); ?>
 								<?php } ?>
-							</div>
+							</td>
 						<?php } ?>
-						<h3 class="pmpro_member_directory_display-name">
-							<?php if(!empty($link) && !empty($profile_url)) { ?>
-								<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
-							<?php } else { ?>
-								<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
-							<?php } ?>
-						</h3>
+						<td>
+							<h3 class="pmpro_member_directory_display-name">
+								<?php if(!empty($link) && !empty($profile_url)) { ?>
+									<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ), $profile_url, true ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+								<?php } else { ?>
+									<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?>
+								<?php } ?>
+							</h3>
+						</td>
 						<?php if(!empty($show_email)) { ?>
-							<p class="pmpro_member_directory_email">
-								<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
+							<td class="pmpro_member_directory_email">
 								<?php echo pmpromd_format_profile_field( $auser->user_email, 'user_email' ); ?>
-							</p>
+							</td>
 						<?php } ?>
+						<?php
+						if(!empty($fields_array))
+						{
+							?>
+							<td class="pmpro_member_directory_additional">
+								<?php
+								foreach($fields_array as $field)
+								{
+									if ( WP_DEBUG ) {
+										error_log("Content of field data: " . print_r( $field, true));
+									}
+
+									// Fix for a trailing space in the 'fields' shortcode attribute.
+									if ( $field[0] === '' ) {
+										break;
+									}
+
+									$meta_field = $auser->{$field[1]};
+									if(!empty($meta_field))
+									{
+										?>
+										<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
+											<?php
+											if(is_array($meta_field) && !empty($meta_field['filename']) )
+											{
+												//this is a file field
+												?>
+												<strong><?php echo $field[0]; ?></strong>
+												<?php echo pmpromd_display_file_field($meta_field); ?>
+												<?php
+											}
+											elseif(is_array($meta_field))
+											{
+												//this is a general array, check for Register Helper options first
+												if(!empty($rh_fields[$field[1]])) {
+													foreach($meta_field as $key => $value)
+														$meta_field[$key] = $rh_fields[$field[1]][$value];
+												}
+												?>
+												<strong><?php echo $field[0]; ?></strong>
+												<?php echo implode(", ",$meta_field); ?>
+												<?php
+											}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]])  ) {
+											?>
+												<strong><?php echo $field[0]; ?></strong>
+												<?php echo $rh_fields[$field[1]][$meta_field]; ?>
+												<?php
+											}
+											else
+											{
+												if($field[1] == 'user_url') {	
+													echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
+												} else {
+											?>
+												<strong><?php echo $field[0]; ?></strong>
+												<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
+														<?php
+												}
+											}
+											?>
+										</p>
+										<?php
+									}
+								}
+								?>
+							</td>
+							<?php
+						}
+						?>
 						<?php if(!empty($show_level)) { ?>
-							<p class="pmpro_member_directory_level">
-								<strong><?php _e('Level', 'pmpro-member-directory'); ?></strong>
+							<td class="pmpro_member_directory_level">
 								<?php
 									$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
 									$membership_levels = array();
@@ -508,119 +456,163 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 									$auser->membership_levels = implode( ', ', $membership_levels );
 									echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
 								?>
-							</p>
+							</td>
 						<?php } ?>
 						<?php if(!empty($show_startdate)) { ?>
-							<p class="pmpro_member_directory_date">
-								<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
+							<td class="pmpro_member_directory_date">
 								<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
-							</p>
+							</td>
 						<?php } ?>
-						<?php
-						if(!empty($fields_array))
-						{
-							foreach($fields_array as $field)
-							{
-								if ( WP_DEBUG ) {
-									error_log("Content of field data: " . print_r( $field, true));
-								}
-
-								// Fix for a trailing space in the 'fields' shortcode attribute.
-								if ( $field[0] === '' ) {
-									break;
-								}
-
-								$meta_field = $auser->{$field[1]};
-								if(!empty($meta_field))
-								{
-									?>
-									<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
-										<?php
-										if(is_array($meta_field) && !empty($meta_field['filename']) )
-										{
-											//this is a file field
-											?>
-											<strong><?php echo $field[0]; ?></strong>
-											<?php echo pmpromd_display_file_field($meta_field); ?>
-											<?php
-										}
-										elseif(is_array($meta_field))
-										{
-											//this is a general array, check for Register Helper options first
-											if(!empty($rh_fields[$field[1]])) {
-												foreach($meta_field as $key => $value)
-													$meta_field[$key] = $rh_fields[$field[1]][$value];
-											}
-											?>
-											<strong><?php echo $field[0]; ?></strong>
-											<?php echo implode(", ",$meta_field); ?>
-											<?php
-										}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]]) ) {
-									?>
-										<strong><?php echo $field[0]; ?></strong>
-										<?php echo $rh_fields[$field[1]][$meta_field]; ?>
-										<?php
-									}
-										elseif($field[1] == 'user_url')
-										{											
-											echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
-										}
-										else
-										{
-											?>
-											<strong><?php echo $field[0]; ?></strong>
-											<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
-											<?php
-										}
-										?>
-									</p>
-									<?php
-								}
-							}
-						}
-						?>
 						<?php if(!empty($link) && !empty($profile_url)) { ?>
-							<p class="pmpro_member_directory_link">
-								<a class="more-link" href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
-							</p>
+							<td class="pmpro_member_directory_link">
+								<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url, true ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
+							</td>
 						<?php } ?>
-					</div> <!-- end pmpro_member_directory-item -->
-				<?php
-			endforeach;
-		?>
-		</div> <!-- end pmpro_member_directory -->
-		<?php
-
-		do_action( 'pmpro_member_directory_after', $sqlQuery, $shortcode_atts );
-		
-		}
-	}
-	else
-	{
-		?>
-		<p class="pmpro_member_directory_message pmpro_message pmpro_error">
-			<?php _e('No matching profiles found','pmpro-member-directory'); ?>
-			<?php
-			if($s)
-			{
-				/* translators: placeholder is for search string entered */
-				printf(__('within <em>%s</em>.','pmpro-member-directory'), stripslashes( ucwords(esc_html($s))) );
-				if(!empty($directory_url))
-				{
-					?>
-					<a class="more-link" href="<?php echo $directory_url; ?>"><?php _e('View All Members','pmpro-member-directory'); ?></a>
+					</tr>
 					<?php
 				}
-			}
-			else
-			{
-				echo ".";
-			}
-			?>
-		</p>
-		<?php
-	}
+				?>
+				</tbody>
+			</table>
+			<?php
+		} else {
+			foreach($theusers as $auser):
+				$auser = get_userdata($auser->ID);					
+				$auser->membership_level = pmpro_getMembershipLevelForUser($auser->ID);
+				$user_identifier = pmpromd_user_identifier();
+				$fields_array = pmpromd_filter_profile_fields_for_levels( $fields_array, $auser );
+				?>
+				<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_member_directory-item', 'directory_item' ); ?>">
+					<?php if(!empty($show_avatar)) { ?>
+						<div class="pmpro_member_directory_avatar">
+							<?php if(!empty($link) && !empty($profile_url)) { ?>
+								<a class="<?php echo $avatar_align; ?>" href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></a>
+							<?php } else { ?>
+								<span class="<?php echo $avatar_align; ?>"><?php echo get_avatar($auser->ID, $avatar_size, NULL, $auser->display_name); ?></span>
+							<?php } ?>
+						</div>
+					<?php } ?>
+					<h3 class="pmpro_member_directory_display-name">
+						<?php if(!empty($link) && !empty($profile_url)) { ?>
+							<a href="<?php echo esc_url( pmpromd_build_profile_url( $auser ), $profile_url ); ?>"><?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+						<?php } else { ?>
+							<?php echo esc_html( pmpro_member_directory_get_member_display_name( $auser ) ); ?></a>
+						<?php } ?>
+					</h3>
+					<?php if(!empty($show_email)) { ?>
+						<p class="pmpro_member_directory_email">
+							<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
+							<?php echo pmpromd_format_profile_field( $auser->user_email, 'user_email' ); ?>
+						</p>
+					<?php } ?>
+					<?php if(!empty($show_level)) { ?>
+						<p class="pmpro_member_directory_level">
+							<strong><?php _e('Level', 'pmpro-member-directory'); ?></strong>
+							<?php
+								$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
+								$membership_levels = array();
+								if ( ! isset( $levels ) ) {
+									// Show all the user's levels.
+									foreach ( $alluserlevels as $curlevel ) {
+										$membership_levels[] = $curlevel->name;
+									}
+								} else {
+									$levels_array = explode(',', $levels);
+									// Show only the levels included in the directory.
+									foreach ( $alluserlevels as $curlevel ) {
+										if ( in_array( $curlevel->id, $levels_array) ) {
+											$membership_levels[] = $curlevel->name;
+										}
+									}
+								}
+								$auser->membership_levels = implode( ', ', $membership_levels );
+								echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
+							?>
+						</p>
+					<?php } ?>
+					<?php if(!empty($show_startdate)) { ?>
+						<p class="pmpro_member_directory_date">
+							<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
+							<?php echo date_i18n(get_option("date_format"), $auser->membership_level->startdate); ?>
+						</p>
+					<?php } ?>
+					<?php
+					if(!empty($fields_array))
+					{
+						foreach($fields_array as $field)
+						{
+							if ( WP_DEBUG ) {
+								error_log("Content of field data: " . print_r( $field, true));
+							}
 
+							// Fix for a trailing space in the 'fields' shortcode attribute.
+							if ( $field[0] === '' ) {
+								break;
+							}
+
+							$meta_field = $auser->{$field[1]};
+							if(!empty($meta_field))
+							{
+								?>
+								<p class="pmpro_member_directory_<?php echo $field[1]; ?>">
+									<?php
+									if(is_array($meta_field) && !empty($meta_field['filename']) )
+									{
+										//this is a file field
+										?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo pmpromd_display_file_field($meta_field); ?>
+										<?php
+									}
+									elseif(is_array($meta_field))
+									{
+										//this is a general array, check for Register Helper options first
+										if(!empty($rh_fields[$field[1]])) {
+											foreach($meta_field as $key => $value)
+												$meta_field[$key] = $rh_fields[$field[1]][$value];
+										}
+										?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo implode(", ",$meta_field); ?>
+										<?php
+									}elseif( !empty($rh_fields[$field[1]]) && is_array($rh_fields[$field[1]]) ) {
+								?>
+									<strong><?php echo $field[0]; ?></strong>
+									<?php echo $rh_fields[$field[1]][$meta_field]; ?>
+									<?php
+								}
+									elseif($field[1] == 'user_url')
+									{											
+										echo pmpromd_format_profile_field( $meta_field, $field[1], $field[0] );
+									}
+									else
+									{
+										?>
+										<strong><?php echo $field[0]; ?></strong>
+										<?php echo pmpromd_format_profile_field( $auser->{$field[1]}, $field[1] ); ?>
+										<?php
+									}
+									?>
+								</p>
+								<?php
+							}
+						}
+					}
+					?>
+					<?php if(!empty($link) && !empty($profile_url)) { ?>
+						<p class="pmpro_member_directory_link">
+							<a class="more-link" href="<?php echo esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ); ?>"><?php _e('View Profile','pmpro-member-directory'); ?></a>
+						</p>
+					<?php } ?>
+				</div> <!-- end pmpro_member_directory-item -->
+			<?php
+			endforeach;
+		} // End if/else for layout.
+		?>
+	</div> <!-- end pmpro_member_directory -->
+	<?php
+	do_action( 'pmpro_member_directory_after', $sqlQuery, $shortcode_atts );
+	
 	//prev/next
 	?>
 	<div class="pmpro_pagination">
