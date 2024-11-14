@@ -34,6 +34,7 @@ else
 // Includes
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/blocks/blocks.php');
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/shortcodes/profile.php');
+require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/shortcodes/search.php');
 
 function pmpromd_load_textdomain() {
 	load_plugin_textdomain( 'pmpro-member-directory', false, basename( dirname( __FILE__ ) ) . '/languages' );
@@ -646,6 +647,35 @@ function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $m
 	}
 }
 add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
+
+/**
+ * Prepare the elements attribute of the shortcodes.
+ */
+function pmpromd_prepare_elements_array( $elements ) {
+	if ( ! empty( $elements ) ) {
+		// Remove a trailing comma or semicolon if it exists.
+		$elements = rtrim( $elements, ',;' );
+
+		// Explode the elements string.
+		$elements = explode( ';', $elements );
+		foreach ( $elements as $element ) {
+			// Remove spaces from the beginning and end of the element.
+			$element = trim( $element );
+
+			if ( str_contains( $element, ',' ) ) {
+				// If there is a comma, then we know it has label/field pair.
+				$elements_array[] = array_map( 'trim', explode( ',', $element ) );
+			} else {
+				// Otherwise we have just the field with no label.
+				$elements_array[] = array( '', trim( $element ) );
+			}
+		}
+	} else {
+		$elements_array = array();
+	}
+
+	return $elements_array;
+}
 
 /**
  * Get the value of a specific element from a string of HTML.

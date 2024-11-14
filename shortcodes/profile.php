@@ -36,48 +36,16 @@ function pmpromd_member_profile_shortcode( $atts, $content = null, $code="" ) {
 	}
 
 	ob_start();
+
+	// Set up the elements data array.
+	$elements_array = pmpromd_prepare_elements_array( $elements );
 	?>
 	<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro' ) ); ?>">
-		<?php if ( ! empty( $show_search ) ) { ?>
-			<form action="<?php echo esc_url( $directory_url ); ?>" method="post" role="search" class="<?php echo pmpro_get_element_class( 'pmpro_form pmpro_member_directory_search', 'pmpro_member_directory_search' ); ?>">
-				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
-					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-ps', 'pmpro_form_field-ps' ) ); ?>">
-						<label for="ps" class="screen-reader-text"><?php _e('Search for:','pmpro-member-directory'); ?></label>
-						<input type="search" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" placeholder="<?php esc_attr_e( 'Search Members','pmpro-member-directory' ); ?>" name="ps" id="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr($_REQUEST['ps']);?>" title="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" />
-					</div> <!-- end pmpro_form_field-ps -->
-				</div> <!-- end pmpro_form_fields -->
-				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_submit' ) ); ?>">
-					<input type="submit" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_btn' ) ); ?>" value="<?php esc_attr_e( 'Submit','pmpro-member-directory'); ?>">
-				</div>
-			</form>
-		<?php } ?>
-		
-		<?php
-			// Set up the elements data array.
-			$elements_array = array();
 
-			// Work with elements passed from shortcode/filter.
-			if ( ! empty( $elements ) ) {
-				// Remove a trailing comma or semicolon if it exists.
-				$elements = rtrim( $elements, ',;' );
+		<?php echo isset( $show_search ) ? do_shortcode( '[pmpromd_search]' ) : ''; ?>
 
-				// Explode the elements string.
-				$elements = explode( ';', $elements );
-				foreach ( $elements as $element ) {
-					// Remove spaces from the beginning and end of the element.
-					$element = trim( $element );
-
-					if ( str_contains( $element, ',' ) ) {
-						// If there is a comma, then we know it has label/field pair.
-						$elements_array[] = array_map( 'trim', explode( ',', $element ) );
-					} else {
-						// Otherwise we have just the field with no label.
-						$elements_array[] = array( '', trim( $element ) );
-					}
-				}
-			}
-		?>
 		<div id="pmpro_member_profile-<?php echo esc_attr( $pu->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_card pmpro_member_profile', 'pmpro_member_profile'); ?>">
+
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 
 				<?php do_action( 'pmpro_member_profile_before', $pu ); ?>
@@ -97,7 +65,9 @@ function pmpromd_member_profile_shortcode( $atts, $content = null, $code="" ) {
 				<?php } ?>
 
 				<?php do_action( 'pmpro_member_profile_after', $pu ); ?>
-			</div>
+
+			</div> <!-- end pmpro_card_content -->
+
 			<?php
 				// Build the links to return.
 				$pmpro_member_profile_action_links = array();
@@ -149,7 +119,9 @@ function pmpromd_member_profile_shortcode( $atts, $content = null, $code="" ) {
 					<?php
 				}
 			?>
+
 		</div> <!-- end pmpro_card -->
+
 	</div> <!-- end pmpro -->
 	<?php
 	$content = ob_get_contents();
