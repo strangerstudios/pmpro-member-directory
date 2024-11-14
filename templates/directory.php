@@ -404,40 +404,49 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			if ( ! empty( $show_email ) ) {
 				?>
 				<<?php echo $data_wrapper; ?> class="pmpro_member_directory_email">
-					<?php echo pmpromd_format_profile_field( $auser->user_email, 'user_email' ); ?>
+					<?php
+					// If the layout is not a table, print "Email Address" as a label.
+					if ( $layout !== 'table' ) {
+						?>
+						<strong><?php _e('Email Address', 'pmpro-member-directory'); ?></strong>
+						<?php
+					}
+					echo pmpromd_format_profile_field( $auser->user_email, 'user_email' );
+					?>
 				</<?php echo $data_wrapper; ?>>
 				<?php
 			}
 
 			// Show the user's membership level.
 			if ( ! empty( $show_level ) ) {
-				// If the layout is not a table, print "level" as a header.
-				if ( $layout !== 'table' ) {
-					?>
-					<strong><?php _e('Level', 'pmpro-member-directory'); ?></strong>
-					<?php
-				}
 				?>
 				<<?php echo $data_wrapper; ?> class="pmpro_member_directory_level">
 					<?php
-						$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
-						$membership_levels = array();
-						if ( ! isset( $levels ) ) {
-							// Show all the user's levels.
-							foreach ( $alluserlevels as $curlevel ) {
+					// If the layout is not a table, print "level" as a label.
+					if ( $layout !== 'table' ) {
+						?>
+						<strong><?php _e('Level', 'pmpro-member-directory'); ?></strong>
+						<?php
+					}
+
+					$alluserlevels = pmpro_getMembershipLevelsForUser( $auser->ID );
+					$membership_levels = array();
+					if ( ! isset( $levels ) ) {
+						// Show all the user's levels.
+						foreach ( $alluserlevels as $curlevel ) {
+							$membership_levels[] = $curlevel->name;
+						}
+					} else {
+						$levels_array = explode(',', $levels);
+						// Show only the levels included in the directory.
+						foreach ( $alluserlevels as $curlevel ) {
+							if ( in_array( $curlevel->id, $levels_array) ) {
 								$membership_levels[] = $curlevel->name;
 							}
-						} else {
-							$levels_array = explode(',', $levels);
-							// Show only the levels included in the directory.
-							foreach ( $alluserlevels as $curlevel ) {
-								if ( in_array( $curlevel->id, $levels_array) ) {
-									$membership_levels[] = $curlevel->name;
-								}
-							}
 						}
-						$auser->membership_levels = implode( ', ', $membership_levels );
-						echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
+					}
+					$auser->membership_levels = implode( ', ', $membership_levels );
+					echo ! empty( $auser->membership_levels ) ? $auser->membership_levels : '';
 					?>
 				</<?php echo $data_wrapper; ?>>
 				<?php
@@ -445,15 +454,17 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 			// Show the user's start date.
 			if ( ! empty( $show_startdate ) ) {
-				// If the layout is not a table, print "Start Date" as a header.
-				if ( $layout !== 'table' ) {
-					?>
-					<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
-					<?php
-				}
 				?>
 				<<?php echo $data_wrapper; ?> class="pmpro_member_directory_date">
-					<?php echo date_i18n( get_option( 'date_format' ), $auser->membership_level->startdate ); ?>
+					<?php
+					// If the layout is not a table, print "Start Date" as a label.
+					if ( $layout !== 'table' ) {
+						?>
+						<strong><?php _e('Start Date', 'pmpro-member-directory'); ?></strong>
+						<?php
+					}
+					echo date_i18n( get_option( 'date_format' ), $auser->membership_level->startdate );
+					?>
 				</<?php echo $data_wrapper; ?>>
 				<?php
 			}
