@@ -10,9 +10,11 @@ Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
+// Definitions
 define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '1.2.6' );
-
-global $pmpromd_options;
+define( 'PMPRO_MEMBER_DIRECTORY_BASE_FILE', __FILE__ );
+define( 'PMPRO_MEMBER_DIRECTORY_DIR', dirname( __FILE__ ) );
+define( 'PMPRO_MEMBER_DIRECTORY_BASENAME', plugin_basename( __FILE__ ) );
 
 $path = dirname(__FILE__);
 $custom_dir = get_stylesheet_directory()."/paid-memberships-pro/pmpro-member-directory/";
@@ -29,7 +31,9 @@ if(file_exists($custom_profile_file))
 else
 	require_once($path . "/templates/profile.php");
 
-require_once($path . "/blocks/blocks.php"); //localization functions
+// Includes
+require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/blocks/blocks.php');
+require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/shortcodes/profile.php');
 
 function pmpromd_load_textdomain() {
 	load_plugin_textdomain( 'pmpro-member-directory', false, basename( dirname( __FILE__ ) ) . '/languages' );
@@ -642,3 +646,81 @@ function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $m
 	}
 }
 add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
+
+/**
+ * Get the value of a specific element from a string of HTML.
+ */
+function pmpromd_get_element( $element, $pu, $format = false, $page = 'profile' ) {
+	// Get a list of fields saved in the wp_users table.
+	$user_column_fields = array(
+		'user_login',
+		'user_email',
+		'user_url',
+		'user_registered',
+		'display_name',
+	);
+
+	// Get a list of fields related to the user's level.
+	$pmpro_level_fields = array(
+		'membership_id',
+		'membership_name',
+		'membership_description',
+		'membership_confirmation',
+		'membership_initial_payment',
+		'membership_startdate',
+		'membership_enddate',
+		'level_cost',
+	);
+
+	// Get a list of fields that should be formatted as dates.
+	$date_fields = array(
+		'startdate',
+		'enddate',
+		'modified',
+		'user_registered',
+		'next_payment_date',
+	);
+
+	// Check if the $element is in one of our special lists.
+	if ( in_array( $element, $user_column_fields ) ) {
+		$value = $pu->$element;
+	} elseif ( in_array( $element, $pmpro_level_fields ) ) {
+		// Strip the prefix 'membership_' from the element.
+		$element = str_replace( 'membership_', '', $element );
+		$value = pmpro_getMembershipLevelForUser( $pu->ID, true );
+		if ( ! empty( $value ) ) {
+			$value = $value->$element;
+		}
+	} else {
+		$value = get_user_meta( $pu->ID, $element, true );
+	}
+
+	switch ( $element ) {
+		case 'display_name':
+			$value = pmpro_member_directory_get_member_display_name( $pu );
+			if ( $format ) {
+				$value = '<h2 class="' . esc_attr( pmpro_get_element_class( 'pmpro_font-x-large' ) ) . '">' . esc_html( $value ) . '</h2>';
+			}
+			break;
+		case 'avatar':
+			/**
+			 * Filter the size of the avatar displayed in the member directory.
+			 *
+			 * @since TBD
+			 * @param int $avatar_size The size of the avatar in pixels.
+			 * @param string $page The page where the avatar is being displayed.
+			 *
+			 * @return int The size of the avatar in pixels.
+			 */
+			$avatar_size = apply_filters( 'pmpro_member_directory_avatar_size', 128, $page );
+			$value = get_avatar( $pu->ID, $avatar_size, NULL, $pu->display_name );
+			break;
+	}
+
+	// Format the date fields.
+	if ( in_array( $element, $date_fields ) ) {
+		$value = date_i18n( get_option( 'date_format' ), strtotime( $value ) );
+	}
+
+	return $value;
+}
