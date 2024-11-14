@@ -101,57 +101,56 @@ function pmpromd_shortcode($atts, $content=null, $code="")
 	$end = $pn * $limit;
 	$start = $end - $limit;
 
-// Build SQL into parts to make it easier to add in specific sections to the SQL.
-$sql_parts = array();
+	// Build SQL into parts to make it easier to add in specific sections to the SQL.
+	$sql_parts = array();
 
-$sql_parts['SELECT'] = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership, umf.meta_value as first_name, uml.meta_value as last_name FROM $wpdb->users u ";
+	$sql_parts['SELECT'] = "SELECT SQL_CALC_FOUND_ROWS u.ID, u.user_login, u.user_email, u.user_nicename, u.display_name, UNIX_TIMESTAMP(u.user_registered) as joindate, mu.membership_id, mu.initial_payment, mu.billing_amount, mu.cycle_period, mu.cycle_number, mu.billing_limit, mu.trial_amount, mu.trial_limit, UNIX_TIMESTAMP(mu.startdate) as startdate, UNIX_TIMESTAMP(mu.enddate) as enddate, m.name as membership, umf.meta_value as first_name, uml.meta_value as last_name FROM $wpdb->users u ";
 
-$sql_parts['JOIN'] = "LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id ";
+	$sql_parts['JOIN'] = "LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->pmpro_membership_levels m ON mu.membership_id = m.id ";
 
-$sql_parts['WHERE'] = "WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
+	$sql_parts['WHERE'] = "WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
 
-$sql_parts['GROUP'] = "GROUP BY u.ID ";
+	$sql_parts['GROUP'] = "GROUP BY u.ID ";
 
-// Clean up order_by to only include text, underscores and periods.
-$order_by = preg_replace( '/[^a-z._]/', '', $order_by );
-$sql_parts['ORDER'] = "ORDER BY ". esc_sql( $order_by ) . " " . esc_sql( $order ) . " ";
+	// Clean up order_by to only include text, underscores and periods.
+	$order_by = preg_replace( '/[^a-z._]/', '', $order_by );
+	$sql_parts['ORDER'] = "ORDER BY ". esc_sql( $order_by ) . " " . esc_sql( $order ) . " ";
 
-$sql_parts['LIMIT'] = "LIMIT $start, $limit";
+	$sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
-if( $s ) {
-	$sql_search_where = "
-		AND (
-			u.user_login LIKE '%" . esc_sql( $s ) . "%'
-			OR u.user_email LIKE '%" . esc_sql( $s ) . "%'
-			OR u.display_name LIKE '%" . esc_sql( $s ) . "%'
-			OR um.meta_value LIKE '%" . esc_sql( $s ) . "%'
-		)
-	";
+	if( $s ) {
+		$sql_search_where = "
+			AND (
+				u.user_login LIKE '%" . esc_sql( $s ) . "%'
+				OR u.user_email LIKE '%" . esc_sql( $s ) . "%'
+				OR u.display_name LIKE '%" . esc_sql( $s ) . "%'
+				OR um.meta_value LIKE '%" . esc_sql( $s ) . "%'
+			)
+		";
 
-	/**
-	 * Allow filtering the member directory search SQL to be used.
-	 *
-	 * @since TBD
-	 *
-	 * @param string $sql_search_where The member directory search SQL to be used.
-	 * @param string $search_text      The search text used.
-	 */
-	$sql_search_where = apply_filters( 'pmpro_member_directory_sql_search_where', $sql_search_where, $s );
+		/**
+		 * Allow filtering the member directory search SQL to be used.
+		 *
+		 * @since TBD
+		 *
+		 * @param string $sql_search_where The member directory search SQL to be used.
+		 * @param string $search_text      The search text used.
+		 */
+		$sql_search_where = apply_filters( 'pmpro_member_directory_sql_search_where', $sql_search_where, $s );
 
-	$sql_parts['WHERE'] .= $sql_search_where;
-}
+		$sql_parts['WHERE'] .= $sql_search_where;
+	}
 
-// If levels are passed in.
-if ( $levels ) {
-	$levels = preg_replace('/[^0-9,]/', '', $levels ); // Only allow commas and numeric values.
-	$sql_parts['WHERE'] .= "AND mu.membership_id IN(" . esc_sql($levels) . ") ";
-}
+	// If levels are passed in.
+	if ( $levels ) {
+		$levels = preg_replace('/[^0-9,]/', '', $levels ); // Only allow commas and numeric values.
+		$sql_parts['WHERE'] .= "AND mu.membership_id IN(" . esc_sql($levels) . ") ";
+	}
 
-// Allow filters for SQL parts.
-$sql_parts = apply_filters( 'pmpro_member_directory_sql_parts', $sql_parts, $levels, $s, $pn, $limit, $start, $end, $order_by, $order );
+	// Allow filters for SQL parts.
+	$sql_parts = apply_filters( 'pmpro_member_directory_sql_parts', $sql_parts, $levels, $s, $pn, $limit, $start, $end, $order_by, $order );
 
-$sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $sql_parts['GROUP'] . $sql_parts['ORDER'] . $sql_parts['LIMIT'];
-
+	$sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $sql_parts['GROUP'] . $sql_parts['ORDER'] . $sql_parts['LIMIT'];
 
 	$sqlQuery = apply_filters("pmpro_member_directory_sql", $sqlQuery, $levels, $s, $pn, $limit, $start, $end, $order_by, $order);
 
@@ -163,8 +162,6 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		$end = $totalrows;
 
 	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers );
-
-	$user_identifier = pmpromd_user_identifier();
 
 	ob_start();
 
@@ -227,8 +224,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 		return $temp_content;
 	}
 
-	if(!empty($fields))
-	{
+	if ( ! empty( $fields ) ) {
 		// Check to see if the Block Editor is used or the shortcode.
 		if ( strpos( $fields, "\n" ) !== FALSE ) {
 			$fields = rtrim( $fields, "\n" ); // clear up a stray \n
@@ -238,14 +234,14 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			$fields_array = explode(";",$fields);
 		}
 
-		if(!empty($fields_array))
-		{
-			for($i = 0; $i < count($fields_array); $i++ )
-				$fields_array[$i] = explode(",", trim($fields_array[$i]));
+		if ( ! empty( $fields_array ) ) {
+			for ( $i = 0; $i < count( $fields_array ); $i++ ) {
+				$fields_array[$i] = explode( ",", trim( $fields_array[$i] ) );
+			}
 		}
-	}
-	else
+	} else {
 		$fields_array = false;
+	}
 
 
 	/**
@@ -259,11 +255,12 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	// Get Register Helper field options
 	$rh_fields = array();
-	if(!empty($pmprorh_registration_fields)) {
-		foreach($pmprorh_registration_fields as $location) {
-			foreach($location as $field) {
-				if(!empty($field->options))
+	if ( ! empty( $pmprorh_registration_fields ) ) {
+		foreach ( $pmprorh_registration_fields as $location ) {
+			foreach ($location as $field) {
+				if ( ! empty( $field->options ) ) {
 					$rh_fields[$field->name] = $field->options;
+				}
 			}
 		}
 	}
@@ -296,12 +293,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 
 	do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
 	
-	<div class="pmpro_member_directory<?php
-		if ( ! empty( $layout ) ) {
-			echo ' pmpro_member_directory-' . $layout;
-		}
-	?>">			
-		
+	<div class="pmpro_member_directory<?php echo ( ! empty( $layout ) ? ' pmpro_member_directory-' . $layout : '' ); ?>">		
 		<?php
 		if($layout == "table") {
 			// Show the header for the table.
