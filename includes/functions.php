@@ -377,7 +377,12 @@ function pmpromd_prepare_elements_array( $elements ) {
 		// Remove a trailing comma or semicolon if it exists.
 		$elements = rtrim( $elements, ',;' );
 
-		// Explode the elements string.
+		// Convert line breaks to semicolons (for the block editor).
+		if ( strpos( $elements, "\n" ) !== FALSE ) {
+			$elements = str_replace( "\n", ';', $elements );
+		}
+
+		// Build the elements array.
 		$elements = explode( ';', $elements );
 		foreach ( $elements as $element ) {
 			// Remove spaces from the beginning and end of the element.
