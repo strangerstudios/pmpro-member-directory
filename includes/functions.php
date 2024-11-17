@@ -443,22 +443,19 @@ function pmpromd_get_display_value( $element, $pu ) {
 			$pu->membership_levels = implode(', ', $membership_levels);		
 		}
 
+		// Get the avatar_size for the avatar element.
+		if ( str_contains( $element, 'avatar' ) ) {
+			$element_parts = explode( '|', $element );
+			$element = $element_parts[0];
+			$avatar_size = ! empty( $element_parts[1] ) ? $element_parts[1] : 128;
+		}
+
 		// Additional formatting and special cases.
 		switch ( $element ) {
 			case 'display_name':
 				$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . pmpro_member_directory_get_member_display_name( $pu ) . '</h2>';
 				break;
 			case 'avatar':
-				/**
-				 * Filter the size of the avatar displayed in the member directory.
-				 *
-				 * @since TBD
-				 * @param int $avatar_size The size of the avatar in pixels.
-				 * @param string $page The page where the avatar is being displayed.
-				 *
-				 * @return int The size of the avatar in pixels.
-				 */
-				$avatar_size = apply_filters( 'pmpro_member_directory_avatar_size', 128, $page );
 				$value = get_avatar( $pu->ID, $avatar_size, NULL, $pu->display_name );
 				break;
 			case 'membership_name':

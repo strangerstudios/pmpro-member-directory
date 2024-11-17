@@ -39,6 +39,9 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	$show_search = filter_var( $show_search, FILTER_VALIDATE_BOOLEAN );
 	$show_startdate = filter_var( $show_startdate, FILTER_VALIDATE_BOOLEAN );
 
+	// Validate the avatar size.
+	$avatar_size = intval( $avatar_size );
+
 	// Build our elements array. If we have an elements attribute on the shortcode, use that and ignore any other legacy attributes.
 	if ( ! empty( $elements ) ) {
 		$elements_array = pmpromd_prepare_elements_array( $elements );
@@ -49,11 +52,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			$elements .= 'display_name;';
 		}
 		if ( ! empty( $show_avatar ) ) {
-			if ( ! empty( $avatar_size ) ) {
-				$elements .= 'avatar|' . $avatar_size . ';';
-			} else {
-				$elements .= 'avatar;';
-			}
+			$elements .= 'avatar|' . $avatar_size . ';';
 		}
 		if ( ! empty( $show_bio ) ) {
 			$elements .= __( 'Biographical Info', 'pmpro-member-directory' ) . ',description;';
