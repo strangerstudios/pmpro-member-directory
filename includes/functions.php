@@ -121,6 +121,11 @@ function pmpromd_custom_rewrite_rules() {
 		return;
 	}
 
+	$structure = get_option( 'permalink_structure' );
+	if ( empty( $structure ) ) {
+		return;
+	}
+
 	$profile_permalink = get_the_permalink( $pmpro_pages['profile'] );
 	$base_site_url = get_site_url();
 	$profile_base = str_replace( $base_site_url . '/', '', $profile_permalink );
