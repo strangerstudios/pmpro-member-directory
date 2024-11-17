@@ -123,8 +123,12 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 				<?php
 					foreach ( $elements_array as $element ) {
-						$value = pmpromd_get_display_value( $element[1], $pu, 'profile' );
+						$value = pmpromd_get_display_value( $element[1], $pu );
 						if ( ! empty( $value ) ) {
+							// If this is the display_name, we need to wrap it in an h2 tag.
+							if ( 'display_name' === $element[1] ) {
+								$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . $value . '</h2>';
+							}
 							?>
 							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . $element[1] ) ); ?>">
 								<?php if ( ! empty( $element[0] ) ) { ?>

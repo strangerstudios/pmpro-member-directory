@@ -225,36 +225,43 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 			* @return array $elements_array The array of elements to display on the member directory.
 			*/
 			$elements_array = apply_filters( 'pmpro_member_directory_elements', $elements_array );
+
+			// Set up an array of items that will be linked to the user's profile.
+			$linked_elements = array( 'display_name' );
+			foreach ( $elements_array as $element ) {
+				if ( strpos( $element[1], 'avatar|' ) !== false ) {
+					$linked_elements[] = $element[1];
+				}
+			}
+
+			/**
+			 * Filter to override the attributes passed into the shortcode.
+			 *
+			 * @param array Contains all of the shortcode attributes used in the directory shortcode
+			 */
+			$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
+				'avatar_size' => $avatar_size,
+				'elements' => $elements,
+				'fields' => $fields,
+				'layout' => $layout,
+				'level' => $level,
+				'levels' => $levels,
+				'limit' => $limit,
+				'link' => $link,
+				'order_by' => $order_by,
+				'order' => $order,
+				'show_avatar' => $show_avatar,
+				'show_email' => $show_email,
+				'show_level' => $show_level,
+				'show_search' => $show_search,
+				'show_startdate' => $show_startdate,
+				'avatar_align' => $avatar_align,
+				'elements_array' => $elements_array,
+				'fields_array' => $elements_array, // Backwards compatibility. We can remove this in a future version.
+			) );
+
+			do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts );
 		?>
-
-		<?php
-		/**
-		 * Filter to override the attributes passed into the shortcode.
-		 *
-		 * @param array Contains all of the shortcode attributes used in the directory shortcode
-		 */
-		$shortcode_atts = apply_filters( 'pmpro_member_directory_before_atts', array(
-			'avatar_size' => $avatar_size,
-			'elements' => $elements,
-			'fields' => $fields,
-			'layout' => $layout,
-			'level' => $level,
-			'levels' => $levels,
-			'limit' => $limit,
-			'link' => $link,
-			'order_by' => $order_by,
-			'order' => $order,
-			'show_avatar' => $show_avatar,
-			'show_email' => $show_email,
-			'show_level' => $show_level,
-			'show_search' => $show_search,
-			'show_startdate' => $show_startdate,
-			'avatar_align' => $avatar_align,
-			'elements_array' => $elements_array,
-			'fields_array' => $elements_array, // Backwards compatibility. We can remove this in a future version.
-		) );
-
-		do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts ); ?>
 
 		<div class="pmpro_member_directory<?php echo ( ! empty( $layout ) ? ' pmpro_member_directory-' . esc_attr( $layout ) : '' ); ?>">
 			<?php
@@ -282,7 +289,11 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 										<tr id="pmpro_member_directory_row-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_row' ) ); ?>">
 											<?php
 												foreach ( $elements_array as $element ) {
-													$value = pmpromd_get_display_value( $element[1], $auser, 'directory' );
+													$value = pmpromd_get_display_value( $element[1], $auser );
+													// Wrap the value in a link if the element is in the linked elements array.
+													if ( ! empty( $link ) && in_array( $element[1], $linked_elements ) ) {
+														$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
+													}
 													?>
 													<td class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_' . $element[1] ) ); ?>"<?php echo ! empty( $element[0] ) ? ' data-title="' . esc_attr( $element[0] ) . '"' : ''; ?>>
 														<?php echo $value; ?>
@@ -317,8 +328,12 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 							<?php
 								// Loop through the elements and output the content.
 								foreach ( $elements_array as $element ) {
-									$value = pmpromd_get_display_value( $element[1], $auser, 'directory' );
+									$value = pmpromd_get_display_value( $element[1], $auser );
 									if ( ! empty( $value ) ) {
+										// Wrap the value in a link if the element is in the linked elements array.
+										if ( ! empty( $link ) && in_array( $element[1], $linked_elements ) ) {
+											$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
+										}
 										?>
 										<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . $element[1] ) ); ?>">
 											<?php if ( ! empty( $element[0] ) ) { ?>
