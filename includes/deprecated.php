@@ -14,6 +14,7 @@ function pmpromd_init_check_for_deprecated_filters() {
 	// Deprecated filter name => new filter name (or null if there is no alternative).
 	$pmpromd_map_deprecated_filters = array(
 		'pmpro_member_profile_fields' => 'pmpro_member_profile_elements',
+		'pmpro_member_directory_fields' => 'pmpro_member_directory_elements',
 	);
 	
 	foreach ( $pmpromd_map_deprecated_filters as $old => $new ) {

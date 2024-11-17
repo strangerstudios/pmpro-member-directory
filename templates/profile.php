@@ -123,7 +123,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 				<?php
 					foreach ( $elements_array as $element ) {
-						$value = pmpromd_get_display_value( $element[1], $pu );
+						$value = pmpromd_get_display_value( $element[1], $pu, 'profile' );
 						if ( ! empty( $value ) ) {
 							?>
 							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . $element[1] ) ); ?>">
