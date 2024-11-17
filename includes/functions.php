@@ -409,7 +409,7 @@ function pmpromd_prepare_elements_array( $elements ) {
 /**
  * Get the value of a specific element from a string of HTML.
  */
-function pmpromd_get_display_value( $element, $pu ) {
+function pmpromd_get_display_value( $element, $pu, $location = 'profile' ) {
 	// Is this a user field?
 	if ( class_exists( 'PMPro_Field_Group' ) ) {
 		$user_field = PMPro_Field_Group::get_field( $element[1] );
@@ -463,7 +463,10 @@ function pmpromd_get_display_value( $element, $pu ) {
 		// Additional formatting and special cases.
 		switch ( $element ) {
 			case 'display_name':
-				$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . pmpro_member_directory_get_member_display_name( $pu ) . '</h2>';
+				$value = pmpro_member_directory_get_member_display_name( $pu );
+				if ( $location == 'profile' ) {
+					$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . $value . '</h2>';
+				}
 				break;
 			case 'avatar':
 				$value = get_avatar( $pu->ID, $avatar_size, NULL, $pu->display_name );
