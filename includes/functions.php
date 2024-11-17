@@ -204,6 +204,11 @@ function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = fals
  * Update the_title for the Profile page.
  */
 function pmpromd_the_title_profile_page( $title, $post_id = NULL ) {
+	// If we're in the admin, don't do anything.
+	if ( is_admin() ) {
+		return $title;
+	}
+
 	global $main_post_id, $current_user, $wp_query;
 	if( $post_id == $main_post_id ) {
 		$pu = pmpromd_get_user();
