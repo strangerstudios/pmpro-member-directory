@@ -68,7 +68,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			$elements .= __( 'Start Date', 'pmpro-member-directory' ) . ',membership_startdate;';
 		}
 		if ( ! empty( $show_billing ) ) {
-			$elements .= __( 'Address', 'pmpro-member-directory' ) . ',pmpro_baddress1|pmpro_baddress2|pmpro_bcity|pmpro_bstate|pmpro_bzipcode|pmpro_bcountry;';
+			$elements .= __( 'Address', 'pmpro-member-directory' ) . ',pmpro_billing_address;';
 		}
 		if ( ! empty( $show_phone ) ) {
 			$elements .= __( 'Phone Number', 'pmpro-member-directory' ) . ',pmpro_bphone;';
@@ -130,7 +130,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 								$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . $value . '</h2>';
 							}
 							?>
-							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . $element[1] ) ); ?>">
+							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . strtok( $element[1], '|' ) ) ); ?>">
 								<?php if ( ! empty( $element[0] ) ) { ?>
 									<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field_label' ) ); ?>">
 										<?php echo esc_html( $element[0] ); ?>

@@ -477,6 +477,30 @@ function pmpromd_get_display_value( $element, $pu ) {
 			case 'membership_enddate':
 				$value = $pu->membership_level->enddate;
 				break;
+			case 'pmpro_billing_address':
+				$value = pmpro_formatAddress(
+					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
+					$pu->pmpro_baddress1,
+					$pu->pmpro_baddress2,
+					$pu->pmpro_bcity,
+					$pu->pmpro_bstate,
+					$pu->pmpro_bzipcode,
+					$pu->pmpro_bcountry,
+					$pu->pmpro_bphone
+				);
+				break;
+			case 'pmpro_shipping_address':
+				$value = pmpro_formatAddress(
+					trim( $pu->pmpro_sfirstname . ' ' . $pu->pmpro_slastname ),
+					$pu->pmpro_saddress1,
+					$pu->pmpro_saddress2,
+					$pu->pmpro_scity,
+					$pu->pmpro_sstate,
+					$pu->pmpro_szipcode,
+					$pu->pmpro_scountry,
+					$pu->pmpro_sphone
+				);
+				break;
 		}
 
 		// If we still do not have a value, try usermeta.

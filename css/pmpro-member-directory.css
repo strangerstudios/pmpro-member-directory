@@ -86,12 +86,30 @@ div.pmpro_member_profile strong {display: block; }
 .pmpro_member_profile {
 
 	.pmpro_card_content {
-		display: flex;
-		flex-direction: column;
 		gap: var(--pmpro--base--spacing--medium);
 		margin-top: var(--pmpro--base--spacing--medium);
+
+		.pmpro_member_profile_field {
+			box-sizing: border-box;
+			flex: 1 1 calc(50% - var(--pmpro--base--spacing--medium));
+		}
+
+		.pmpro_member_profile_field_label {
+			font-weight: 700;
+		}
+
+		/* Full width profile items */
+		.pmpro_member_profile_field-display_name,
+		.pmpro_member_profile_field-description {
+			flex: 1 1 100%;
+		}
+
+		.pmpro_member_profile_field-display_name h2 {
+			margin: 0;
+		}
 	}
 }
+
 .pmpro_member_profile .pmpromd_filename {
 	display: block;
 }
