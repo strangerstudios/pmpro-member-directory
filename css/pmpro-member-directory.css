@@ -86,6 +86,8 @@ div.pmpro_member_profile strong {display: block; }
 .pmpro_member_profile {
 
 	.pmpro_card_content {
+		display: flex;
+		flex-wrap: wrap;
 		gap: var(--pmpro--base--spacing--medium);
 		margin-top: var(--pmpro--base--spacing--medium);
 
