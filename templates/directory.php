@@ -295,7 +295,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 														$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
 													}
 													?>
-													<td class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_' . $element[1] ) ); ?>"<?php echo ! empty( $element[0] ) ? ' data-title="' . esc_attr( $element[0] ) . '"' : ''; ?>>
+													<td class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_field-' . strtok( $element[1], '|' ) ) ); ?>"<?php echo ! empty( $element[0] ) ? ' data-title="' . esc_attr( $element[0] ) . '"' : ''; ?>>
 														<?php echo $value; ?>
 													</td>
 													<?php
@@ -334,8 +334,11 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 										if ( ! empty( $link ) && in_array( $element[1], $linked_elements ) ) {
 											$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
 										}
+										if ( 'display_name' === $element[1] ) {
+											$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-large' ) . '">' . $value . '</h2>';
+										}
 										?>
-										<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . $element[1] ) ); ?>">
+										<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field pmpro_member_profile_field-' . strtok( $element[1], '|' ) ) ); ?>">
 											<?php if ( ! empty( $element[0] ) ) { ?>
 												<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field_label' ) ); ?>">
 													<?php echo esc_html( $element[0] ); ?>
@@ -377,7 +380,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 			do_action( 'pmpro_member_directory_after', $sqlQuery, $shortcode_atts );
 		?>
 
-		<div class="pmpro_pagination">
+		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination' ) ); ?>">
 			<?php
 			//prev
 			if ( $pn > 1 ) {
@@ -388,39 +391,39 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				);
 				$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'prev' );
 				?>
-				<span class="pmpro_prev"><a href="<?php echo esc_url(add_query_arg( $query_args, get_permalink($post->ID)));?>">&laquo; <?php _e('Previous','pmpro-member-directory'); ?></a></span>
+				<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination-previous' ) ); ?>" href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>" title="<?php esc_attr_e( 'Previous Page', 'pmpro-member-directory' ); ?>"><?php esc_html_e( '&larr; Previous', 'pmpro-member-directory' ); ?></a>
 				<?php
 			}
 
 			$number_of_pages = $totalrows / $limit;
 			//Page Numbers
-			?>
-			<span class="pmpro_page_numbers">
-				<?php
-					$counter = 0;
-					if ( empty( $pn ) || $pn != 1 ) {
-						echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
-					}
+			$counter = 0;
+			if ( empty( $pn ) || $pn != 1 ) {
+				echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpromd' ) . '">...</a>';
+			}
 
-					if ( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
-						//If there's only one page, no need to show the page numbers
-						for( $i = $pn; $i <= $number_of_pages; $i++ ){
-							if( $counter <= 6 ){
-								$query_args = array(
-									'ps' => $s,
-									'pn' => $i,
-									'limit' => $limit,
-								);
+			if ( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
+				//If there's only one page, no need to show the page numbers
+				for( $i = $pn; $i <= $number_of_pages; $i++ ){
+					if( $counter <= 6 ){
+						$query_args = array(
+							'ps' => $s,
+							'pn' => $i,
+							'limit' => $limit,
+						);
 
-								if( $i == $pn ){ $active_class = 'class="pmpro_page_active"'; } else { $active_class = ''; }
-
-								echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" ' . $active_class . ' title="' . esc_attr( sprintf( __('Page %s', 'pmpromd' ), $i ) ) . '">' . $i . '</a>';
-							}
-							$counter++;
+						$classes = array();
+						$classes[] = 'pmpro_member_directory_pagination-page';
+						if ( $i == $pn ) {
+							$classes[] = 'pmpro_member_directory_pagination-current';
 						}
+						$classes = implode(	' ', $classes );
+						echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" class="' . esc_attr( pmpro_get_element_class( $classes ) ) . '" title="' . esc_attr( sprintf( __('Page %s', 'pmpro-member-directory' ), $i ) ) . '">' . $i . '</a>';
 					}
-				?>
-			</span> <!-- end pmpro_page_numbers -->
+					$counter++;
+				}
+			}
+			?>
 
 			<?php
 			//next
@@ -432,7 +435,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				);
 				$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'next' );
 				?>
-				<span class="pmpro_next"><a href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>"><?php _e( 'Next', 'pmpro-member-directory' ); ?> &raquo;</a></span>
+				<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination-next' ) ); ?>" href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>" title="<?php esc_attr_e( 'Next Page', 'pmpro-member-directory' ); ?>"><?php esc_html_e( 'Next &rarr;', 'pmpro-member-directory' ); ?></a>
 				<?php
 			}
 			?>
