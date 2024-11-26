@@ -98,6 +98,40 @@ div.pmpro_member_profile strong {display: block; }
 		.pmpro_member_profile_field {
 			box-sizing: border-box;
 			flex: 1 1 calc(50% - var(--pmpro--base--spacing--medium));
+
+			&:has(iframe) {
+				flex-basis: 100%;
+				height: 0;
+				overflow: hidden;
+				padding-bottom: 56.25%;
+				position: relative;
+				width: 100%;
+
+				iframe {
+					height: 100%;
+					left: 0;
+					position: absolute;
+					top: 0;
+					width: 100%;
+				}
+			}
+
+			&:has(audio) {
+				flex-basis: 100%;
+
+				audio {
+					width: 100%;
+				}
+			}
+
+			&:has(video) {
+				flex-basis: 100%;
+
+				video {
+					width: 100%;
+				}
+			}
+
 		}
 
 		.pmpro_member_profile_field_label {
@@ -125,6 +159,23 @@ div.pmpro_member_profile strong {display: block; }
 	.pmpro_member_directory.pmpro_member_directory-3col,
 	.pmpro_member_directory.pmpro_member_directory-4col {
 		grid-template-columns: 1fr;
+	}
+}
+
+/**
+ * Special user field formatting.
+ */
+.pmpro_member_profile_field_data:has([class*="pmpro_form_field-file-subtype_"]) {
+
+	a {
+		align-items: center;
+		display: flex;
+		gap: var(--pmpro--base--spacing--small);
+
+		img {
+			max-height: 40px;
+			width: auto;
+		}
 	}
 }
 

@@ -412,18 +412,19 @@ function pmpromd_prepare_elements_array( $elements ) {
 function pmpromd_get_display_value( $element, $pu ) {
 	// Is this a user field?
 	if ( class_exists( 'PMPro_Field_Group' ) ) {
-		$user_field = PMPro_Field_Group::get_field( $element[1] );
+		$user_field = PMPro_Field_Group::get_field( $element );
 	} else {
-		$user_field = pmpro_get_user_field( $element[1] );
+		$user_field = pmpro_get_user_field( $element );
 	}
 
 	// Yes, this is a user field. Check that the user has the required level for this field.
 	if ( ! empty( $user_field ) ) {
+
 		if ( ! empty( $user_field->levels ) && ! pmpro_hasMembershipLevel( $user_field->levels, $pu->ID ) ) {
 			// The user does not have the required level for this field.
 			return '';
 		}
-		$value = $pu->{$element[1]};
+		$value = $pu->{$element};
 		return $user_field->displayValue( $value, false );
 	} else {
 		// Let's try to get the value from other places and format it for return.
@@ -503,9 +504,25 @@ function pmpromd_get_display_value( $element, $pu ) {
 				break;
 		}
 
-		// If we still do not have a value, try usermeta.
+		// If we still do not have a value, try usermeta and format using User Fields display method.
 		if ( empty( $value ) ) {
 			$value = $pu->$element;
+
+			// Try to guess the field type, default to text.
+			$field_type = 'text';
+
+			// Special handling for arrays.
+			if ( is_array( $value ) ) {
+				if ( isset( $value['filename'] ) ) {
+					$field_type = 'file';
+				} else {
+					$field_type = 'multiselect';
+				}
+			}
+
+			// Create a new PMPro_Field object.
+			$user_field = new PMPro_Field( $element, $field_type );
+			$value = $user_field->displayValue( $value, false );
 		}
 
 		// Format the date fields.
