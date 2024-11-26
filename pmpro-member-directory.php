@@ -405,31 +405,29 @@ function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
 add_filter( 'pmpro_member_profile_fields', 'pmpromd_filter_profile_fields_for_levels', 10, 2 );
 
 /**
- * We determine that the URL base is for the profile and then set up the rewrite rule
+ * Determine what the URL base is for the profile and then set up the rewrite rule.
  */
 function pmpromd_custom_rewrite_rules() {
-
 	global $pmpro_pages;
 
 	if ( empty( $pmpro_pages ) || empty( $pmpro_pages['profile'] ) ) {
 		return;
 	}
 
-	$profile_permalink = get_the_permalink( $pmpro_pages['profile'] );
+	// Get the profile permalink.
+	$profile_permalink = get_permalink( $pmpro_pages['profile'] );
 
-	$base_site_url = get_site_url();
+	// Parse the path from the permalink, taking subfolder installations into account.
+	$profile_base = trim( parse_url( $profile_permalink, PHP_URL_PATH ), '/' );
 
-	$profile_base = str_replace( $base_site_url . '/', '', $profile_permalink );
-
+	// Add the rewrite rule.
 	add_rewrite_rule(
-		$profile_base.'([^/]+)/?$',
+		'^' . preg_quote( $profile_base, '#' ) . '/([^/]+)/?$',
 		'index.php?pagename=' . $profile_base . '&pu=$matches[1]',
 		'top'
 	);
-
 }
 add_action( 'init', 'pmpromd_custom_rewrite_rules', 10 );
-
 
 /**
  * Adding in the ?pu parameter so that we can retrieve the value from the pretty permalink
