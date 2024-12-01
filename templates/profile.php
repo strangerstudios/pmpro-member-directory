@@ -7,6 +7,8 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'avatar_size' => '128',
 		'elements' => NULL,
 		'fields' => NULL,
+		'level' => NULL,
+		'levels' => NULL,
 		'show_avatar' => true,
 		'show_bio' => true,
 		'show_billing' => true,
@@ -27,6 +29,16 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 
 	// Get the user for this profile.
 	$pu = pmpromd_get_user( $user_id );
+
+	// Did they use level instead of levels?
+	if ( empty( $levels ) && ! empty( $level ) ) {
+		$levels = $level;
+	}
+
+	// Convert the levels attribute to an array.
+	if ( is_array( $levels ) ) {
+		$levels = implode( ',', $levels );
+	}
 
 	// Validate boolean variables.
 	$show_avatar = filter_var( $show_avatar, FILTER_VALIDATE_BOOLEAN );
@@ -89,6 +101,9 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	 */
 	$elements_array = apply_filters( 'pmpro_member_profile_elements', $elements_array, $pu );
 
+	// Set the displayed_levels variable to use for displaying values.
+	$displayed_levels = empty( $levels ) ? 'all' : $levels;
+
 	if(isset($_REQUEST['limit']))
 		$limit = intval($_REQUEST['limit']);
 	elseif(empty($limit))
@@ -101,10 +116,6 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			if ( ! empty( $show_search ) ) {
 				echo pmpromd_search_form();
 			}
-		?>
-
-		<?php
-			// TODO: Do we need to check if a have a user here? Shouldn't earlier redirects be handling that?
 		?>
 
 		<div id="pmpro_member_profile-<?php echo esc_attr( $pu->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_card pmpro_member_profile', 'pmpro_member_profile'); ?>">
@@ -123,7 +134,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 				<?php
 					foreach ( $elements_array as $element ) {
-						$value = pmpromd_get_display_value( $element[1], $pu );
+						$value = pmpromd_get_display_value( $element[1], $pu, $displayed_levels );
 						if ( ! empty( $value ) ) {
 							// If this is the display_name, we need to wrap it in an h2 tag.
 							if ( 'display_name' === $element[1] ) {

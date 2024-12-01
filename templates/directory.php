@@ -260,6 +260,9 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				'fields_array' => $elements_array, // Backwards compatibility. We can remove this in a future version.
 			) );
 
+			// Set the displayed_levels variable to use for displaying values.
+			$displayed_levels = empty( $levels ) ? 'all' : $levels;
+
 			do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts );
 		?>
 
@@ -289,7 +292,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 										<tr id="pmpro_member_directory_row-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_row' ) ); ?>">
 											<?php
 												foreach ( $elements_array as $element ) {
-													$value = pmpromd_get_display_value( $element[1], $auser );
+													$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels );
 													// Wrap the value in a link if the element is in the linked elements array.
 													if ( ! empty( $link ) && in_array( $element[1], $linked_elements ) ) {
 														$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
@@ -328,7 +331,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 							<?php
 								// Loop through the elements and output the content.
 								foreach ( $elements_array as $element ) {
-									$value = pmpromd_get_display_value( $element[1], $auser );
+									$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels );
 									if ( ! empty( $value ) ) {
 										// Wrap the value in a link if the element is in the linked elements array.
 										if ( ! empty( $link ) && in_array( $element[1], $linked_elements ) ) {

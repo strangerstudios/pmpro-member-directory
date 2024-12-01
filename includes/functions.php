@@ -409,7 +409,7 @@ function pmpromd_prepare_elements_array( $elements ) {
 /**
  * Get the value of a specific element from a string of HTML.
  */
-function pmpromd_get_display_value( $element, $pu ) {
+function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 	// Is this a user field?
 	if ( class_exists( 'PMPro_Field_Group' ) ) {
 		$user_field = PMPro_Field_Group::get_field( $element );
@@ -445,13 +445,24 @@ function pmpromd_get_display_value( $element, $pu ) {
 
 		// Check if the $element is a PMPro level field.
 		if ( in_array( $element, $pmpro_level_fields ) ) {
-			$pu->membership_level = pmpro_getMembershipLevelForUser( $pu->ID );
-			$allmylevels = pmpro_getMembershipLevelsForUser( $pu->ID );
-			$membership_levels = array();
-			foreach ( $allmylevels as $curlevel ) {
-				$membership_levels[] = $curlevel->name;
+			// Get all levels for the user.
+			$all_levels_to_display = pmpro_getMembershipLevelsForUser( $pu->ID );
+
+			// Filter levels if $displayed_levels is set and not 'all'.
+			if ( ! empty( $displayed_levels ) && $displayed_levels !== 'all' ) {
+				$displayed_levels = explode( ',', $displayed_levels );
+				$all_levels_to_display = array_filter( $all_levels_to_display, fn( $level ) => in_array( $level->id, $displayed_levels ) );
 			}
-			$pu->membership_levels = implode(', ', $membership_levels);		
+
+			// Get the names of the levels to display.
+			$pu->membership_levels = implode( ', ', array_column( $all_levels_to_display, 'name' ) );
+
+			// Calculate the oldest start date and the soonest end date, if levels are available.
+			$start_dates = array_column( $all_levels_to_display, 'startdate' );
+			$end_dates = array_column( $all_levels_to_display, 'enddate' );
+
+			$startdate = ! empty( $start_dates ) ? min( $start_dates ) : null;
+			$enddate = ! empty( $end_dates ) ? min( $end_dates ) : null;
 		}
 
 		// Get the avatar_size for the avatar element.
@@ -473,10 +484,10 @@ function pmpromd_get_display_value( $element, $pu ) {
 				$value = $pu->membership_levels;
 				break;
 			case 'membership_startdate':
-				$value = $pu->membership_level->startdate;
+				$value = $startdate;
 				break;
 			case 'membership_enddate':
-				$value = $pu->membership_level->enddate;
+				$value = $enddate;
 				break;
 			case 'pmpro_billing_address':
 				$value = pmpro_formatAddress(
