@@ -37,25 +37,23 @@ div.pmpro_member_profile strong {display: block; }
 	.pmpro_card {
 		margin: 0;
 
-		.pmpro_card_title a {
-			text-decoration: none;
-		}
-		.pmpro_card_title a:hover {
-			text-decoration: underline;
-		}
-
-		.pmpro_card_title.pmpro_heading-avatar-right {
-			flex-direction: row-reverse;
-			justify-content: space-between;
-		}
-		.pmpro_card_title.pmpro_heading-avatar-top {
-			align-items: flex-start;
-			flex-direction: column;
-		}
 		.pmpro_card_content {
 			display: flex;
 			flex-direction: column;
 			gap: var(--pmpro--base--spacing--small);
+			margin-top: var(--pmpro--base--spacing--medium);
+
+			.pmpro_member_profile_field_label {
+				font-weight: 700;
+			}
+
+			.pmpro_member_profile_field-display_name {
+
+				h2 {
+					font-weight: 700;
+					margin: 0;
+				}
+			}
 		}
 
 		.pmpro_card_actions {
@@ -74,12 +72,18 @@ div.pmpro_member_profile strong {display: block; }
 }
 
 /* single directory item in list */
-.pmpro_member_directory .pmpro_member_directory-item,
-.pmpro_member_directory .pmpro_member_directory_row {
-	word-break: break-word;
-}
-.pmpro_member_directory_link {
-	word-break: normal;
+.pmpro_member_directory {
+	.pmpro_member_directory-item {
+		word-break: break-word;
+	}
+
+	.pmpro_member_directory_row {
+		word-break: break-word;
+	}
+
+	.pmpro_member_directory_link {
+		word-break: normal;
+	}
 }
 
 /* single profile item */
@@ -87,11 +91,65 @@ div.pmpro_member_profile strong {display: block; }
 
 	.pmpro_card_content {
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
 		gap: var(--pmpro--base--spacing--medium);
 		margin-top: var(--pmpro--base--spacing--medium);
+
+		.pmpro_member_profile_field {
+			box-sizing: border-box;
+			flex: 1 1 calc(50% - var(--pmpro--base--spacing--medium));
+
+			&:has(iframe) {
+				flex-basis: 100%;
+				height: 0;
+				overflow: hidden;
+				padding-bottom: 56.25%;
+				position: relative;
+				width: 100%;
+
+				iframe {
+					height: 100%;
+					left: 0;
+					position: absolute;
+					top: 0;
+					width: 100%;
+				}
+			}
+
+			&:has(audio) {
+				flex-basis: 100%;
+
+				audio {
+					width: 100%;
+				}
+			}
+
+			&:has(video) {
+				flex-basis: 100%;
+
+				video {
+					width: 100%;
+				}
+			}
+
+		}
+
+		.pmpro_member_profile_field_label {
+			font-weight: 700;
+		}
+
+		/* Full width profile items */
+		.pmpro_member_profile_field-display_name,
+		.pmpro_member_profile_field-description {
+			flex: 1 1 100%;
+		}
+
+		.pmpro_member_profile_field-display_name h2 {
+			margin: 0;
+		}
 	}
 }
+
 .pmpro_member_profile .pmpromd_filename {
 	display: block;
 }
@@ -105,8 +163,62 @@ div.pmpro_member_profile strong {display: block; }
 }
 
 /**
+ * Special user field formatting.
+ */
+.pmpro_member_profile_field_data:has([class*="pmpro_form_field-file-subtype_"]) {
+
+	a {
+		align-items: center;
+		display: flex;
+		gap: var(--pmpro--base--spacing--small);
+
+		img {
+			max-height: 40px;
+			width: auto;
+		}
+	}
+}
+
+/**
  * Pagination/page numbers
  */
+.pmpro_member_directory_pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--pmpro--base--spacing--small);
+	margin: var(--pmpro--base--spacing--medium) 0;
+
+	a {
+		background-color: var(--pmpro--color--base);
+		border: 1px solid var(--pmpro--color--border--variation);
+		border-radius: var(--pmpro--base--border-radius);
+		color: var(--pmpro--color--contrast);
+		padding: 2px var(--pmpro--base--spacing--small);
+		text-decoration: none;
+		transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+		&:hover {
+			background-color: var(--pmpro--color--accent--variation);
+			border-color: var(--pmpro--color--accent--variation);
+			color: var(--pmpro--color--base);
+		}
+
+		&.pmpro_member_directory_pagination-current {
+			background-color: var(--pmpro--color--accent);
+			color: var(--pmpro--color--base);
+			cursor: default;
+			font-weight: 700;
+		}
+
+		&.pmpro_member_directory_pagination-previous {
+			margin-right: 0;
+		}
+	}
+
+}
+
+/* This is legacy pagination styling we can leave in here until we remove templating. */
 .pmpro_page_numbers a {
 	padding: 6px;
 }
