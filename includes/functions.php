@@ -507,6 +507,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				);
 				break;
 			case 'pmpro_shipping_address':
+			case 'pmpro_mailing_address':
 				$value = pmpro_formatAddress(
 					trim( $pu->pmpro_sfirstname . ' ' . $pu->pmpro_slastname ),
 					$pu->pmpro_saddress1,
