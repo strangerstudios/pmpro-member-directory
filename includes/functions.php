@@ -432,7 +432,23 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 		$value = $pu->{$element};
 		return $user_field->displayValue( $value, false );
 	} else {
-		// Let's try to get the value from other places and format it for return.
+		// Get the filtered list of levels to display for the member.
+		$all_levels_to_display = pmpro_getMembershipLevelsForUser( $pu->ID );
+
+		// Filter member's levels if $displayed_levels is set and not 'all'.
+		if ( ! empty( $displayed_levels ) && $displayed_levels !== 'all' ) {
+			$displayed_levels = explode( ',', $displayed_levels );
+
+			// Filter and re-index the array.
+			$all_levels_to_display = array_values(
+				array_filter( $all_levels_to_display, fn( $level ) => in_array( $level->id, $displayed_levels ) )
+			);
+
+			// Sort levels based on the order in $displayed_levels.
+			usort( $all_levels_to_display, function( $a, $b ) use ( $displayed_levels ) {
+				return array_search( $a->id, $displayed_levels ) - array_search( $b->id, $displayed_levels );
+			});
+		}
 
 		// Get a list of fields related to the user's level.
 		$pmpro_level_fields = array(
@@ -450,15 +466,6 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 
 		// Check if the $element is a PMPro level field.
 		if ( in_array( $element, $pmpro_level_fields ) ) {
-			// Get all levels for the user.
-			$all_levels_to_display = pmpro_getMembershipLevelsForUser( $pu->ID );
-
-			// Filter levels if $displayed_levels is set and not 'all'.
-			if ( ! empty( $displayed_levels ) && $displayed_levels !== 'all' ) {
-				$displayed_levels = explode( ',', $displayed_levels );
-				$all_levels_to_display = array_filter( $all_levels_to_display, fn( $level ) => in_array( $level->id, $displayed_levels ) );
-			}
-
 			// Get the names of the levels to display.
 			$pu->membership_levels = implode( ', ', array_column( $all_levels_to_display, 'name' ) );
 
@@ -495,15 +502,17 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				$value = $enddate;
 				break;
 			case 'pmpro_billing_address':
+				$last_order = new MemberOrder();
+				$last_order->getLastMemberOrder( $pu->ID, 'success', $all_levels_to_display[0]->ID ?? null );
 				$value = pmpro_formatAddress(
-					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
-					$pu->pmpro_baddress1,
-					$pu->pmpro_baddress2,
-					$pu->pmpro_bcity,
-					$pu->pmpro_bstate,
-					$pu->pmpro_bzipcode,
-					$pu->pmpro_bcountry,
-					$pu->pmpro_bphone
+					$last_order->billing->name,
+					$last_order->billing->street,
+					$last_order->billing->street2,
+					$last_order->billing->city,
+					$last_order->billing->state,
+					$last_order->billing->zip,
+					$last_order->billing->country,
+					$last_order->billing->phone
 				);
 				break;
 			case 'pmpro_shipping_address':
