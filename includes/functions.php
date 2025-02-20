@@ -507,6 +507,9 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 					$pu->pmpro_bphone
 				);
 				break;
+			case 'pmpro_bphone':
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The pmpro_bphone element is deprecated. Collect phone numbers in a user field instead.', 'pmpro-member-directory' ), 'TBD' );
+				break;
 			case 'pmpro_shipping_address':
 			case 'pmpro_mailing_address':
 				$value = pmpro_formatAddress(
