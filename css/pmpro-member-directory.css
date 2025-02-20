@@ -1,9 +1,15 @@
 /* CSS Document */
+form.pmpro_member_directory_search {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	gap: var(--pmpro--base--spacing--small);
+	justify-content: flex-end;
 
-h2#pmpro_member_directory_subheading {clear: none; margin-top: 0; }
-form.pmpro_member_directory_search {float: right; margin-bottom: 1rem; clear: both; }
-form.pmpro_member_directory_search input[type=text] { }
-form.pmpro_member_directory_search input[type=submit] {background: none; border: none; padding: 0; position: absolute; text-indent: -9999em; }
+	.pmpro_form_submit {
+		margin: 0;
+	}
+}
 
 .pmpro_member_directory {clear: both; }
 .pmpro_pagination {margin: 1em 0;}
@@ -24,51 +30,204 @@ div.pmpro_member_profile strong {display: block; }
 .pmpro_member_directory.pmpro_member_directory-2col,
 .pmpro_member_directory.pmpro_member_directory-3col,
 .pmpro_member_directory.pmpro_member_directory-4col {
-    display: grid;
-    grid-column-gap: 2.9rem;
-    grid-row-gap: 5.8rem;
-    text-align: center;
+	display: grid;
+	grid-column-gap: 2.9rem;
+	grid-row-gap: 2.9rem;
+
+	.pmpro_card {
+		margin: 0;
+
+		.pmpro_card_content {
+			display: flex;
+			flex-direction: column;
+			gap: var(--pmpro--base--spacing--small);
+			margin-top: var(--pmpro--base--spacing--medium);
+
+			.pmpro_member_profile_field_label {
+				font-weight: 700;
+			}
+
+			.pmpro_member_profile_field-display_name {
+
+				h2 {
+					font-weight: 700;
+					margin: 0;
+				}
+			}
+		}
+
+		.pmpro_card_actions {
+			margin-top: auto;
+		}
+	}
 }
 .pmpro_member_directory.pmpro_member_directory-2col {
-    grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 }
 .pmpro_member_directory.pmpro_member_directory-3col {
-    grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 .pmpro_member_directory.pmpro_member_directory-4col {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 /* single directory item in list */
-.pmpro_member_directory .pmpro_member_directory-item,
-.pmpro_member_directory .pmpro_member_directory_row {
-    word-break: break-word;
-}
-.pmpro_member_directory_link {
-    word-break: normal;
+.pmpro_member_directory {
+	.pmpro_member_directory-item {
+		word-break: break-word;
+	}
+
+	.pmpro_member_directory_row {
+		word-break: break-word;
+	}
+
+	.pmpro_member_directory_link {
+		word-break: normal;
+	}
 }
 
 /* single profile item */
-.pmpro_member_profile { }
+.pmpro_member_profile {
+
+	.pmpro_card_content {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--pmpro--base--spacing--medium);
+		margin-top: var(--pmpro--base--spacing--medium);
+
+		.pmpro_member_profile_field {
+			box-sizing: border-box;
+			flex: 1 1 calc(50% - var(--pmpro--base--spacing--medium));
+
+			&:has(iframe) {
+				flex-basis: 100%;
+				width: 100%;
+
+				.pmpro_member_profile_field_data {
+
+					height: 0;
+					overflow: hidden;
+					padding-bottom: 56.25%;
+					position: relative;
+
+					iframe {
+						height: 100%;
+						left: 0;
+						position: absolute;
+						top: 0;
+						width: 100%;
+					}
+				}
+
+			}
+
+			&:has(audio) {
+				flex-basis: 100%;
+
+				audio {
+					width: 100%;
+				}
+			}
+
+			&:has(video) {
+				flex-basis: 100%;
+
+				video {
+					width: 100%;
+				}
+			}
+
+		}
+
+		.pmpro_member_profile_field_label {
+			font-weight: 700;
+		}
+
+		/* Full width profile items */
+		.pmpro_member_profile_field-display_name,
+		.pmpro_member_profile_field-description {
+			flex: 1 1 100%;
+		}
+
+		.pmpro_member_profile_field-display_name h2 {
+			margin: 0;
+		}
+	}
+}
+
 .pmpro_member_profile .pmpromd_filename {
-    display: block;
+	display: block;
 }
 
 @media only screen and (max-width: 767px) {
-    .pmpro_member_directory.pmpro_member_directory-2col,
-    .pmpro_member_directory.pmpro_member_directory-3col,
-    .pmpro_member_directory.pmpro_member_directory-4col {
-        grid-template-columns: 1fr;
-    }
+	.pmpro_member_directory.pmpro_member_directory-2col,
+	.pmpro_member_directory.pmpro_member_directory-3col,
+	.pmpro_member_directory.pmpro_member_directory-4col {
+		grid-template-columns: 1fr;
+	}
+}
+
+/**
+ * Special user field formatting.
+ */
+.pmpro_member_profile_field_data:has([class*="pmpro_form_field-file-subtype_"]) {
+
+	a {
+		align-items: center;
+		display: flex;
+		gap: var(--pmpro--base--spacing--small);
+
+		img {
+			max-height: 40px;
+			width: auto;
+		}
+	}
 }
 
 /**
  * Pagination/page numbers
  */
+.pmpro_member_directory_pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--pmpro--base--spacing--small);
+	margin: var(--pmpro--base--spacing--medium) 0;
+
+	a {
+		background-color: var(--pmpro--color--base);
+		border: 1px solid var(--pmpro--color--border--variation);
+		border-radius: var(--pmpro--base--border-radius);
+		color: var(--pmpro--color--contrast);
+		padding: 2px var(--pmpro--base--spacing--small);
+		text-decoration: none;
+		transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+		&:hover {
+			background-color: var(--pmpro--color--accent--variation);
+			border-color: var(--pmpro--color--accent--variation);
+			color: var(--pmpro--color--base);
+		}
+
+		&.pmpro_member_directory_pagination-current {
+			background-color: var(--pmpro--color--accent);
+			color: var(--pmpro--color--base);
+			cursor: default;
+			font-weight: 700;
+		}
+
+		&.pmpro_member_directory_pagination-previous {
+			margin-right: 0;
+		}
+	}
+
+}
+
+/* This is legacy pagination styling we can leave in here until we remove templating. */
 .pmpro_page_numbers a {
-    padding: 6px;
+	padding: 6px;
 }
 
 .pmpro_page_numbers a.pmpro_page_active {
-    font-weight: bold;
+	font-weight: bold;
 }

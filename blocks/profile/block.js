@@ -128,7 +128,7 @@ export default registerBlockType(
                 />
 
                 <CheckboxControl 
-                  label='Show Billing'
+                  label='Show Billing (deprecated)'
                   checked={ show_billing }
                   onChange={ show_billing => { setAttributes( { show_billing } ) } }
                 />
@@ -145,7 +145,7 @@ export default registerBlockType(
                 />
 
                 <CheckboxControl 
-                  label='Show Phone'
+                  label='Show Phone (deprecated)'
                   checked={ show_phone }
                   onChange={ show_phone => { setAttributes( { show_phone } ) } }
                 />
