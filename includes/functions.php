@@ -427,10 +427,10 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 
 		if ( ! empty( $user_field->levels ) && ! pmpro_hasMembershipLevel( $user_field->levels, $pu->ID ) ) {
 			// The user does not have the required level for this field.
-			return '';
+			$value = '';
+		} else {
+			$value = $user_field->displayValue( $pu->{$element}, false );
 		}
-		$value = $pu->{$element};
-		return $user_field->displayValue( $value, false );
 	} else {
 		// Let's try to get the value from other places and format it for return.
 
@@ -548,6 +548,19 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 		}
 
 	}
+
+	/**
+	 * Filter the value of a specific element from a string of HTML.
+	 *
+	 * @since TBD
+	 * @param string $value The value of the element.
+	 * @param string $element The element to get the value for.
+	 * @param object $pu The user object.
+	 * @param string $displayed_levels The levels to display.
+	 *
+	 * @return string The value of the element.
+	 */
+	$value = apply_filters( 'pmpromd_get_display_value', $value, $element, $pu, $displayed_levels );
 
 	return $value;
 }
