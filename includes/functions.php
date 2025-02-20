@@ -427,9 +427,10 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 
 		if ( ! empty( $user_field->levels ) && ! pmpro_hasMembershipLevel( $user_field->levels, $pu->ID ) ) {
 			// The user does not have the required level for this field.
-			return '';
+			$value = '';
+		} else {
+			$value = $user_field->displayValue( $pu->{$element}, false );
 		}
-		$value = $user_field->displayValue( $pu->{$element}, false );
 	} else {
 		// Let's try to get the value from other places and format it for return.
 
