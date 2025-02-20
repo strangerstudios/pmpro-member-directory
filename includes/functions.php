@@ -495,7 +495,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				$value = $enddate;
 				break;
 			case 'pmpro_billing_address':
-				_doing_it_wrong( __FUNCTION__, esc_html__( 'The pmpro_billing_address element is deprecated. Use pmpro_mailing_address instead.', 'pmpro-member-directory' ), 'TBD' );
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields.', 'pmpro-member-directory' ), 'TBD' );
 				$value = pmpro_formatAddress(
 					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
 					$pu->pmpro_baddress1,
@@ -508,7 +508,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				);
 				break;
 			case 'pmpro_bphone':
-				_doing_it_wrong( __FUNCTION__, esc_html__( 'The pmpro_bphone element is deprecated. Collect phone numbers in a user field instead.', 'pmpro-member-directory' ), 'TBD' );
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field.', 'pmpro-member-directory' ), 'TBD' );
 				break;
 			case 'pmpro_shipping_address':
 			case 'pmpro_mailing_address':

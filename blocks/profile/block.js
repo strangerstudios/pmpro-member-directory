@@ -128,7 +128,7 @@ export default registerBlockType(
                 />
 
                 <CheckboxControl 
-                  label='Show Billing (Deprecated)'
+                  label='Show Billing (deprecated)'
                   checked={ show_billing }
                   onChange={ show_billing => { setAttributes( { show_billing } ) } }
                 />
