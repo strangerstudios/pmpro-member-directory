@@ -495,6 +495,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				$value = $enddate;
 				break;
 			case 'pmpro_billing_address':
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The pmpro_billing_address element is deprecated. Use pmpro_mailing_address instead.', 'pmpro-member-directory' ), 'TBD' );
 				$value = pmpro_formatAddress(
 					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
 					$pu->pmpro_baddress1,

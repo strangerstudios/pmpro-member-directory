@@ -41,10 +41,8 @@ Shortcode attributes for `[pmpro_member_profile]` include:
 1. fields: Display additional user meta fields. default: none (accepts a list of label names and field IDs, i.e. fields="Company,company;Website,user_url").
 1. show_avatar: Display the user's avatar generated via Gravatar (https://en.gravatar.com) or user-submitted using a plugin like Simple Local Avatars (https://wordpress.org/plugins/simple-local-avatars/); default: true (accepts 'true' or 'false').
 1. show_bio: Display the user's bio (if available); default: true (accepts 'true' or 'false').
-1. show_billing: Display the user's billing address (if available); default: true (accepts 'true' or 'false').
 1. show_email: Display the user's email address; default: true (accepts 'true' or 'false').
 1. show_level: Display the user's membership level; default: true  (accepts 'true' or 'false').
-1. show_phone: Display the user's billing phone (if available); default: true (accepts 'true' or 'false').
 1. show_search: Display a search form (searches on member display name or email address); default: true (accepts 'true' or 'false').
 1. show_startdate: Display the user's membership start date for their current level; default: true (accepts 'true' or 'false').
 1. user_id: Show a specific member's profile; default: none (accepts any numeric uesr id, i.e. user_id="125").
@@ -77,13 +75,13 @@ Show a unique member directory by level. Level 1 Members can only see other Leve
 [pmpro_member_directory levels="3"]
 [/membership]
 
-Show unique member profiles based on level - hide user phone number and email address.
+Show unique member profiles based on level - hide user email address.
 [membership level="1"]
-[pmpro_member_profile show_email="false" show_phone="false"]
+[pmpro_member_profile show_email="false"]
 [/membership]
 
 [membership level="2"]
-[pmpro_member_profile show_email="true" show_phone="true"]
+[pmpro_member_profile show_email="true"]
 [/membership]
 
 == Frequently Asked Questions ==
