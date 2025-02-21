@@ -11,11 +11,11 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'levels' => NULL,
 		'show_avatar' => true,
 		'show_bio' => true,
-		'show_billing' => true,
+		'show_billing' => false,
 		'show_email' => true,
 		'show_level' => true,
 		'show_name' => true,
-		'show_phone' => true,
+		'show_phone' => false,
 		'show_search' => true,
 		'show_startdate' => true,
 		'user_id' => NULL
