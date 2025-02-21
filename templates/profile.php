@@ -114,11 +114,11 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro' ) ); ?>">
 		<?php
 			if ( ! empty( $show_search ) ) {
-				echo pmpromd_search_form();
+				pmpromd_search_form();
 			}
 		?>
 
-		<div id="pmpro_member_profile-<?php echo esc_attr( $pu->ID ); ?>" class="<?php echo pmpro_get_element_class( 'pmpro_card pmpro_member_profile', 'pmpro_member_profile'); ?>">
+		<div id="pmpro_member_profile-<?php echo esc_attr( $pu->ID ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card pmpro_member_profile', 'pmpro_member_profile') ); ?>">
 
 			<?php
 				/**
@@ -148,7 +148,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 									</div>
 								<?php } ?>
 								<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field_data' ) ); ?>">
-									<?php echo $value; ?>
+									<?php echo wp_kses_post( $value ); ?>
 								</div>
 							</div> <!-- end pmpro_member_profile_field -->
 							<?php
@@ -185,7 +185,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 						}
 
 						if ( ! empty( $edit_profile_url) ) {
-							$pmpro_member_profile_action_links['edit-profile'] = sprintf( '<a id="pmpro_actionlink-profile" href="%s">%s</a>', esc_url( $edit_profile_url ), esc_html__( 'Edit Profile', 'paid-memberships-pro' ) );
+							$pmpro_member_profile_action_links['edit-profile'] = sprintf( '<a id="pmpro_actionlink-profile" href="%s">%s</a>', esc_url( $edit_profile_url ), esc_html__( 'Edit Profile', 'pmpro-member-directory' ) );
 						}
 					}
 
