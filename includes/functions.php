@@ -26,6 +26,7 @@ function pmpromd_add_user_fields() {
 			'pmpromd_hide_directory',
 			'checkbox',
 			array(
+				// translators: placeholder is the title of the directory page.
 				'label' => sprintf( __('Hide from %s?','pmpro-member-directory'), $directory_page_title ),
 				'profile' => 'only',
 				'required' => false
