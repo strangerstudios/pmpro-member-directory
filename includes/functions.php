@@ -218,8 +218,8 @@ function pmpromd_the_title_profile_page( $title, $post_id = NULL ) {
 		return $title;
 	}
 
-	global $main_post_id, $current_user, $wp_query;
-	if( $post_id == $main_post_id ) {
+	global $main_post_id;
+	if ( $post_id == $main_post_id ) {
 		$pu = pmpromd_get_user();
 
 		$display_name = pmpro_member_directory_get_member_display_name( $pu );
@@ -236,7 +236,7 @@ add_filter( 'the_title', 'pmpromd_the_title_profile_page', 10, 2 );
  * Update the document title parts for the Profile page.
  */
 function pmpromd_document_title_parts( $title_parts ) {
-	global $wpdb, $main_post_id, $post, $current_user, $wp_query;
+	global $main_post_id, $post;
 
 	if ( isset( $post->ID ) && $post->ID == $main_post_id ) {
 
@@ -300,7 +300,7 @@ add_filter( 'wp_nav_menu_items', 'pmpromd_readd_title_filters_in_menus' );
  * @return void
  */
 function pmpromd_profile_page_preheader() {
-	global $post, $pmpro_pages, $current_user;
+	global $post, $pmpro_pages;
 
 	// Bail if we're not on the profile page.
 	if ( empty( $pmpro_pages['profile'] ) || ! is_page( $pmpro_pages['profile'] ) ) {
