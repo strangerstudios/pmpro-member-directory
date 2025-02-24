@@ -52,10 +52,6 @@ export default registerBlockType(
             type: 'string',
             default: 'true'
           },
-          show_billing: {
-            type: 'boolean',
-            default: true
-          },
           show_email: {
             type: 'boolean',
             default: true
@@ -65,10 +61,6 @@ export default registerBlockType(
             default: true
           },  
           show_level: {
-            type: 'boolean',
-            default: true
-          },
-          show_phone: {
             type: 'boolean',
             default: true
           },
@@ -83,6 +75,14 @@ export default registerBlockType(
           user_id: {
             type: 'string',
             default: ''
+          },
+          show_billing: {
+            type: 'boolean',
+            default: false
+          },
+          show_phone: {
+            type: 'boolean',
+            default: false
           },
         },
         edit: props => {
@@ -128,11 +128,6 @@ export default registerBlockType(
                 />
 
                 <CheckboxControl 
-                  label='Show Billing'
-                  checked={ show_billing }
-                  onChange={ show_billing => { setAttributes( { show_billing } ) } }
-                />
-                <CheckboxControl 
                   label='Show Email Address'
                   checked={ show_email }
                   onChange={ show_email => { setAttributes( { show_email } ) } }
@@ -145,15 +140,21 @@ export default registerBlockType(
                 />
 
                 <CheckboxControl 
-                  label='Show Phone'
-                  checked={ show_phone }
-                  onChange={ show_phone => { setAttributes( { show_phone } ) } }
-                />
-
-                <CheckboxControl 
                   label='Show Start Date'
                   checked={ show_startdate }
                   onChange={ show_startdate => { setAttributes( { show_startdate } ) } }
+                />
+
+                <CheckboxControl 
+                  label='Show Billing (deprecated)'
+                  checked={ show_billing }
+                  onChange={ show_billing => { setAttributes( { show_billing } ) } }
+                />
+
+                <CheckboxControl 
+                  label='Show Phone (deprecated)'
+                  checked={ show_phone }
+                  onChange={ show_phone => { setAttributes( { show_phone } ) } }
                 />
 
                 <TextControl 
