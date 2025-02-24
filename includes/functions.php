@@ -127,12 +127,15 @@ function pmpromd_custom_rewrite_rules() {
 		return;
 	}
 
-	$profile_permalink = get_the_permalink( $pmpro_pages['profile'] );
-	$base_site_url = get_site_url();
-	$profile_base = str_replace( $base_site_url . '/', '', $profile_permalink );
+	// Get the profile permalink.
+	$profile_permalink = get_permalink( $pmpro_pages['profile'] );
 
+	// Parse the path from the permalink, taking subfolder installations into account.
+	$profile_base = trim( parse_url( $profile_permalink, PHP_URL_PATH ), '/' );
+
+	// Add the rewrite rule.
 	add_rewrite_rule(
-		$profile_base.'([^/]+)/?$',
+		'^' . preg_quote( $profile_base, '#' ) . '/([^/]+)/?$',
 		'index.php?pagename=' . $profile_base . '&pu=$matches[1]',
 		'top'
 	);
