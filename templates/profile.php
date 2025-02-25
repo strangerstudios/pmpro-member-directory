@@ -25,7 +25,11 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 
 	// Make sure that Paid Memberships Pro is enabled.
 	if ( ! function_exists( 'pmpro_get_element_class' ) ) {
-		return esc_html__( 'Paid Memberships Pro must be enabled to use the Member Directory Add On.', 'pmpro-member-directory' );
+		if ( current_user_can( 'activate_plugins' ) ) {
+			return esc_html__( 'Admin Only Alert: You must activate Paid Memberships Pro to use the Member Directory Add On.', 'pmpro-member-directory' );
+		} else {
+			return '';
+		}
 	}
 
 	// Get the directory and profile page URLs.
