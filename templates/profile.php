@@ -23,6 +23,11 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 
 	global $current_user, $pmpro_pages;
 
+	// Make sure that Paid Memberships Pro is enabled.
+	if ( ! function_exists( 'pmpro_get_element_class' ) ) {
+		return esc_html__( 'Paid Memberships Pro must be enabled to use the Member Directory Add On.', 'pmpro-member-directory' );
+	}
+
 	// Get the directory and profile page URLs.
 	$directory_url = ! empty( $pmpro_pages['directory'] ) ? get_permalink( $pmpro_pages['directory'] ) : '';
 	$profile_url = ! empty( $pmpro_pages['profile'] ) ? get_permalink( $pmpro_pages['profile'] ) : '';

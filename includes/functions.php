@@ -331,7 +331,7 @@ function pmpromd_profile_page_preheader() {
 	}
 
 	// If no profile user, membership level, or hidden, go to directory or home.
-	if ( empty( $pu ) || empty( $pu->ID ) || ! pmpro_hasMembershipLevel( null, $pu->ID ) || $pmpromd_hide_directory == '1' ) {
+	if ( empty( $pu ) || empty( $pu->ID ) || ! function_exists('pmpro_hasMembershipLevel') || ! pmpro_hasMembershipLevel( null, $pu->ID ) || $pmpromd_hide_directory == '1' ) {
 		wp_redirect( $redirect );
 		exit;
 	}
