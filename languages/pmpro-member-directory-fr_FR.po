@@ -1,17 +1,17 @@
-# Copyright (C) 2024 Paid Memberships Pro
+# Copyright (C) 2025 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 1.2.6\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-19T11:00:40+00:00\n"
+"POT-Creation-Date: 2025-02-26T18:57:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pmpro-member-directory\n"
 
 #. Plugin Name of the plugin
@@ -45,16 +45,19 @@ msgstr "https://www.paidmembershipspro.com/"
 #: pmpro-member-directory.php:87
 #: pmpro-member-directory.php:79
 #: pmpro-member-directory.php:92
+#: includes/functions.php:20
 msgid "directory"
 msgstr ""
 
 #. translators: placeholder is for directory page name
+#. translators: placeholder is the title of the directory page.
 #: pmpro-member-directory.php:73
 #: pmpro-member-directory.php:85
 #: pmpro-member-directory.php:77
 #: pmpro-member-directory.php:89
 #: pmpro-member-directory.php:82
 #: pmpro-member-directory.php:94
+#: includes/functions.php:30
 msgid "Hide from %s?"
 msgstr "Cacher de %s ?"
 
@@ -62,6 +65,7 @@ msgstr "Cacher de %s ?"
 #: pmpro-member-directory.php:160
 #: pmpro-member-directory.php:165
 #: pmpro-member-directory.php:172
+#: includes/admin.php:190
 msgid "View Documentation"
 msgstr "Voir la documentation"
 
@@ -69,6 +73,7 @@ msgstr "Voir la documentation"
 #: pmpro-member-directory.php:160
 #: pmpro-member-directory.php:165
 #: pmpro-member-directory.php:172
+#: includes/admin.php:190
 msgid "Docs"
 msgstr "Documents"
 
@@ -76,6 +81,7 @@ msgstr "Documents"
 #: pmpro-member-directory.php:161
 #: pmpro-member-directory.php:166
 #: pmpro-member-directory.php:173
+#: includes/admin.php:191
 msgid "Visit Customer Support Forum"
 msgstr "Consultez le forum de support"
 
@@ -83,6 +89,7 @@ msgstr "Consultez le forum de support"
 #: pmpro-member-directory.php:161
 #: pmpro-member-directory.php:166
 #: pmpro-member-directory.php:173
+#: includes/admin.php:191
 msgid "Support"
 msgstr "Soutien"
 
@@ -93,6 +100,7 @@ msgstr "Soutien"
 #: templates/profile.php:244
 #: templates/profile.php:260
 #: templates/directory.php:175
+#: includes/search.php:20
 msgid "Search for:"
 msgstr "Rechercher"
 
@@ -109,6 +117,7 @@ msgstr "Rechercher"
 #: templates/profile.php:264
 #: templates/directory.php:176
 #: templates/directory.php:180
+#: includes/search.php:21
 msgid "Search Members"
 msgstr "Recherchez les membres"
 
@@ -122,12 +131,14 @@ msgstr "Profils au sein de <em>%s</em>."
 #: templates/directory.php:159
 #: templates/directory.php:181
 #: templates/directory.php:189
+#: templates/directory.php:152
 msgid "Viewing All Profiles"
 msgstr "Tous les profils"
 
 #: templates/directory.php:165
 #: templates/directory.php:187
 #: templates/directory.php:195
+#: templates/directory.php:159
 msgid "Showing 1 Result"
 msgstr "1 résultat trouvé."
 
@@ -135,6 +146,7 @@ msgstr "1 résultat trouvé."
 #: templates/directory.php:168
 #: templates/directory.php:190
 #: templates/directory.php:198
+#: templates/directory.php:162
 #, fuzzy
 msgid "Showing %1$s-%2$s of %3$s Results"
 msgstr "Liste de %s -%s des %s résultats"
@@ -144,6 +156,7 @@ msgstr "Liste de %s -%s des %s résultats"
 #: templates/directory.php:280
 #: templates/directory.php:282
 #: templates/directory.php:290
+#: templates/directory.php:204
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -152,6 +165,7 @@ msgstr "Avatar"
 #: templates/directory.php:284
 #: templates/directory.php:286
 #: templates/directory.php:294
+#: templates/directory.php:206
 msgid "Member"
 msgstr "Membre"
 
@@ -166,6 +180,9 @@ msgstr "Membre"
 #: templates/profile.php:312
 #: templates/profile.php:328
 #: templates/directory.php:298
+#: templates/directory.php:214
+#: templates/profile.php:82
+#: blocks/profile/block.js:195
 msgid "Email Address"
 msgstr "Courriel"
 
@@ -192,6 +209,9 @@ msgstr "Plus de détails"
 #: templates/profile.php:334
 #: templates/directory.php:308
 #: templates/directory.php:506
+#: templates/directory.php:218
+#: templates/profile.php:86
+#: blocks/profile/block.js:200
 msgid "Level"
 msgstr "Niveau"
 
@@ -210,6 +230,9 @@ msgstr "Niveau"
 #: templates/profile.php:340
 #: templates/directory.php:313
 #: templates/directory.php:531
+#: templates/directory.php:221
+#: templates/profile.php:89
+#: blocks/profile/block.js:205
 msgid "Start Date"
 msgstr "Date de début"
 
@@ -227,6 +250,8 @@ msgstr "Date de début"
 #: templates/directory.php:592
 #: templates/directory.php:462
 #: templates/directory.php:600
+#: templates/directory.php:329
+#: templates/directory.php:382
 msgid "View Profile"
 msgstr "Voir le profil"
 
@@ -255,6 +280,8 @@ msgstr "au sein de <em>%s</em>."
 #: templates/directory.php:619
 #: templates/profile.php:460
 #: templates/directory.php:627
+#: templates/directory.php:180
+#: templates/profile.php:185
 msgid "View All Members"
 msgstr "Voir tous les membres"
 
@@ -263,6 +290,7 @@ msgstr "Voir tous les membres"
 #: templates/directory.php:637
 #: templates/directory.php:645
 #: templates/directory.php:653
+#: templates/directory.php:425
 msgid "Previous"
 msgstr "Précédent"
 
@@ -279,6 +307,8 @@ msgstr "Suiv."
 #: templates/profile.php:303
 #: templates/profile.php:306
 #: templates/profile.php:322
+#: templates/profile.php:79
+#: blocks/profile/block.js:190
 msgid "Biographical Info"
 msgstr "Biographie"
 
@@ -287,6 +317,8 @@ msgstr "Biographie"
 #: templates/profile.php:327
 #: templates/profile.php:330
 #: templates/profile.php:354
+#: templates/profile.php:92
+#: blocks/profile/block.js:210
 msgid "Address"
 msgstr "Adresse"
 
@@ -295,6 +327,8 @@ msgstr "Adresse"
 #: templates/profile.php:341
 #: templates/profile.php:344
 #: templates/profile.php:368
+#: templates/profile.php:95
+#: blocks/profile/block.js:220
 msgid "Phone Number"
 msgstr "Téléphone"
 
@@ -344,6 +378,7 @@ msgstr ""
 
 #: blocks/directory/block.js:226
 #: blocks/profile/block.js:168
+#: blocks/profile/block.js:169
 msgid "Extra Fields"
 msgstr ""
 
@@ -394,6 +429,7 @@ msgstr ""
 
 #: blocks/directory/block.js:281
 #: blocks/profile/block.js:228
+#: blocks/profile/block.js:229
 msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
 msgstr ""
 
@@ -411,31 +447,38 @@ msgid "Display Settings"
 msgstr ""
 
 #: blocks/profile/block.js:163
+#: blocks/profile/block.js:164
 msgid "Set this to a user ID to show a profile of a specific user. Leave blank for current user."
 msgstr ""
 
 #: blocks/profile/block.js:174
+#: blocks/profile/block.js:175
 msgid "Accepts a list of label names and metakeys per line. (i.e. Label,meta_key)"
 msgstr ""
 
 #: blocks/profile/block.js:179
+#: blocks/profile/block.js:180
 #, fuzzy
 msgid "Membership Profile"
 msgstr "Voir le profil"
 
 #: blocks/profile/block.js:185
+#: blocks/profile/block.js:186
 msgid "August Dibble"
 msgstr ""
 
 #: blocks/profile/block.js:195
+#: blocks/profile/block.js:196
 msgid "August.Dibble@mail.com"
 msgstr ""
 
 #: blocks/profile/block.js:200
+#: blocks/profile/block.js:201
 msgid "Free"
 msgstr ""
 
 #: blocks/profile/block.js:205
+#: blocks/profile/block.js:206
 msgid "Jan 21, 2019"
 msgstr ""
 
@@ -451,13 +494,103 @@ msgstr ""
 #: pmpro-member-directory.php:323
 #: pmpro-member-directory.php:337
 #: pmpro-member-directory.php:340
+#: templates/profile.php:197
 msgid "Edit Profile"
 msgstr ""
 
 #: pmpro-member-directory.php:242
+#: pmpro-member-directory.php:174
 msgid "Yes"
 msgstr ""
 
 #: pmpro-member-directory.php:244
+#: pmpro-member-directory.php:176
 msgid "No"
+msgstr ""
+
+#: includes/admin.php:24
+#: includes/admin.php:27
+msgid "Edit Member"
+msgstr ""
+
+#: includes/admin.php:44
+msgid "Directory"
+msgstr ""
+
+#: includes/admin.php:46
+msgid "Include the shortcode [pmpro_member_directory]."
+msgstr ""
+
+#: includes/admin.php:49
+msgid "Profile"
+msgstr ""
+
+#: includes/admin.php:51
+msgid "Include the shortcode [pmpro_member_profile]."
+msgstr ""
+
+#. translators: 1: the old hook name, 2: the new or replacement hook name
+#: includes/deprecated.php:25
+msgid "The %1$s hook has been deprecated in the Member Directory Add On for Paid Memberships Pro. Please use the %2$s hook instead."
+msgstr ""
+
+#. translators: 1: the old hook name
+#: includes/deprecated.php:36
+msgid "The %1$s hook has been deprecated in  Member Directory Add On for Paid Memberships Pro and may not be available in future versions."
+msgstr ""
+
+#: includes/functions.php:16
+msgid "Directory and Profile Preferences"
+msgstr ""
+
+#: includes/functions.php:502
+msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
+msgstr ""
+
+#: includes/functions.php:515
+msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
+msgstr ""
+
+#: includes/search.php:26
+msgid "Submit"
+msgstr ""
+
+#: templates/directory.php:30
+#: templates/profile.php:29
+msgid "Admin Only Alert: You must activate Paid Memberships Pro to use the Member Directory Add On."
+msgstr ""
+
+#. translators: placeholder is for search string entered
+#: templates/directory.php:150
+msgid "Profiles Within %s."
+msgstr ""
+
+#. translators: placeholder is for search string entered
+#: templates/directory.php:175
+msgid "No matching profiles found within <em>%s</em>."
+msgstr ""
+
+#: templates/directory.php:184
+msgid "No matching profiles found."
+msgstr ""
+
+#: templates/directory.php:417
+msgid "Previous Page"
+msgstr ""
+
+#: templates/directory.php:417
+msgid "&larr; Previous"
+msgstr ""
+
+#. translators: placeholder is for page number.
+#: templates/directory.php:445
+msgid "Page %s"
+msgstr ""
+
+#: templates/directory.php:462
+msgid "Next Page"
+msgstr ""
+
+#: templates/directory.php:462
+msgid "Next &rarr;"
 msgstr ""
