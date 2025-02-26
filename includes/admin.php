@@ -7,7 +7,7 @@ function pmpromd_add_edit_profile( $admin_bar ) {
 	global $pmpro_pages, $post;
 
 	// Only show the link to users who can edit members.
-	if ( ! current_user_can( pmpro_get_edit_member_capability() ) ) {
+	if (! function_exists( 'pmpro_get_edit_member_capability') || ! current_user_can( pmpro_get_edit_member_capability() ) ) {
 		return;
 	}
 
