@@ -529,25 +529,43 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				break;
 		}
 
-		// If we still do not have a value, try usermeta and format using User Fields display method.
+		// If we still do not have a value, try user or usermeta. Format using User Fields display method.
 		if ( empty( $value ) ) {
-			$value = $pu->$element;
+			if ( isset( $pu->data ) && in_array( $element, array_keys( get_object_vars( $pu->data ) ) ) ) {
+				// This is a user table field. Only allow certain fields.
+				$user_column_fields = array(
+					'user_login',
+					'user_email',
+					'user_url',
+					'user_registered',
+					'display_name',
+				);
 
-			// Try to guess the field type, default to text.
-			$field_type = 'text';
-
-			// Special handling for arrays.
-			if ( is_array( $value ) ) {
-				if ( isset( $value['filename'] ) ) {
-					$field_type = 'file';
-				} else {
-					$field_type = 'multiselect';
+				if ( in_array( $element, $user_column_fields ) ) {
+					$value = $pu->data->$element;
 				}
+			} else {
+				// This is a usermeta field.
+				$value = $pu->$element;
 			}
 
-			// Create a new PMPro_Field object.
-			$user_field = new PMPro_Field( $element, $field_type );
-			$value = $user_field->displayValue( $value, false );
+			if ( ! empty( $value ) ) {
+				// Try to guess the field type, default to text.
+				$field_type = 'text';
+
+				// Special handling for arrays.
+				if ( is_array( $value ) ) {
+					if ( isset( $value['filename'] ) ) {
+						$field_type = 'file';
+					} else {
+						$field_type = 'multiselect';
+					}
+				}
+
+				// Create a new PMPro_Field object.
+				$user_field = new PMPro_Field( $element, $field_type );
+				$value = $user_field->displayValue( $value, false );
+			}
 		}
 
 		// Format the date fields.
