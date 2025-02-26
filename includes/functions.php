@@ -2,7 +2,7 @@
 /**
  * Set up user fields for the directory and profile pages.
  *
- * @since TBD
+ * @since 2.0
  */
 function pmpromd_add_user_fields() {
 	global $pmpro_pages;
@@ -256,7 +256,7 @@ add_filter( 'document_title_parts', 'pmpromd_document_title_parts' );
 /**
  * We're working with the menu now so remove the filters.
  *
- * @since TBD
+ * @since 2.0
  *
  * @param string|null $output Nav menu output to short-circuit with. Default null.
  *
@@ -276,7 +276,7 @@ add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_title_filters_in_menus' );
 /**
  * We're done working with the menu so add those filters back.
  *
- * @since TBD
+ * @since 2.0
  *
  * @param string $items The HTML list content for the menu items.
  *
@@ -296,7 +296,7 @@ add_filter( 'wp_nav_menu_items', 'pmpromd_readd_title_filters_in_menus' );
 /**
  * Preheader operations for the profile page.
  *
- * @since TBD
+ * @since 2.0
  * @return void
  */
 function pmpromd_profile_page_preheader() {
@@ -499,7 +499,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				$value = $enddate;
 				break;
 			case 'pmpro_billing_address':
-				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields.', 'pmpro-member-directory' ), 'TBD' );
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields.', 'pmpro-member-directory' ), '2.0' );
 				$value = pmpro_formatAddress(
 					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
 					$pu->pmpro_baddress1,
@@ -512,7 +512,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				);
 				break;
 			case 'pmpro_bphone':
-				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field.', 'pmpro-member-directory' ), 'TBD' );
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field.', 'pmpro-member-directory' ), '2.0' );
 				break;
 			case 'pmpro_shipping_address':
 			case 'pmpro_mailing_address':
@@ -578,7 +578,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 	/**
 	 * Filter the value of a specific element from a string of HTML.
 	 *
-	 * @since TBD
+	 * @since 2.0
 	 * @param string $value The value of the element.
 	 * @param string $element The element to get the value for.
 	 * @param object $pu The user object.

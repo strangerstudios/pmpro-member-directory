@@ -2,7 +2,7 @@
 /**
  * Deprecated hooks, filters and functions
  *
- * @since TBD
+ * @since 2.0
  */
 
 /**

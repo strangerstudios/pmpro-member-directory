@@ -2,7 +2,7 @@
 /**
  * Function to display the search form for the member directory.
  *
- * @since TBD
+ * @since 2.0
  * @return string $content The search form for the member directory.
  */
 function pmpromd_search_form() {

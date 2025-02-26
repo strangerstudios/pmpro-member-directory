@@ -103,7 +103,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	/**
 	 * Filter the elements array for the member profile.
 	 *
-	 * @since TBD
+	 * @since 2.0
 	 * @param array $elements_array The array of elements to display on the member profile.
 	 * @param object $pu The user object.
 	 * @return array $elements_array The array of elements to display on the member profile.

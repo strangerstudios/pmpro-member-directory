@@ -110,7 +110,7 @@ add_action( 'admin_init', 'pmpromd_check_for_upgrade' );
 /**
  * Strip the [pmpro_member_directory] or [pmpro_member_profile] shortcode and blocks from content if the current user can't edit users.
  *
- * @since TBD
+ * @since 2.0
  *
  * @return mixed The content with the shortcode removed. Will be the same type as the input.
  */
@@ -158,7 +158,7 @@ add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_shortcodes' );
  * Only allow those with the edit_users capability
  * to use the Directory or Profile shortcodes in post_meta.
  *
- * @since TBD
+ * @since 2.0
  * @param int    $meta_id     ID of the meta data entry.
  * @param int    $object_id   ID of the object the meta is attached to.
  * @param string $meta_key    Meta key.

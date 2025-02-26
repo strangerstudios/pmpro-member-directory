@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
-Tested up to: 6.4
-Stable tag: 1.2.6
+Tested up to: 6.7
+Stable tag: 2.0
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -95,6 +95,20 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.0 - 2025-02-26 =
+* FEATURE: Added support an “elements” attribute on the directory and profile shortcodes to allow total customization of the displayed content and order it is displayed. This attribute will replace several true/false attributes as well as the “fields” attribute in a future update. #169 (@kimcoleman)
+* FEATURE: Added a new `[pmpro_member_directory_search]` shortcode to allow placing the search form outside of the directory or profile. #169 (@kimcoleman)
+* ENHANCEMENT: Updated styling for PMPro v3.1. #169 (@kimcoleman)
+* ENHANCEMENT: Added a User Field Group for "Directory and Profile Preferences". #169 (@kimcoleman)
+* ENHANCEMENT: Improved how user fields are displayed in directories and profiles. #169 (@kimcoleman)
+* ENHANCEMENT: Added a new filter `pmpromd_get_display_value` to allow customizing the display value of user fields. #172 (@kimcoleman)
+* BUG FIX/ENHANCEMENT: Improved logic to determine which level to show information for on profiles when users have multiple levels. #169 (@kimcoleman)
+* BUG FIX: Fixed a fatal error that may show when viewing a directory or profile without the core PMPro plugin enabled. #176 (@dparker1005)
+* BUG FIX: Fixed an issue where pretty permalinks would not work on subfolder WordPress installs. #168 (@kimcoleman)
+* REFACTOR: Cleaned up plugin files and WPCS fixes. #169 (@kimcoleman)
+* DEPRECATED: Deprecated the `pmpro_member_directory_fields` filter. Use `pmpro_member_directory_elements` instead. #169 (@kimcoleman)
+* DEPREACTED: Marked billing addresses as deprecated. Directory addressses should be stored separately from billing addresses as they may not be the same. #173 (@dparker1005)
+
 = 1.2.6 - 2024-02-19 =
 * SECURITY: Improved security around shortcode attributes to prevent SQL injection.
 

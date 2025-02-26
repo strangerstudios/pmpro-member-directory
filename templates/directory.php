@@ -101,7 +101,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 		/**
 		 * Allow filtering the member directory search SQL to be used.
 		 *
-		 * @since TBD
+		 * @since 2.0
 		 *
 		 * @param string $sql_search_where The member directory search SQL to be used.
 		 * @param string $search_text      The search text used.
@@ -229,7 +229,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				/**
 				* Filter the elements array for the member directory.
 				*
-				* @since TBD
+				* @since 2.0
 				* @param array $elements_array The array of elements to display on the member directory.
 				* @param object $pu The user object.
 				* @return array $elements_array The array of elements to display on the member directory.
