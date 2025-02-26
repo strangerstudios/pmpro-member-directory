@@ -73,7 +73,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 
 == Changelog ==
 = 2.0 - 2025-02-26 =
-* FEATURE: Added support an “elements” attribute on the directory and profile shortcodes to allow total customization of the displayed content and order it is displayed. This attribute will replace several true/false attributes as well as the “fields” attribute in a future update. #169 (@kimcoleman)
+* FEATURE: Added support for an “elements” attribute on the directory and profile shortcodes to allow total customization of the displayed content and order it is displayed. This attribute will replace several true/false attributes as well as the “fields” attribute in a future update. #169 (@kimcoleman)
 * FEATURE: Added a new `[pmpro_member_directory_search]` shortcode to allow placing the search form outside of the directory or profile. #169 (@kimcoleman)
 * ENHANCEMENT: Updated styling for PMPro v3.1. #169 (@kimcoleman)
 * ENHANCEMENT: Added a User Field Group for "Directory and Profile Preferences". #169 (@kimcoleman)
@@ -84,7 +84,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * BUG FIX: Fixed an issue where pretty permalinks would not work on subfolder WordPress installs. #168 (@kimcoleman)
 * REFACTOR: Cleaned up plugin files and WPCS fixes. #169 (@kimcoleman)
 * DEPRECATED: Deprecated the `pmpro_member_directory_fields` filter. Use `pmpro_member_directory_elements` instead. #169 (@kimcoleman)
-* DEPREACTED: Marked billing addresses as deprecated. Directory addressses should be stored separately from billing addresses as they may not be the same. #173 (@dparker1005)
+* DEPRECATED: Marked billing addresses as deprecated. Directory addresses should be stored separately from billing addresses as they may not be the same. #173 (@dparker1005)
 
 = 1.2.6 - 2024-02-19 =
 * SECURITY: Improved security around shortcode attributes to prevent SQL injection.
