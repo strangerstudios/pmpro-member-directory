@@ -17,34 +17,23 @@ The Member Directory Add On enhances your membership site with a public or priva
 This is an official Add On for [Paid Memberships Pro](https://www.paidmembershipspro.com), the most complete member management and membership subscriptions plugin for WordPress.
 
 = Shortcodes and Attributes =
-This plugin creates 2 shortcodes for a Member Directory and Member Profile pages, which can be defined in Memberships > Page Settings of the WordPress admin.
+This plugin creates shortcodes for Member Directory and Member Profile pages, which can be defined in Memberships > Page Settings of the WordPress admin.
 
 Shortcode attributes for `[pmpro_member_directory]` include:
 
-1. avatar_size: The square pixel dimensions of the avatar to display. Requires the "show_avatar" attribute to be set to 'true'. default: '128' (accepts any numerical value).
-1. fields: Display additional user meta fields. default: none (accepts a list of label names and field IDs, i.e. fields="Company,company;Website,user_url").
+1. elements: Set the elements that will be shown for each directory entry. default: none (accepts a list of label names and element IDs, i.e. elements="Company,company;Website,user_url").
 1. layout: The format of the directory. default: div (accepts 'table', 'div', '2col', '3col', and '4col').
 1. levels: The level ID or a comma-separated list of level IDs to include in the directory. default: all levels (accepts a single level ID or a comma-separated list of IDs).
 1. limit: the number of members to display per page
 1. link: Optionally link the member directory item to the single member profile page. default: true (accepts 'true' or 'false').
 1. order: Sort the results based on the order_by attribute in ascending or descending order. default: ASC (accepts 'DESC' or 'ASC').
 1. order_by: The sort order for the results. default: 'u.display_name' (accepts 'u.user_email', 'u.user_email', 'u.display_name', 'u.user_login', 'u.user_registered', 'mu.membership_id', 'mu.startdate', 'joindate')
-1. show_avatar: Display the user's avatar generated via Gravatar (https://en.gravatar.com) or user-submitted using a plugin like Simple Local Avatars (https://wordpress.org/plugins/simple-local-avatars/); default: true (accepts 'true' or 'false').
-1. show_email: Display the user's email address; default: true (accepts 'true' or 'false').
-1. show_level: Display the user's membership level; default: true  (accepts 'true' or 'false').
 1. show_search: Display a search form (searches on member display name or email address); default: true (accepts 'true' or 'false').
-1. show_startdate: Display the user's membership start date for their current level; default: true (accepts 'true' or 'false').
 
 Shortcode attributes for `[pmpro_member_profile]` include:
 
-1. avatar_size: The square pixel dimensions of the avatar to display. Requires the "show_avatar" attribute to be set to 'true'. default: '128' (accepts any numerical value).
-1. fields: Display additional user meta fields. default: none (accepts a list of label names and field IDs, i.e. fields="Company,company;Website,user_url").
-1. show_avatar: Display the user's avatar generated via Gravatar (https://en.gravatar.com) or user-submitted using a plugin like Simple Local Avatars (https://wordpress.org/plugins/simple-local-avatars/); default: true (accepts 'true' or 'false').
-1. show_bio: Display the user's bio (if available); default: true (accepts 'true' or 'false').
-1. show_email: Display the user's email address; default: true (accepts 'true' or 'false').
-1. show_level: Display the user's membership level; default: true  (accepts 'true' or 'false').
+1. elements: Set the elements that will be shown on the user profile. default: none (accepts a list of label names and element IDs, i.e. elements="Company,company;Website,user_url").
 1. show_search: Display a search form (searches on member display name or email address); default: true (accepts 'true' or 'false').
-1. show_startdate: Display the user's membership start date for their current level; default: true (accepts 'true' or 'false').
 1. user_id: Show a specific member's profile; default: none (accepts any numeric uesr id, i.e. user_id="125").
 
 == Installation ==
@@ -56,11 +45,8 @@ Shortcode attributes for `[pmpro_member_profile]` include:
 1. Navigate to Memberships > Page Settings to assign your pages to the Directory and Profile page settings.
 
 == Examples ==
-Show only level IDs 1 and 4, hide avatars and email address:
-[pmpro_member_directory levels="1,4" show_avatar="false" show_email="false"]
-
-Show all level IDs, hide level name and start date:
-[pmpro_member_directory show_level="false" show_startdate="false"]
+Show only level IDs 1 and 4, show avatars and email address.:
+[pmpro_member_directory levels="1,4" elements="Avatar,avatar|128;Email Address,user_email;"]
 
 Show a unique member directory by level. Level 1 Members can only see other Level 1 Members...:
 [membership level="1"]
@@ -73,15 +59,6 @@ Show a unique member directory by level. Level 1 Members can only see other Leve
 
 [membership level="3"]
 [pmpro_member_directory levels="3"]
-[/membership]
-
-Show unique member profiles based on level - hide user email address.
-[membership level="1"]
-[pmpro_member_profile show_email="false"]
-[/membership]
-
-[membership level="2"]
-[pmpro_member_profile show_email="true"]
 [/membership]
 
 == Frequently Asked Questions ==
