@@ -144,6 +144,7 @@ div.pmpro_member_profile strong {display: block; }
 		}
 
 		/* Full width profile items */
+		.pmpro_member_profile_field-avatar,
 		.pmpro_member_profile_field-display_name,
 		.pmpro_member_profile_field-description {
 			flex: 1 1 100%;
