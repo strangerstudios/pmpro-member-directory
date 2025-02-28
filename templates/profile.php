@@ -157,7 +157,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 									</div>
 								<?php } ?>
 								<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field_data' ) ); ?>">
-									<?php echo wp_kses_post( $value ); ?>
+									<?php echo wp_kses( $value, pmpromd_allowed_html() ); ?>
 								</div>
 							</div> <!-- end pmpro_member_profile_field -->
 							<?php
