@@ -74,9 +74,9 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	// Build SQL into parts to make it easier to add in specific sections to the SQL.
 	$sql_parts = array();
 
-	$sql_parts['SELECT'] = "SELECT SQL_CALC_FOUND_ROWS u.ID FROM $wpdb->users u ";
+	$sql_parts['SELECT'] = "SELECT SQL_CALC_FOUND_ROWS u.ID, umf.meta_value as first_name, uml.meta_value as last_name FROM $wpdb->users u ";
 
-	$sql_parts['JOIN'] = "LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id ";
+	$sql_parts['JOIN'] = "LEFT JOIN $wpdb->usermeta umh ON umh.meta_key = 'pmpromd_hide_directory' AND u.ID = umh.user_id LEFT JOIN $wpdb->pmpro_memberships_users mu ON u.ID = mu.user_id LEFT JOIN $wpdb->usermeta umf ON umf.meta_key = 'first_name' AND u.ID = umf.user_id LEFT JOIN $wpdb->usermeta uml ON uml.meta_key = 'last_name' AND u.ID = uml.user_id ";
 
 	$sql_parts['WHERE'] = "WHERE mu.status = 'active' AND (umh.meta_value IS NULL OR umh.meta_value <> '1') AND mu.membership_id > 0 ";
 
