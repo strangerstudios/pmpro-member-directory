@@ -419,6 +419,9 @@ function pmpromd_prepare_elements_array( $elements ) {
  * Get the value of a specific element from a string of HTML.
  */
 function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
+	// Initialize the value.
+	$value = '';
+
 	// Is this a user field?
 	if ( class_exists( 'PMPro_Field_Group' ) ) {
 		$user_field = PMPro_Field_Group::get_field( $element );
