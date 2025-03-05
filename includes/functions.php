@@ -598,7 +598,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 /**
  * Function for allowed HTML tags in various templates
  *
- * @since TBD
+ * @since 2.0.1
  * @return array $allowed_html The allowed HTML to be used for wp_kses escaping.
  */
 function pmpromd_allowed_html() {
@@ -675,7 +675,7 @@ function pmpromd_allowed_html() {
 	/**
 	 * Filters the allowed HTML tags for the Member Directory Add On
 	 *
-	 * @since TBD
+	 * @since 2.0.1
 	 * @param array $allowed_html The allowed html elements for the Member Directory escaping where wp_kses is used
 	 */
 	return apply_filters( 'pmpromd_allowed_html', $allowed_html );

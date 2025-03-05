@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 6.7
-Stable tag: 2.0
+Stable tag: 2.0.1
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,15 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.0.1 - 2025-03-05 =
+* ENHANCEMENT: Now allowing more HTML tags in the directory and profile pages. #179 (@kimcoleman)
+* ENHANCEMENT: Added a new filter `pmpromd_allowed_html` to customize the allowed HTML tags in the directory and profile pages. #179 (@kimcoleman)
+* BUG FIX: Fixed a PHP fatal error that could occur when 3rd party code called functions that were removed in the previous release. #183 (@dparker1005)
+* BUG FIX: Fixed an issue where sorting the directory by first or last name would cause no results to be shown. #182 (@dparker1005)
+* BUG FIX: Fixed an issue where elements with a value of '0' would not be displayed. #181 (@dparker1005)
+* BUG FIX: Fixed a PHP warning that would occur if there was not a value found for a directory or profile element. #181 (@kimcoleman)
+* BUG FIX: Fixed the styling of avatars in directories. #180 (@kimcoleman)
+
 = 2.0 - 2025-02-26 =
 * FEATURE: Added support for an “elements” attribute on the directory and profile shortcodes to allow total customization of the displayed content and order it is displayed. This attribute will replace several true/false attributes as well as the “fields” attribute in a future update. #169 (@kimcoleman)
 * FEATURE: Added a new `[pmpro_member_directory_search]` shortcode to allow placing the search form outside of the directory or profile. #169 (@kimcoleman)
