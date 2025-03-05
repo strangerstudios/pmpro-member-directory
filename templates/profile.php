@@ -144,7 +144,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 				<?php
 					foreach ( $elements_array as $element ) {
 						$value = pmpromd_get_display_value( $element[1], $pu, $displayed_levels );
-						if ( ! empty( $value ) || ( is_string( $value ) && strlen( $value ) > 0 ) ) { // The string '0' is empty(), but we want to show it.
+						if ( ! empty( $value ) || $value === '0' ) {
 							// If this is the display_name, we need to wrap it in an h2 tag.
 							if ( 'display_name' === $element[1] ) {
 								$value = '<h2 class="' . pmpro_get_element_class( 'pmpro_font-x-large' ) . '">' . $value . '</h2>';
