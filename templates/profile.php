@@ -229,3 +229,61 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	return $temp_content;
 }
 add_shortcode( 'pmpro_member_profile', 'pmpromd_profile_shortcode' );
+
+/**
+ * This shortcode will display the profile for the user ID specified in the URL and additional content based on the defined attributes.
+ *
+ * @deprecated TBD
+ */
+function pmpromd_profile_preheader()
+{
+	_deprecated_function( __FUNCTION__, 'TBD' );
+}
+
+/**
+ * Update the head title and H1
+ *
+ * @deprecated TBD
+ */
+function pmpromd_the_title($title, $post_id = NULL)
+{
+	_deprecated_function( __FUNCTION__, 'TBD' );
+	return $title;
+}
+
+/**
+ * Update the head title and H1
+ *
+ * @deprecated TBD
+ */
+function pmpromd_wp_title($title, $sep)
+{
+	_deprecated_function( __FUNCTION__, 'TBD' );
+	return $title;
+}
+
+/**
+ * We're working with the menu now so remove the filters.
+ *
+ * @deprecated TBD
+ */
+function pmpromd_remove_filters_menu_title( $nav_menu ) {	
+	_deprecated_function( __FUNCTION__, 'TBD' );
+	remove_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+	remove_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+	return $nav_menu;
+}
+
+
+/**
+ * We're done working with the menu so add those filters back.
+ *
+ * @deprecated TBD
+ */
+function pmpromd_readd_filters_menu_title( $items ) {
+	_deprecated_function( __FUNCTION__, 'TBD' );
+	// we are done working with menu, so add the title filter back
+	add_filter( 'wp_title', 'pmpromd_wp_title', 10, 2 );
+	add_filter( 'the_title', 'pmpromd_the_title', 10, 2 );
+	return $items;
+}
