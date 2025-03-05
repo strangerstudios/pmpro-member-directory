@@ -350,7 +350,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 								// Loop through the elements and output the content.
 								foreach ( $elements_array as $element ) {
 									$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels );
-									if ( ! empty( $value ) ) {
+									if ( ! empty( $value ) || ( is_string( $value ) && strlen( $value ) > 0 ) ) { // The string '0' is empty(), but we want to show it.
 										// Wrap the value in a link if the element is in the linked elements array.
 										if ( ! empty( $link ) && ! empty( $profile_url ) &&in_array( $element[1], $linked_elements ) ) {
 											$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
