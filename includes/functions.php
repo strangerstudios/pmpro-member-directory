@@ -590,3 +590,90 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 
 	return $value;
 }
+
+
+/**
+ * Function for allowed HTML tags in various templates
+ *
+ * @since TBD
+ * @return array $allowed_html The allowed HTML to be used for wp_kses escaping.
+ */
+function pmpromd_allowed_html() {
+	$allowed_html = wp_kses_allowed_html('post');
+
+	// Add support for iframes (YouTube, Vimeo, SoundCloud, etc.)
+	$allowed_html['iframe'] = [
+		'src'             => [],
+		'width'           => [],
+		'height'          => [],
+		'frameborder'     => [],
+		'allow'           => [],
+		'allowfullscreen' => [],
+		'loading'         => [],
+		'referrerpolicy'  => [],
+	];
+
+	// Add support for embeds (older methods, fallback)
+	$allowed_html['embed'] = [
+		'src'             => [],
+		'type'            => [],
+		'width'           => [],
+		'height'          => [],
+		'allowfullscreen' => [],
+	];
+
+	// Add support for objects (legacy flash embeds, rare)
+	$allowed_html['object'] = [
+		'type'   => [],
+		'width'  => [],
+		'height' => [],
+		'data'   => [],
+	];
+
+	// Add support for param inside object (legacy)
+	$allowed_html['param'] = [
+		'name'  => [],
+		'value' => [],
+	];
+
+	// Add support for blockquotes (Twitter/X, Facebook)
+	$allowed_html['blockquote'] = [
+		'class'  => [],
+		'cite'   => [],
+		'lang'   => [],
+	];
+
+	// Add support for script (for Twitter/X and other embeds that rely on JS)
+	$allowed_html['script'] = [
+		'src'    => [],
+		'async'  => [],
+		'defer'  => [],
+		'type'   => [],
+	];
+
+	// Add support for divs (for Facebook embeds)
+	$allowed_html['div'] = [
+		'class'          => [],
+		'data-href'      => [],
+		'data-width'     => [],
+		'data-show-text' => [],
+	];
+
+	// Add support for Twitter embeds
+	$allowed_html['a'] = [
+		'href'            => [],
+		'class'           => [],
+		'target'          => [],
+		'rel'             => [],
+		'data-dnt'        => [],
+		'data-show-count' => [],
+	];
+
+	/**
+	 * Filters the allowed HTML tags for the Member Directory Add On
+	 *
+	 * @since TBD
+	 * @param array $allowed_html The allowed html elements for the Member Directory escaping where wp_kses is used
+	 */
+	return apply_filters( 'pmpromd_allowed_html', $allowed_html );
+}

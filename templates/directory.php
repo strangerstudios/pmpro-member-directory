@@ -317,7 +317,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 													}
 													?>
 													<td class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_field-' . strtok( $element[1], '|' ) ) ); ?>"<?php echo ! empty( $element[0] ) ? ' data-title="' . esc_attr( $element[0] ) . '"' : ''; ?>>
-														<?php echo wp_kses_post( $value ); ?>
+														<?php echo wp_kses( $value, pmpromd_allowed_html() ); ?>
 													</td>
 													<?php
 												}
@@ -366,7 +366,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 												</div>
 											<?php } ?>
 											<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_profile_field_data' ) ); ?>">
-												<?php echo wp_kses_post( $value ); ?>
+												<?php echo wp_kses( $value, pmpromd_allowed_html() ); ?>
 											</div>
 										</div> <!-- end pmpro_member_profile_field -->
 										<?php
