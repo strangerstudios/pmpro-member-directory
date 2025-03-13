@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
-Tested up to: 6.7
-Stable tag: 2.0.1
+Tested up to: 6.8
+Stable tag: 2.0.2
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.0.2 - 2025-03-13 =
+* BUG FIX: Fixed a PHP fatal error that could occur when 3rd party code called functions that were removed in the v2.0 release. #184 (@dparker1005)
+
 = 2.0.1 - 2025-03-05 =
 * ENHANCEMENT: Now allowing more HTML tags in the directory and profile pages. #179 (@kimcoleman)
 * ENHANCEMENT: Added a new filter `pmpromd_allowed_html` to customize the allowed HTML tags in the directory and profile pages. #179 (@kimcoleman)

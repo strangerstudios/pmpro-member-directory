@@ -41,24 +41,24 @@ function pmpromd_init_check_for_deprecated_filters() {
 add_action( 'init', 'pmpromd_init_check_for_deprecated_filters', 99 );
 
 /**
- * @deprecated TBD
+ * @deprecated 2.0.2
  */
 function pmpromd_show_extra_profile_fields( $user ) {
-	_deprecated_function( __FUNCTION__, 'TBD' );
+	_deprecated_function( __FUNCTION__, '2.0.2' );
 }
 
 /**
- * @deprecated TBD
+ * @deprecated 2.0.2
  */
 function pmpromd_save_extra_profile_fields( $user_id ) {
-	_deprecated_function( __FUNCTION__, 'TBD' );
+	_deprecated_function( __FUNCTION__, '2.0.2' );
 }
 
 /**
- * @deprecated TBD
+ * @deprecated 2.0.2
  */
 function pmpromd_filter_profile_fields_for_levels( $profile_fields, $pu ) {
-	_deprecated_function( __FUNCTION__, 'TBD' );
+	_deprecated_function( __FUNCTION__, '2.0.2' );
 	global $pmprorh_registration_fields;
 
 	$fields_to_hide = array();
