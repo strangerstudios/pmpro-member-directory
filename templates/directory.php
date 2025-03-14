@@ -185,6 +185,8 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 						}
 					?>
 				</div>
+				</div> <!-- end pmpro_member_directory_before -->
+				</div> <!-- end pmpro -->
 				<?php
 				$temp_content = ob_get_contents();
 				ob_end_clean();
