@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.2\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.3\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-13T15:28:44+00:00\n"
+"POT-Creation-Date: 2025-03-18T16:13:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -157,6 +157,7 @@ msgstr "Liste de %s -%s des %s résultats"
 #: templates/directory.php:282
 #: templates/directory.php:290
 #: templates/directory.php:204
+#: templates/directory.php:206
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -166,6 +167,7 @@ msgstr "Avatar"
 #: templates/directory.php:286
 #: templates/directory.php:294
 #: templates/directory.php:206
+#: templates/directory.php:208
 msgid "Member"
 msgstr "Membre"
 
@@ -183,6 +185,7 @@ msgstr "Membre"
 #: templates/directory.php:214
 #: templates/profile.php:82
 #: blocks/profile/block.js:195
+#: templates/directory.php:216
 msgid "Email Address"
 msgstr "Courriel"
 
@@ -212,6 +215,7 @@ msgstr "Plus de détails"
 #: templates/directory.php:218
 #: templates/profile.php:86
 #: blocks/profile/block.js:200
+#: templates/directory.php:220
 msgid "Level"
 msgstr "Niveau"
 
@@ -233,6 +237,7 @@ msgstr "Niveau"
 #: templates/directory.php:221
 #: templates/profile.php:89
 #: blocks/profile/block.js:205
+#: templates/directory.php:223
 msgid "Start Date"
 msgstr "Date de début"
 
@@ -252,6 +257,8 @@ msgstr "Date de début"
 #: templates/directory.php:600
 #: templates/directory.php:329
 #: templates/directory.php:382
+#: templates/directory.php:331
+#: templates/directory.php:384
 msgid "View Profile"
 msgstr "Voir le profil"
 
@@ -595,4 +602,8 @@ msgstr ""
 
 #: templates/directory.php:462
 msgid "Next &rarr;"
+msgstr ""
+
+#: templates/directory.php:428
+msgid "Member Directory Pagination"
 msgstr ""
