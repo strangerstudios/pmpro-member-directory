@@ -185,6 +185,42 @@ div.pmpro_member_profile strong {display: block; }
 	}
 }
 
+/* This is legacy core PMPro pagination styling to support sites that are running PMPro < 3.4.3 */
+.pmpro_pagination {
+	align-items: center;
+	display: flex;
+	gap: var(--pmpro--base--spacing--small);
+	justify-content: center;
+	margin: var(--pmpro--base--spacing--medium) 0;
+
+	a {
+		background-color: var(--pmpro--color--base);
+		border: 1px solid var(--pmpro--color--border--variation);
+		border-radius: var(--pmpro--base--border-radius);
+		color: var(--pmpro--color--contrast);
+		padding: 2px var(--pmpro--base--spacing--small);
+		text-decoration: none;
+		transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+		&:hover {
+			background-color: var(--pmpro--color--accent--variation);
+			border-color: var(--pmpro--color--accent--variation);
+			color: var(--pmpro--color--base);
+		}
+
+	}
+
+	span.current {
+		background-color: var(--pmpro--color--accent);
+		border: 1px solid var(--pmpro--color--border--variation);
+		border-radius: var(--pmpro--base--border-radius);
+		color: var(--pmpro--color--base);
+		font-weight: 700;
+		padding: 2px var(--pmpro--base--spacing--small);
+	}
+
+}
+
 /* This is legacy pagination styling we can leave in here until we remove templating. */
 .pmpro_page_numbers a {
 	padding: 6px;
