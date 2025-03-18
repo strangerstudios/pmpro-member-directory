@@ -410,7 +410,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				 * Filter the query arguments for the pagination URL.
 				 *
 				 * @since 0.7
-				 * @deprecated TBD The `$type` parameter is no longer used.
+				 * @deprecated 2.0.2 The `$type` parameter is no longer used.
 				 *
 				 * @param array $query_args The query arguments for the pagination URL.
 				 * @param string $type (deprecated) The type of pagination URL to get. This parameter is no longer used.

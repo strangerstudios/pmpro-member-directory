@@ -72,6 +72,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.0.3 - 2025-03-18 =
+* BUG FIX: Fixed an issue that could cause content after the directory shortcode to be formatted incorrectly if no members were found. #185 (@kimcoleman)
+* ENHANCEMENT: Now leveraging the `pmpro_getPaginationString()` function for pagination on the directory page. #186 (@kimcoleman)
+* DEPRECATED: The second parameter passed to the `pmpromd_pagination_url` shortcode is now deprecated and should no longer be used. #186 (@kimcoleman)
+
 = 2.0.2 - 2025-03-13 =
 * BUG FIX: Fixed a PHP fatal error that could occur when 3rd party code called functions that were removed in the v2.0 release. #184 (@dparker1005)
 
