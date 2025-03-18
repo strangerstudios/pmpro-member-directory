@@ -185,14 +185,12 @@ div.pmpro_member_profile strong {display: block; }
 	}
 }
 
-/**
- * Pagination/page numbers
- */
-.pmpro_member_directory_pagination {
-	display: flex;
-	justify-content: center;
+/* This is legacy core PMPro pagination styling to support sites that are running PMPro < 3.4.3 */
+.pmpro_pagination {
 	align-items: center;
+	display: flex;
 	gap: var(--pmpro--base--spacing--small);
+	justify-content: center;
 	margin: var(--pmpro--base--spacing--medium) 0;
 
 	a {
@@ -210,16 +208,15 @@ div.pmpro_member_profile strong {display: block; }
 			color: var(--pmpro--color--base);
 		}
 
-		&.pmpro_member_directory_pagination-current {
-			background-color: var(--pmpro--color--accent);
-			color: var(--pmpro--color--base);
-			cursor: default;
-			font-weight: 700;
-		}
+	}
 
-		&.pmpro_member_directory_pagination-previous {
-			margin-right: 0;
-		}
+	span.current {
+		background-color: var(--pmpro--color--accent);
+		border: 1px solid var(--pmpro--color--border--variation);
+		border-radius: var(--pmpro--base--border-radius);
+		color: var(--pmpro--color--base);
+		font-weight: 700;
+		padding: 2px var(--pmpro--base--spacing--small);
 	}
 
 }

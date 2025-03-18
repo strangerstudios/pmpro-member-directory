@@ -405,67 +405,31 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 				do_action( 'pmpro_member_directory_after', $sqlQuery, $shortcode_atts );
 			?>
 
-			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination' ) ); ?>">
-				<?php
-				//prev
-				if ( $pn > 1 ) {
-					$query_args = array(
-						'ps' => $s,
-						'pn' => $pn-1,
-						'limit' => $limit,
-					);
-					$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'prev' );
-					?>
-					<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination-previous' ) ); ?>" href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>" title="<?php esc_attr_e( 'Previous Page', 'pmpro-member-directory' ); ?>"><?php esc_html_e( '&larr; Previous', 'pmpro-member-directory' ); ?></a>
-					<?php
-				}
+			<?php
+				/**
+				 * Filter the query arguments for the pagination URL.
+				 *
+				 * @since 0.7
+				 * @deprecated TBD The `$type` parameter is no longer used.
+				 *
+				 * @param array $query_args The query arguments for the pagination URL.
+				 * @param string $type (deprecated) The type of pagination URL to get. This parameter is no longer used.
+				 */
+				$target_page_query_args = apply_filters( 'pmpromd_pagination_url', array( 'ps' => $s, 'limit' => $limit ), 'prev' );
 
-				$number_of_pages = $totalrows / $limit;
-				//Page Numbers
-				$counter = 0;
-				if ( empty( $pn ) || $pn != 1 ) {
-					echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" title="' . esc_attr__( 'Previous', 'pmpro-member-directory' ) . '">...</a>';
-				}
+				// Show the pagination.
+				$pagination = pmpro_getPaginationString(
+					$pn,
+					$totalrows,
+					$limit,
+					1,
+					esc_url( add_query_arg( $target_page_query_args, get_permalink( $post->ID ) ) ),
+					'&pn=',
+					__( 'Member Directory Pagination', 'pmpro-member-directory' )
+				);
+				echo wp_kses_post( $pagination );
+			?>
 
-				if ( round( $number_of_pages, 0 ) !== 1 && $pn !== 1 ) {
-					//If there's only one page, no need to show the page numbers
-					for( $i = $pn; $i <= $number_of_pages; $i++ ){
-						if( $counter <= 6 ){
-							$query_args = array(
-								'ps' => $s,
-								'pn' => $i,
-								'limit' => $limit,
-							);
-
-							$classes = array();
-							$classes[] = 'pmpro_member_directory_pagination-page';
-							if ( $i == $pn ) {
-								$classes[] = 'pmpro_member_directory_pagination-current';
-							}
-							$classes = implode(	' ', $classes );
-							// translators: placeholder is for page number.
-							echo '<a href="' . esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) ) . '" class="' . esc_attr( pmpro_get_element_class( $classes ) ) . '" title="' . esc_attr( sprintf( __('Page %s', 'pmpro-member-directory' ), $i ) ) . '">' . esc_html( $i ) . '</a>';
-						}
-						$counter++;
-					}
-				}
-				?>
-
-				<?php
-				//next
-				if ( $totalrows > $end ) {
-					$query_args = array(
-						'ps' => $s,
-						'pn' => $pn+1,
-						'limit' => $limit,
-					);
-					$query_args = apply_filters( 'pmpromd_pagination_url', $query_args, 'next' );
-					?>
-					<a class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_pagination-next' ) ); ?>" href="<?php echo esc_url( add_query_arg( $query_args, get_permalink( $post->ID ) ) );?>" title="<?php esc_attr_e( 'Next Page', 'pmpro-member-directory' ); ?>"><?php esc_html_e( 'Next &rarr;', 'pmpro-member-directory' ); ?></a>
-					<?php
-				}
-				?>
-			</div> <!-- end pmpro_pagination -->
 		</div> <!-- end pmpro_member_directory_after -->
 	</div> <!-- end pmpro -->
 	<?php
