@@ -12,7 +12,7 @@ function pmpromd_register_profile_styling() {
 		'pmpromd-block-styling',
 		plugins_url( '/css/blocks.css', __FILE__ ),
 		array(),
-		PMPRO_VERSION
+		PMPRO_MEMBER_DIRECTORY_VERSION
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'pmpromd_register_profile_styling' );
