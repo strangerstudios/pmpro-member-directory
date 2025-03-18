@@ -404,11 +404,18 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 			?>
 
 			<?php
+				/**
+				 * Filter the query arguments for the pagination URL.
+				 *
+				 * @since 0.7
+				 * @deprecated TBD The `$type` parameter is no longer used.
+				 *
+				 * @param array $query_args The query arguments for the pagination URL.
+				 * @param string $type (deprecated) The type of pagination URL to get. This parameter is no longer used.
+				 */
+				$target_page_query_args = apply_filters( 'pmpromd_pagination_url', array( 'ps' => $s, 'limit' => $limit ), 'prev' );
+
 				// Show the pagination.
-				$target_page_query_args = array(
-					'ps' => $s,
-					'limit' => $limit,
-				);
 				$pagination = pmpro_getPaginationString(
 					$pn,
 					$totalrows,
