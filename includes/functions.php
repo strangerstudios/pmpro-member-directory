@@ -155,7 +155,10 @@ add_filter( 'query_vars', 'pmpromd_custom_query_vars', 10, 1 );
  * Redirect from the OLD profile URL to the new URL's
  */
 function pmpromd_redirect_profile_links() {
-	if ( ! empty( $_REQUEST['pu'] ) ) {
+
+    global $post, $pmpro_pages;
+
+	if ( ! empty( $pmpro_pages['profile'] ) && $post->ID === (int)$pmpro_pages['profile'] && ! empty( $_REQUEST['pu'] ) ) {        
 		$structure = get_option( 'permalink_structure' );	
 		if ( ! empty( $structure ) ) {
 			wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
@@ -163,7 +166,7 @@ function pmpromd_redirect_profile_links() {
 		}		
 	}
 }
-add_action( 'init', 'pmpromd_redirect_profile_links' );
+add_action( 'wp', 'pmpromd_redirect_profile_links' );
 
 /**
  * Build profile URL
