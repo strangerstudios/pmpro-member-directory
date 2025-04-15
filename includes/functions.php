@@ -156,7 +156,7 @@ add_filter( 'query_vars', 'pmpromd_custom_query_vars', 10, 1 );
  */
 function pmpromd_redirect_profile_links() {
 
-    global $post, $pmpro_pages;
+    global $pmpro_pages;
 
 	if ( ! empty( $pmpro_pages['profile'] ) && is_page( $pmpro_pages['profile'] ) && ! empty( $_REQUEST['pu'] ) ) {   
 		$structure = get_option( 'permalink_structure' );	
