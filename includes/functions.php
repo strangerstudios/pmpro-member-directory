@@ -158,7 +158,7 @@ function pmpromd_redirect_profile_links() {
 
     global $post, $pmpro_pages;
 
-	if ( ! empty( $pmpro_pages['profile'] ) && $post->ID === (int)$pmpro_pages['profile'] && ! empty( $_REQUEST['pu'] ) ) {        
+	if ( ! empty( $pmpro_pages['profile'] ) && is_page( $pmpro_pages['profile'] ) && ! empty( $_REQUEST['pu'] ) ) {   
 		$structure = get_option( 'permalink_structure' );	
 		if ( ! empty( $structure ) ) {
 			wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
