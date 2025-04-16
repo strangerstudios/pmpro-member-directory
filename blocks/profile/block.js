@@ -49,7 +49,7 @@ export default registerBlockType(
             default: true
           },
           show_bio: {
-            type: 'string',
+            type: 'boolean',
             default: 'true'
           },
           show_email: {
