@@ -693,6 +693,12 @@ function pmpromd_allowed_html() {
 		'data-show-count' => [],
 	];
 
+	// Add support for Audio Embed and Video Embed  HTML elements
+	$allowed_html['source'] = [
+		'src'  => [],
+		'type' => [],
+	];	
+
 	/**
 	 * Filters the allowed HTML tags for the Member Directory Add On
 	 *
