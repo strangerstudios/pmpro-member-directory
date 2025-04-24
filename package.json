@@ -6,10 +6,10 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "start": "wp-scripts start",
-    "build": "wp-scripts build"
-  },
+"scripts": {
+  "start": "wp-scripts start",
+  "build": "wp-scripts build"
+},
   "keywords": [
     "wordpress",
     "membership",
@@ -18,6 +18,6 @@
   "author": "Stranger Studios",
   "license": "GPL-2.0",
   "devDependencies": {
-    "@wordpress/scripts": "^11.0.0"
+    "@wordpress/scripts": "^30.15.0"
   }
 }
