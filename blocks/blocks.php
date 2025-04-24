@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Require blocks.
+ * Require compiled blocks.
  */
 require_once( "dist/profile/block.php" );
 require_once( "dist/directory/block.php" );
