@@ -159,24 +159,24 @@ function pmpromd_redirect_profile_links() {
     global $pmpro_pages;
 
     //We don't have a profile page set
-    if( empty( $pmpro_pages['profile'] ) ) {
+    if ( empty( $pmpro_pages['profile'] ) ) {
         return;
     }
 
     //We're not redirecting away from the profile page
-    if( ! is_page( $pmpro_pages['profile'] ) ) {
+    if ( ! is_page( $pmpro_pages['profile'] ) ) {
         return;
     }
 
     //The pu param isn't present
-    if( empty( $_REQUEST['pu'] ) ) {
+    if ( empty( $_REQUEST['pu'] ) ) {
         return;
     }
 	
     $structure = get_option( 'permalink_structure' );	
 
     //We don't have custom permalinks set up
-    if( empty( $structure ) ) {
+    if ( empty( $structure ) ) {
         return;
     }
 	
