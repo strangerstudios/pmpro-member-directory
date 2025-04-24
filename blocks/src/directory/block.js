@@ -1,4 +1,4 @@
-import ShowExtraFields from '../components/extra-fields/extra-fields.js';
+// import ShowExtraFields from 'components/extra-fields/extra-fields.js';
 import DivLayout from './templates/div.js';
 import TableLayout from './templates/table.js';
 import Col2 from './templates/2col.js';

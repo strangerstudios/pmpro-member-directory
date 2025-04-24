@@ -3,8 +3,8 @@
 /**
  * Require blocks.
  */
-require_once( "profile/block.php" );
-require_once( "directory/block.php" );
+require_once( "dist/profile/block.php" );
+require_once( "dist/directory/block.php" );
 
 // Block styling
 function pmpromd_register_profile_styling() {
