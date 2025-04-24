@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.3\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-18T16:13:55+00:00\n"
+"POT-Creation-Date: 2025-04-24T13:19:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -158,6 +158,7 @@ msgstr "Liste de %s -%s des %s résultats"
 #: templates/directory.php:290
 #: templates/directory.php:204
 #: templates/directory.php:206
+#: blocks/src/directory/templates/table.js:15
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -168,6 +169,7 @@ msgstr "Avatar"
 #: templates/directory.php:294
 #: templates/directory.php:206
 #: templates/directory.php:208
+#: blocks/src/directory/templates/table.js:16
 msgid "Member"
 msgstr "Membre"
 
@@ -186,6 +188,9 @@ msgstr "Membre"
 #: templates/profile.php:82
 #: blocks/profile/block.js:195
 #: templates/directory.php:216
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/templates/table.js:17
+#: blocks/src/profile/block.js:195
 msgid "Email Address"
 msgstr "Courriel"
 
@@ -194,6 +199,7 @@ msgstr "Courriel"
 #: templates/directory.php:293
 #: templates/directory.php:295
 #: templates/directory.php:303
+#: blocks/src/directory/templates/table.js:18
 msgid "More Information"
 msgstr "Plus de détails"
 
@@ -216,6 +222,9 @@ msgstr "Plus de détails"
 #: templates/profile.php:86
 #: blocks/profile/block.js:200
 #: templates/directory.php:220
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/templates/table.js:19
+#: blocks/src/profile/block.js:200
 msgid "Level"
 msgstr "Niveau"
 
@@ -238,6 +247,9 @@ msgstr "Niveau"
 #: templates/profile.php:89
 #: blocks/profile/block.js:205
 #: templates/directory.php:223
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/templates/table.js:20
+#: blocks/src/profile/block.js:205
 msgid "Start Date"
 msgstr "Date de début"
 
@@ -259,6 +271,10 @@ msgstr "Date de début"
 #: templates/directory.php:382
 #: templates/directory.php:331
 #: templates/directory.php:384
+#: blocks/src/directory/templates/table.js:31
+#: blocks/src/directory/templates/table.js:40
+#: blocks/src/directory/templates/table.js:49
+#: blocks/src/directory/templates/table.js:58
 msgid "View Profile"
 msgstr "Voir le profil"
 
@@ -316,6 +332,8 @@ msgstr "Suiv."
 #: templates/profile.php:322
 #: templates/profile.php:79
 #: blocks/profile/block.js:190
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:190
 msgid "Biographical Info"
 msgstr "Biographie"
 
@@ -326,6 +344,8 @@ msgstr "Biographie"
 #: templates/profile.php:354
 #: templates/profile.php:92
 #: blocks/profile/block.js:210
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:210
 msgid "Address"
 msgstr "Adresse"
 
@@ -336,156 +356,206 @@ msgstr "Adresse"
 #: templates/profile.php:368
 #: templates/profile.php:95
 #: blocks/profile/block.js:220
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:220
 msgid "Phone Number"
 msgstr "Téléphone"
 
 #: blocks/directory/block.js:31
+#: blocks/src/directory/block.js:30
 msgid "Members Directory"
 msgstr ""
 
 #: blocks/directory/block.js:32
+#: blocks/src/directory/block.js:31
 msgid "Display a directory of members."
 msgstr ""
 
 #: blocks/directory/block.js:148
+#: blocks/src/directory/block.js:147
 msgid "Levels Selected: "
 msgstr ""
 
 #: blocks/directory/block.js:157
+#: blocks/src/directory/block.js:156
 msgid "Display Options"
 msgstr ""
 
 #: blocks/directory/block.js:161
+#: blocks/src/directory/block.js:160
 msgid "Select levels"
 msgstr ""
 
 #: blocks/directory/block.js:162
+#: blocks/src/directory/block.js:161
 msgid "List of level IDs that allow profiles. Default: All"
 msgstr ""
 
 #: blocks/directory/block.js:173
+#: blocks/src/directory/block.js:172
 msgid "div"
 msgstr ""
 
 #: blocks/directory/block.js:174
+#: blocks/src/directory/block.js:173
 msgid "table"
 msgstr ""
 
 #: blocks/directory/block.js:175
+#: blocks/src/directory/block.js:174
 msgid "2col"
 msgstr ""
 
 #: blocks/directory/block.js:176
+#: blocks/src/directory/block.js:175
 msgid "3col"
 msgstr ""
 
 #: blocks/directory/block.js:177
+#: blocks/src/directory/block.js:176
 msgid "4col"
 msgstr ""
 
 #: blocks/directory/block.js:226
 #: blocks/profile/block.js:168
 #: blocks/profile/block.js:169
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:225
+#: blocks/src/profile/block.js:169
 msgid "Extra Fields"
 msgstr ""
 
 #: blocks/directory/block.js:237
+#: blocks/src/directory/block.js:236
 msgid "Filtering Options"
 msgstr ""
 
 #: blocks/directory/block.js:244
+#: blocks/src/directory/block.js:243
 msgid "Display Name"
 msgstr ""
 
 #: blocks/directory/block.js:245
+#: blocks/src/directory/block.js:244
 msgid "User Email"
 msgstr ""
 
 #: blocks/directory/block.js:246
+#: blocks/src/directory/block.js:245
 msgid "User Login"
 msgstr ""
 
 #: blocks/directory/block.js:247
+#: blocks/src/directory/block.js:246
 msgid "User Registered"
 msgstr ""
 
 #: blocks/directory/block.js:248
+#: blocks/src/directory/block.js:247
 msgid "Membership Level"
 msgstr ""
 
 #: blocks/directory/block.js:249
+#: blocks/src/directory/block.js:248
 #, fuzzy
 msgid "Membership Start Date"
 msgstr "Date de début"
 
 #: blocks/directory/block.js:250
+#: blocks/src/directory/block.js:249
 msgid "Join Date"
 msgstr ""
 
 #: blocks/directory/block.js:259
+#: blocks/src/directory/block.js:258
 msgid "ASC"
 msgstr ""
 
 #: blocks/directory/block.js:260
+#: blocks/src/directory/block.js:259
 msgid "DESC"
 msgstr ""
 
 #: blocks/directory/block.js:274
+#: blocks/src/directory/block.js:273
 msgid "Membership Directory"
 msgstr ""
 
 #: blocks/directory/block.js:281
 #: blocks/profile/block.js:228
 #: blocks/profile/block.js:229
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:280
+#: blocks/src/profile/block.js:229
 msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
 msgstr ""
 
 #: blocks/profile/block.js:25
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:25
 #, fuzzy
 msgid "Member Profile"
 msgstr "Voir le profil"
 
 #: blocks/profile/block.js:26
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:26
 msgid "Display a profile for a Member."
 msgstr ""
 
 #: blocks/profile/block.js:95
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:95
 msgid "Display Settings"
 msgstr ""
 
 #: blocks/profile/block.js:163
 #: blocks/profile/block.js:164
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:164
 msgid "Set this to a user ID to show a profile of a specific user. Leave blank for current user."
 msgstr ""
 
 #: blocks/profile/block.js:174
 #: blocks/profile/block.js:175
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:175
 msgid "Accepts a list of label names and metakeys per line. (i.e. Label,meta_key)"
 msgstr ""
 
 #: blocks/profile/block.js:179
 #: blocks/profile/block.js:180
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:180
 #, fuzzy
 msgid "Membership Profile"
 msgstr "Voir le profil"
 
 #: blocks/profile/block.js:185
 #: blocks/profile/block.js:186
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:186
 msgid "August Dibble"
 msgstr ""
 
 #: blocks/profile/block.js:195
 #: blocks/profile/block.js:196
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:196
 msgid "August.Dibble@mail.com"
 msgstr ""
 
 #: blocks/profile/block.js:200
 #: blocks/profile/block.js:201
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:201
 msgid "Free"
 msgstr ""
 
 #: blocks/profile/block.js:205
 #: blocks/profile/block.js:206
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/profile/block.js:206
 msgid "Jan 21, 2019"
 msgstr ""
 
@@ -552,11 +622,13 @@ msgstr ""
 
 #: includes/functions.php:502
 #: includes/functions.php:505
+#: includes/functions.php:526
 msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
 msgstr ""
 
 #: includes/functions.php:515
 #: includes/functions.php:518
+#: includes/functions.php:539
 msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
 msgstr ""
 
