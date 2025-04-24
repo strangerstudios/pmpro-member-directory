@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 6.8
-Stable tag: 2.0.2
+Stable tag: 2.0.4
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.0.4 - 2025-04-24 =
+* BUG FIX/ENHANCEMENT: Added improved compatibility for The Events Calendar plugin, and possibly other plugins that may use `?pu=` in their URLs. #191 (@JarrydLong)
+* BUG FIX: Fixed an issue with the Member Profile block not honoring the "Show Bio" setting. #192 (@dwanjuki)
+* BUG FIX: Fixed audio playback (embedded) videos on the profile and directory pages. #193 (@dwanjuki)
+
 = 2.0.3 - 2025-03-18 =
 * BUG FIX: Fixed an issue that could cause content after the directory shortcode to be formatted incorrectly if no members were found. #185 (@kimcoleman)
 * ENHANCEMENT: Now leveraging the `pmpro_getPaginationString()` function for pagination on the directory page. #186 (@kimcoleman)
