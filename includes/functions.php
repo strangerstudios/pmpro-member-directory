@@ -542,6 +542,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 					'user_url',
 					'user_registered',
 					'display_name',
+					'ID',
 				);
 
 				if ( in_array( $element, $user_column_fields ) ) {
