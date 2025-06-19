@@ -3,6 +3,8 @@
  * Show the content for the [pmpro_member_profile] shortcode.
  */
 function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
+	global $current_user, $pmpro_pages;
+
 	extract(shortcode_atts(array(
 		'avatar_size' => '128',
 		'elements' => NULL,
@@ -18,10 +20,15 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'show_phone' => false,
 		'show_search' => true,
 		'show_startdate' => true,
-		'user_id' => NULL
+		'user_id' => NULL,
+		'show_map' => false,
+		'map_zoom' => sanitize_text_field( apply_filters( 'pmpromm_default_zoom_level', '8' ) ),
+		'map_height' => '400',
+		'map_width' => '100',
+		'map_max_zoom' => NULL,
+		'map_infowindow_width' 	=> '300',
 	), $atts));
 
-	global $current_user, $pmpro_pages;
 
 	// Make sure that Paid Memberships Pro is enabled.
 	if ( ! function_exists( 'pmpro_get_element_class' ) ) {
@@ -118,6 +125,31 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	elseif(empty($limit))
 		$limit = 15;
 
+
+	$shortcode_atts = array(
+		'avatar_size' => $avatar_size,
+		'elements' => $elements,
+		'fields' => $fields,
+		'level' => $level,
+		'levels' => $levels,
+		'show_avatar' => $show_avatar,
+		'show_bio' => $show_bio,
+		'show_billing' => $show_billing,
+		'show_email' => $show_email,
+		'show_level' => $show_level,
+		'show_name' => $show_name,
+		'show_phone' => $show_phone,
+		'show_search' => $show_search,
+		'show_startdate' => $show_startdate,
+		'user_id' => $user_id,
+		'show_map' => false,
+		'map_zoom' => sanitize_text_field( apply_filters( 'pmpromm_default_zoom_level', '8' ) ),
+		'map_height' => '400',
+		'map_width' => '100',
+		'map_max_zoom' => NULL,
+		'map_infowindow_width' 	=> '300',
+	);
+
 	ob_start();
 	?>
 	<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro' ) ); ?>">
@@ -138,7 +170,12 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 				 *
 				 */
 				do_action( 'pmpro_member_profile_before', $pu );
+
+				/// Try to show the Google Map.
+				echo pmpromd_show_google_map( $shortcode_atts, $pu );
 			?>
+
+		
 
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 				<?php

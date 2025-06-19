@@ -16,9 +16,6 @@ define( 'PMPRO_MEMBER_DIRECTORY_BASE_FILE', __FILE__ );
 define( 'PMPRO_MEMBER_DIRECTORY_DIR', dirname( __FILE__ ) );
 define( 'PMPRO_MEMBER_DIRECTORY_BASENAME', plugin_basename( __FILE__ ) );
 
-/* TO DO: Is this needed? */
-global $pmpromd_options;
-
 // Load directory or profile templates from theme, then from plugin.
 $custom_dir = get_stylesheet_directory() . '/paid-memberships-pro/pmpro-member-directory/';
 $custom_directory_file = $custom_dir . 'directory.php';
@@ -32,6 +29,7 @@ require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/includes/admin.php' );
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/includes/deprecated.php' );
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/includes/functions.php' );
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/includes/search.php' );
+require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/includes/google-maps/membership-maps.php' );
 
 // Shortcodes
 require_once( PMPRO_MEMBER_DIRECTORY_DIR . '/shortcodes/search.php' );
