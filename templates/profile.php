@@ -76,11 +76,11 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	} else {
 		// We need to support the legacy attributes for backwards compatibility.
 		$elements = '';
-		if ( ! empty( $show_name ) ) {
-			$elements .= 'display_name;';
-		}
 		if ( ! empty( $show_avatar ) ) {
 			$elements .= 'avatar|' . $avatar_size . ';';
+		}
+		if ( ! empty( $show_name ) ) {
+			$elements .= 'display_name;';
 		}
 		if ( ! empty( $show_bio ) ) {
 			$elements .= __( 'Biographical Info', 'pmpro-member-directory' ) . ',description;';
@@ -142,12 +142,12 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'show_search' => $show_search,
 		'show_startdate' => $show_startdate,
 		'user_id' => $user_id,
-		'show_map' => false,
-		'map_zoom' => sanitize_text_field( apply_filters( 'pmpromm_default_zoom_level', '8' ) ),
-		'map_height' => '400',
-		'map_width' => '100',
-		'map_max_zoom' => NULL,
-		'map_infowindow_width' 	=> '300',
+		'show_map' => $show_map,
+		'map_zoom' => $map_zoom,
+		'map_height' => $map_height,
+		'map_width' => $map_width,
+		'map_max_zoom' => $map_max_zoom,
+		'map_infowindow_width' 	=> $map_infowindow_width,
 	);
 
 	ob_start();

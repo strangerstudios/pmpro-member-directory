@@ -181,7 +181,14 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 	// Let's put all the marker data together to display on the map.
 	$marker_array = array();
 	if ( ! empty( $members ) ) {
-		foreach( $members as $member ){
+		foreach( $members as $member ) {
+
+			// Sometimes the $member data that is passed through isn't an object when on the profile page (for some reason - so skip it).
+			// It should either be an object or a WP_User object.
+			if ( ! is_object( $member ) ) {
+				continue;
+			}
+
 			$member_array = array();
 
 			// Try to get the member's address.
@@ -193,8 +200,9 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 					$member_address['old_lat'] = $member->old_lat;
 					$member_address['old_lng'] = $member->old_lng;
 				} else {
-					$member_address['old_lat'] = get_user_meta( $member->ID, 'pmpro_lat', true );
-					$member_address['old_lng'] = get_user_meta( $member->ID, 'pmpro_lng', true );
+					$map_location = pmpromd_get_member_address( $member->ID );
+					$member_address['old_lat'] = ! empty( $map_location['latitude'] ) ? $map_location['latitude'] : get_user_meta( $member->ID, 'pmpro_lat', true );
+					$member_address['old_lng'] = ! empty( $map_location['longitude'] ) ? $map_location['longitude'] : get_user_meta( $member->ID, 'pmpro_lng', true );
 				}
 
 				// If we still don't have lat/lng, we should skip this member.
@@ -233,7 +241,7 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			$marker_content = '';
 			if ( ! empty( $elements_array ) ) {
 
-				// Elements that should link to the member's profile page.
+				// Elements that should link to the member's profile page. Note: This does not link when on the profile page.
 				$linked_elements = array( 'display_name' );
 
 				foreach( $elements_array as $element ) {
@@ -520,8 +528,9 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
 }
 
 /**
- * Get the member's address from user meta.
- *
+ * Get the member's address from user meta and support backwards compatibility for older versions of membership maps.
+ * Note: This function should be slightly refactored in the future to remove the backwards compatibility.
+ * 
  * @since TBD
  * 
  * @param int|boolean $user_id The user ID to get the address for. If false, it will get the current user ID.
@@ -611,3 +620,15 @@ function pmpromd_geocode_map_address( $addr_array, $morder = false, $return_body
 	return $geocoded_data;
 
 }
+
+/**
+ * Geocode map fields when saving/updating a user profile
+ *
+ * @since TBD
+ */
+function pmpromd_geocode_map_address_for_user( $user_id ) {
+	pmpromd_save_marker_location_for_user( $user_id );
+}
+add_action( 'pmpro_personal_options_update', 'pmpromd_geocode_map_address_for_user', 10, 1 );
+add_action( 'personal_options_update', 'pmpromd_geocode_map_address_for_user', 10, 1 );
+add_action( 'edit_user_profile_update', 'pmpromd_geocode_map_address_for_user', 10, 1 );
