@@ -3,8 +3,13 @@
 /**
  * Adds API Key field to advanced settings page
  * Note: The filter escapes during it's output and not needed within this function.
+ * 
+ * @since TBD
+ * 
+ * @param array $fields The existing fields on the PMPro Advanced Settings page.
+ * @return array $fields The modified fields with the Google Maps API Key field added.
  */
-function pmpromm_advanced_settings_field( $fields ) {
+function pmpromd_add_google_maps_api_key_setting( $fields ) {
 
 	// Get the 'old' API key option.
 	$api_key = get_option( 'pmpro_pmpromm_api_key' );
@@ -37,15 +42,14 @@ function pmpromm_advanced_settings_field( $fields ) {
 	
 	return $fields;
 }
-add_filter('pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20);
+add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_setting', 20 );
 
 
 /**
  * Test the API key upon saving the PMPro Advanced Settings.
  * 
  * @since TBD
- * 
- * @return void
+ *
  */
 function pmpromd_test_maps_api() {
 
@@ -99,7 +103,7 @@ add_action( 'admin_init', 'pmpromd_test_maps_api' );
  * @param  string $api_key The current API Key
  * @return string The API key found in the $_REQUEST var
  */
-function pmpromm_use_api_key_on_save( $api_key ) {
+function pmpromd_use_api_key_on_save( $api_key ) {
 
 	if ( ! empty( $_REQUEST['pmpromd_maps_api_key'] ) ) {
 		$api_key = trim( sanitize_text_field( $_REQUEST['pmpromd_maps_api_key'] ) );
