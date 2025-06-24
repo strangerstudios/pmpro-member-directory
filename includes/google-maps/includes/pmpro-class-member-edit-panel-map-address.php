@@ -24,7 +24,7 @@ if ( ! class_exists( 'PMPro_Member_Edit_Panel_Map_Address' ) ) {
 			$user = self::get_user();
 			?>
 			<div id="pmpromm-map-address">
-				<?php pmpromm_show_pin_location_fields( $user->ID, 'table' ); ?>
+				<?php pmpromd_show_map_address_fields( $user->ID, 'table' ); ?>
 				<div>
 					<button type="submit" name="pmpro-member-edit-memberships-panel-member_address" class="button button-primary" value="">
 						<?php esc_html_e( 'Save Map Address', 'pmpro-member-directory' ); ?>
@@ -48,7 +48,7 @@ if ( ! class_exists( 'PMPro_Member_Edit_Panel_Map_Address' ) ) {
 			$user = self::get_user();
 
 			if ( ! empty( $_REQUEST['pmpro_member_edit_panel'] ) && $_REQUEST['pmpro_member_edit_panel'] === 'map_address' ) {
-				pmpromm_save_pin_location_fields( $user->ID );
+				pmpromd_save_marker_location_for_user( $user->ID );
 			}
 		}
 	} // End of class PMPro_Member_Edit_Panel_Map_Address.

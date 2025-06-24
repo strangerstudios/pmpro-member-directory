@@ -11,4 +11,6 @@
 define( 'PMPRO_MEMBER_DIRECTORY_MAPS_DIR', dirname( __FILE__ ) );
 
 include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/functions.php' );
+include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/checkout.php' );
+include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/admin.php' );
 include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/pmpro-class-member-edit-panel-map-address.php' );

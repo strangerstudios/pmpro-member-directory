@@ -50,6 +50,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	$show_level = filter_var( $show_level, FILTER_VALIDATE_BOOLEAN );
 	$show_search = filter_var( $show_search, FILTER_VALIDATE_BOOLEAN );
 	$show_startdate = filter_var( $show_startdate, FILTER_VALIDATE_BOOLEAN );
+	$show_map = filter_var( $show_map, FILTER_VALIDATE_BOOLEAN );
 
 	// Validate the avatar size.
 	$avatar_size = intval( $avatar_size );
@@ -86,9 +87,9 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 		u.user_nicename,
 		umf.meta_value AS first_name, 
 		uml.meta_value AS last_name,
-		umlng.meta_key as old_lng,
-		umlat.meta_key as old_lat,
-		ummap.meta_value AS maplocation 
+		umlng.meta_value as old_lng,
+		umlat.meta_value as old_lat,
+		ummap.meta_value AS maplocation
 	FROM $wpdb->users u 
 ";
 
@@ -106,7 +107,7 @@ $sql_parts['JOIN'] = "
 	LEFT JOIN $wpdb->usermeta umlng 
 		ON umlng.meta_key = 'pmpro_lng' AND u.ID = umlng.user_id 
 	LEFT JOIN $wpdb->usermeta ummap 
-		ON ummap.meta_key = 'pmpromm_pin_location' AND u.ID = ummap.user_id 
+		ON ummap.meta_key = 'pmpromd_map_location' AND u.ID = ummap.user_id 
 ";
 
 $sql_parts['WHERE'] = "
@@ -155,7 +156,6 @@ $sql_parts = apply_filters( 'pmpro_member_directory_sql_parts', $sql_parts, $lev
 
 // Assemble full SQL query
 $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $sql_parts['GROUP'] . $sql_parts['ORDER'] . $sql_parts['LIMIT'];
-
 // Final filter on full SQL string
 $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s, $pn, $limit, $start, $end, $order_by, $order );
 
@@ -167,7 +167,6 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 		$end = $totalrows;
 
 	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers );
-
 	ob_start();
 	?>
 	<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro' ) ); ?>">
@@ -304,12 +303,12 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 					'avatar_align' => $avatar_align,
 					'elements_array' => $elements_array,
 					'fields_array' => $elements_array, // Backwards compatibility. We can remove this in a future version.
-					'show_map' => false,
-					'map_zoom' => sanitize_text_field( apply_filters( 'pmpromm_default_zoom_level', '8' ) ),
-					'map_height' => '400',
-					'map_width' => '100',
-					'map_max_zoom' => NULL,
-					'map_infowindow_width' 	=> '300',
+					'show_map' => $show_map,
+					'map_zoom' => $map_zoom,
+					'map_height' => $map_height,
+					'map_width' => $map_width,
+					'map_max_zoom' => $map_max_zoom,
+					'map_infowindow_width' 	=> $map_infowindow_width,
 				) );
 
 				// Set the displayed_levels variable to use for displaying values.

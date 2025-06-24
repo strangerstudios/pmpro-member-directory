@@ -15,17 +15,17 @@
 function pmpromd_show_google_map( $attributes, $members ) {
 
 	// Only show the map if the 'show_map' attribute is set to true.
-	// if ( $attributes['show_map'] === false ) {
-	// 	return;
-	// }
+	if ( $attributes['show_map'] === false ) {
+		return;
+	}
 
 	// Make sure we have the Maps API key, if it's not set we shouldn't try to do anything.
-	$maps_api_key = get_option( 'pmpro_pmpromm_api_key' );
+	$maps_api_key = get_option( 'pmpro_pmpromd_maps_api_key' );
 	if ( empty( $maps_api_key ) ) {
 		return;
 	}
 
-	// //Extract the array $attributes so we can use them directly without doing $attributes['key'] all the time.
+	// Extract the array $attributes so we can use them directly without doing $attributes['key'] all the time.
 	extract( $attributes );
 
 	/**
@@ -44,8 +44,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	$map_id = apply_filters( 'pmpromd_map_id', $map_id, $attributes );
 
 	/**
-	 * Adjust the notice that is displayed when the map fails to load.
-	 * @deprecated TBD
+	 * @deprecated TBD - use `pmpromd_map_failed_to_load_notice` instead.
 	 */
 	$notice = apply_filters_deprecated(
 		'pmpromm_default_map_notice',
@@ -66,9 +65,6 @@ function pmpromd_show_google_map( $attributes, $members ) {
 
 	//Get the marker data
 	$marker_data = pmpromd_generate_marker_data( $members, $attributes );
-
-	// Enqueue jQuery.
-	// wp_enqueue_script( 'jquery' );
 
 	/**
 	 * Filter the map styles.
@@ -105,7 +101,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	 */
 	$query_params = apply_filters( 'pmpromd_maps_query_params', array( 
 		'key' => $maps_api_key,
-		'callback' => 'pmpromm_init_map', 
+		'callback' => 'pmpromd_init_map', 
 		'loading' => 'async', 
 		'v' => '3', 
 		'style' => $map_styles 
@@ -116,29 +112,55 @@ function pmpromd_show_google_map( $attributes, $members ) {
 
 	wp_enqueue_script( 'pmpromd-google-maps', add_query_arg( $query_params, 'https://maps.googleapis.com/maps/api/js' ), array(), PMPRO_MEMBER_DIRECTORY_VERSION, array( 'strategy'  => 'async' ) );
 	wp_register_script( 'pmpromd-google-maps-javascript', plugin_dir_url( dirname( __FILE__ ) ) . 'js/map.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION ); // This changes to `map.js`
+		
 	/**
-	 * Setup defaults for the map. We're passing through the map_id attribute
-	 * to allow developers to differentiate maps. 
+	 * @deprecated TBD - use `pmpromd_default_map_start` instead.
 	 */
-	wp_localize_script( 'pmpromd-google-maps-javascript', 'pmpromm_vars', array(
-		'default_start' => apply_filters( 'pmpromm_default_map_start', array( 'lat' => -34.397, 'lng' => 150.644 ), $map_id ),
-		'override_first_marker_location' => apply_filters( 'pmpromm_override_first_marker', '__return_false', $map_id ),
+	$default_start_location = apply_filters_deprecated( 'pmpromm_default_map_start', array( array( 'lat' => -34.397, 'lng' => 150.644 ), $map_id ), 'pmpromd_default_map_start', 'TBD' );
+	
+	/**
+	 * @deprecated TBD - use `pmpromd_override_first_marker` instead.
+	 */
+	$override_first_marker_location = apply_filters_deprecated( 'pmpromm_override_first_marker', array( '__return_false', $map_id ), 'pmpromd_override_first_marker', 'TBD' );
+		
+	$pmpromd_map_attributes = array(
+		/**
+		 * Adjust the map starting point location. This gets overridden when there are markers on the map.
+		 * 
+		 * @since TBD
+		 * 
+		 * @param array $default_start_location An array containing the latitude and longitude of the default starting location.
+		 * @param string $map_id The ID of the map.
+		 */
+		'default_start' => apply_filters( 'pmpromd_default_map_start', $default_start_location, $map_id ),
+		
+		/**
+		 * Override the first marker location. This is useful when you want to show a specific location on the map first.
+		 * 
+		 * @since TBD
+		 * 
+		 * @param bool $override_first_marker_location Whether to override the first marker location.
+		 * @param string $map_id The ID of the map.
+		 */
+		'override_first_marker_location' => apply_filters( 'pmpromd_override_first_marker', $override_first_marker_location, $map_id ),
 		'infowindow_width' => $map_infowindow_width,
 		'marker_data' => $marker_data,
 		'zoom_level' => $map_zoom,
 		'max_zoom' => $map_max_zoom,
-		'infowindow_classes' => pmpro_get_element_class( 'pmpromm_infowindow' ),
+		'infowindow_classes' => pmpro_get_element_class( 'pmpromd_infowindow' ),
 		'map_styles' => $map_styles		
-	) );
+	);
 
+	wp_localize_script( 'pmpromd-google-maps-javascript', 'pmpromd_vars', $pmpromd_map_attributes );
 	wp_enqueue_script( 'pmpromd-google-maps-javascript' );
 
-	return "<div id='pmpromm_map' class='pmpromm_map pmpro_map_id_" . esc_attr( $map_id ) . "' style='height: " . esc_attr( $map_height ) . "px; width: " . esc_attr( $map_width ) . "%;'>" . esc_html( $notice ) . "</div>";
+	return "<div id='pmpromd_map' class='pmpromd_map pmpromd_map_id_" . esc_attr( $map_id ) . "' style='height: " . esc_attr( $map_height ) . "px; width: " . esc_attr( $map_width ) . "%;'>" . esc_html( $notice ) . "</div>";
 }
-
 
 /**
  * Generate the marker data for the Google Maps.
+ * 
+ * @since TBD
  *
  * @param Object $members An array of members (WP_User or stdClass) to be displayed on the map.
  * @param array $marker_attributes An array of marker attributes.
@@ -146,7 +168,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
  */
 function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 
-	global $wpdb, $post, $pmpro_pages, $pmprorh_registration_fields;
+	global $wpdb, $post, $pmpro_pages;
 
 	$show_avatar = filter_var( $marker_attributes['show_avatar'], FILTER_VALIDATE_BOOLEAN );
 	$link = filter_var( $marker_attributes['link'], FILTER_VALIDATE_BOOLEAN );
@@ -154,55 +176,18 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 	$show_level = filter_var( $marker_attributes['show_level'], FILTER_VALIDATE_BOOLEAN );
 	$show_startdate = filter_var( $marker_attributes['show_startdate'], FILTER_VALIDATE_BOOLEAN );
 
-	//// Fix to "Elements" but fallback to Fields. See how the core does it.
-	if( !empty( $marker_attributes['fields'] ) ) {
-		// Check to see if the Block Editor is used or the shortcode.
-		if ( strpos( $marker_attributes['fields'], "\n" ) !== FALSE ) {
-			$fields = rtrim( $marker_attributes['fields'], "\n" ); // clear up a stray \n
-			$fields_array = explode("\n", $marker_attributes['fields']); // For new block editor.
-		} else {
-			$fields = rtrim( $marker_attributes['fields'], ';' ); // clear up a stray ;
-			$fields_array = explode(";",$marker_attributes['fields']);
-		}
-		if( !empty( $fields_array ) ){
-			for($i = 0; $i < count($fields_array); $i++ ){
-				$fields_array[$i] = explode(",", trim($fields_array[$i]));
-			}
-		}
-	} else {
-		$fields_array = false;
-	}
-
-	//// OLD REMOVE IT, convert to user fields. We can avoid support RH.
-	// Get Register Helper field options
-	$rh_fields = array();
-
-	if(!empty($pmprorh_registration_fields)) {
-		foreach($pmprorh_registration_fields as $location) {
-			
-			foreach($location as $field) {
-				
-				if(!empty($field->options))
-					$rh_fields[$field->name] = $field->options;
-			}
-		}
-	}
+	$elements_array = ! empty( $marker_attributes['elements'] ) ? pmpromd_prepare_elements_array( $marker_attributes['elements'] ) : false;
 
 	// Let's put all the marker data together to display on the map.
 	$marker_array = array();
 	if ( ! empty( $members ) ) {
 		foreach( $members as $member ){
-			// If the $member isn't an object, we should skip it.
-			if ( ! is_object( $member ) ) {
-				continue;
-			}
-
 			$member_array = array();
 
-			// Assume $member is now a WP_User or stdClass object
+			// Try to get the member's address.
 			$member_address = isset( $member->maplocation ) ? maybe_unserialize( $member->maplocation ) : array();
-
-			// If it's an empty array, but the member has old lat/lng, we should use that.
+			
+			// If it's empty, but the member has old lat/lng, we should use that.
 			if ( empty( $member_address ) ) {
 				if ( ! empty( $member->old_lat ) ) {
 					$member_address['old_lat'] = $member->old_lat;
@@ -229,6 +214,7 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			}
 
 			if ( empty( $member_address['latitude'] ) && isset($member_address['old_lat']) && $member_address['old_lat'] !== NULL && isset($member_address['old_lng']) && $member_address['old_lng'] !== NULL ) {
+
 				//If we don't have a new address, check for a valid old address
 				$member_array['marker_meta']['lat'] = $member_address['old_lat'];
 				$member_array['marker_meta']['lng'] = $member_address['old_lng'];
@@ -238,171 +224,390 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			}
 
 			$member_array['ID'] = $member->ID;
-			$member->meta = get_user_meta( $member->ID );
+			$member = get_userdata( $member->ID );
 			$profile_url = get_permalink( $pmpro_pages['profile'] );
 			
-			$name_content = "";
-			$name_content .= '<h2 class="' . esc_attr( pmpro_get_element_class( 'pmpromm_display-name' ) ) . '">';
-				if( !empty( $link ) && !empty( $profile_url ) ) {	
-					$user_profile = pmpromd_build_profile_url( $member, $profile_url );			
-					$name_content .= '<a href="' . esc_url( $user_profile ) . '">' . esc_html( $member->display_name ) . '</a>';
-				} else {
-					$name_content .= esc_html( $member->display_name );
-				}
-			$name_content .= '</h2>';
-
-			//This will allow us to hook into the content and add custom fields from RH
-			$avatar_content = "";
-			if( $show_avatar ){
-				$avatar_align = ( !empty( $marker_attributes['avatar_align'] ) ) ? $marker_attributes['avatar_align'] : "";
-				$avatar_content .= '<div class="' . esc_attr( pmpro_get_element_class( 'pmpromm_avatar' ) ) . '">';
-					if ( ! empty( $marker_attributes['link'] ) && ! empty( $profile_url ) ) {
-						$user_profile = pmpromd_build_profile_url( $member, $profile_url );		
-						$avatar_content .= '<a class="' . esc_attr( pmpro_get_element_class( $avatar_align ) ) . '" href="' . esc_url( $user_profile ) . '">' . get_avatar( $member->ID, $marker_attributes['avatar_size'], NULL, $member->display_name ) . '</a>';
-					} else {
-						$avatar_content .= '<span class="' . esc_attr( pmpro_get_element_class( $avatar_align ) ) . '">' . get_avatar( $member->ID, $marker_attributes['avatar_size'], NULL, $member->display_name ) . '</span>';
-					}
-				$avatar_content .= '</div>';
-			}
-
-			$email_content = "";
-			if ( $show_email ) {
-				$email_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromm_email' ) ) . '">';
-					$email_content .= '<strong>' . esc_html__( 'Email Address', 'pmpro-membership-maps' ) . '</strong>&nbsp;';
-					$email_content .= esc_html( $member->user_email );
-				$email_content .= '</p>';
-			}
-
-			// We may need to get all of the user's levels for MMPU compatibility. Declaring a variable here to hold that data.
-			$user_levels = null;
-
-			$level_content = "";
-			if ( $show_level ) {
-				$user_levels = pmpro_getMembershipLevelsForUser( $member->ID );
-				$level_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromm_level' ) ) . '">';
-				if ( count ( $user_levels ) > 1 ) {
-					$level_content .= '<strong>' . esc_html__( 'Levels', 'pmpro-membership-maps' ) . '</strong>&nbsp;';
-					$level_content .= implode( ', ', wp_list_pluck( $user_levels, 'name' ) );
-				} else {
-					$level_content .= '<strong>' . esc_html__( 'Level', 'pmpro-membership-maps' ) . '</strong>&nbsp;';
-					$level_content .= esc_html( $user_levels[0]->name );
-				}
-				$level_content .= '</p>';
-			}
-
-			$startdate_content = "";
-			if ( $show_startdate ) {
-				// Make sure that we have the user's levels.
-				if ( empty( $user_levels ) ) {
-					$user_levels = pmpro_getMembershipLevelsForUser( $member->ID );
-				}
-
-				// Calculate their oldest startdate.
-				$min_startdate = null;
-				foreach( $user_levels as $level ) {
-					if ( empty( $min_startdate ) || $level->startdate < $min_startdate ) {
-						$min_startdate = $level->startdate;
-					}
-				}
-
-				// Display the start date.
-				$startdate_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromm_date' ) ) . '">';
-				$startdate_content .= '<strong>' . esc_html__( 'Start Date', 'pmpro-membership-maps' ) . '</strong>&nbsp;';
-				$startdate_content .= date_i18n( get_option( 'date_format' ), $min_startdate );
-				$startdate_content .= '</p>';
-			}
-
 			// We should get rid of the user levels now so that it doesn't affect future loop iterations.
 			unset( $user_levels );
+			
+			$marker_content = '';
+			if ( ! empty( $elements_array ) ) {
 
-			$profile_content = "";
-			if ( ! empty( $link ) && ! empty( $profile_url ) ) {
-				$user_profile = pmpromd_build_profile_url( $member, $profile_url );
-				$profile_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromm_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html( apply_filters( 'pmpromm_view_profile_text', __( 'View Profile', 'pmpro-membership-maps' ) ) ) . '</a></p>';				
-			}
+				// Elements that should link to the member's profile page.
+				$linked_elements = array( 'display_name' );
 
-			$rhfield_content = "";
+				foreach( $elements_array as $element ) {
+					if ( strpos( $element[1], 'avatar|' ) !== false ) {
+						$linked_elements[] = $element[1];
+					}
+					// Get the field value.
+					$value = pmpromd_get_display_value( $element[1], $member );
 
-			if( !empty( $fields_array ) ){
-				foreach( $fields_array as $field ){
+					// Link any linkable elements to the member's profile page.
+					if ( ! empty( $link ) && ! empty( $profile_url ) && in_array( $element[1], $linked_elements ) ) {
+						$value = '<a href="' . esc_url( pmpromd_build_profile_url( $member, $profile_url ) ) . '">' . $value . '</a>';
+					}
 					
-					if ( WP_DEBUG ) {
-						error_log("Content of field data: " . print_r( $field, true));
+					// Get the display name and make it h2, then skip to the next element.
+					if ( 'display_name' === $element[1] ) {
+						$marker_content .= '<h2 class="' . esc_attr( pmpro_get_element_class( 'pmpro_font-large' ) ) . '">' . wp_kses( $value , pmpromd_allowed_html() ) . '</h2>';
+						continue;
 					}
 
-					// Fix for a trailing space in the 'fields' shortcode attribute.
-					if ( $field[0] === '' || empty( $field[1] ) ) {
-						break;
-					}
-
-					if( !empty( $member->meta[$field[1]] ) || !empty( $member->{$field[1]} ) ){
-
-						$current_field_key = $field[0];
-						if( isset( $member->meta[$field[1]] ) ) {
-							$current_field_val = reset( $member->meta[$field[1]] );
-						} else {
-							$current_field_val = $member->{$field[1]};
-						}
-
-						$rhfield_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromm_'.$current_field_key ) ) . '">';
-						if( is_array( $field ) && !empty( $field['filename'] ) ){
-							//this is a file field
-							$rhfield_content .= '<strong>' . esc_html( $current_field_key ) . '</strong>';
-							$rhfield_content .= pmpromm_display_file_field($member->meta[$field[1]]);
-						} elseif ( is_array( $field ) ){
-							$cf_field = array();
-							//this is a general array, check for Register Helper options first
-							if(!empty($rh_fields[$field[1]])) {								
-								foreach($field as $key => $value){
-									$cf_field[$current_field_key] = $rh_fields[$field[1]][$current_field_val];
-								}
-							} else {
-								$current_field_val = maybe_unserialize( $current_field_val );
-								if( is_array( $current_field_val ) ) {
-									//Adds support for serialized fields (typically multiselect)
-									$cf_field[] = implode( ", ", $current_field_val );
-								} else {
-									// Check if the field is a valid URL and then try to make it clickable.
-									if ( wp_http_validate_url( $current_field_val ) ) {
-										$current_field_val = make_clickable( $current_field_val );
-									}
-									$cf_field[] = $current_field_val;	
-								}
-							}
-							$rhfield_content .= '<strong>' . esc_html( $current_field_key ) . '</strong> ';
-							$rhfield_content .= wp_kses_post( implode( ', ', $cf_field ) );
-						} elseif ( !empty( $rh_fields[$field[1]] ) && is_array( $rh_fields[$field[1]] ) ) {
-							$rhfield_content .= '<strong>' . esc_html( $current_field_val ) . '</strong>';
-							$rhfield_content .= wp_kses_post( $rh_fields[$field[1]][$current_field] );
-						} else {
-							$rhfield_content .= '<strong>' . esc_html( $field[0] ) . ':</strong>';
-							$rhfield_content .= make_clickable( $member->{$field[1]} );
-						}
-
-						$rhfield_content .= '</p>';
-
-					}
+					// Add marker content to the infowindow and escape/sanitize it.
+					$marker_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_' . $element['class'] ) ) . '"> ' . wp_kses( $element[0], pmpromd_allowed_html() ) . '<br>' . wp_kses( $value , pmpromd_allowed_html() ) . '</p>';
 				}
+
+				// Add the View Profile link at the end of the infowindow.
+				if ( ! empty( $link ) && ! empty( $profile_url ) ) {
+					$user_profile = pmpromd_build_profile_url( $member, $profile_url );
+					$profile_content = '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html( apply_filters( 'pmpromm_view_profile_text', __( 'View Profile', 'pmpro-membership-maps' ) ) ) . '</a></p>';
+					$marker_content .= $profile_content;			
+				}
+				
 			}
 
-			$marker_content_order = apply_filters( 'pmpromm_marker_content_order', array(
-				'name' 		=> $name_content,
-				'avatar' 	=> $avatar_content,
-				'email' 	=> $email_content,
-				'level'		=> $level_content,
-				'startdate' => $startdate_content,
-				'rh_fields'	=> $rhfield_content,
-				'profile'	=> $profile_content,
-			) );
+			$member_array['marker_content'] = $marker_content;
+			
+			/**
+			 * @deprecated TBD - use `pmpromd_single_marker_content` instead.
+			 */
+			$member_array['marker_content'] = apply_filters_deprecated( 'pmpromm_single_marker_content', array( $member_array['marker_content'], $member ), 'pmpromd_single_marker_content', 'TBD' );
 
-			$member_array['marker_content'] = implode( " ", $marker_content_order );
-
-			$member_array['marker_content'] = apply_filters( 'pmpromm_single_marker_content', $member_array['marker_content'], $member );
+			/**
+			 *  Filter the infowindow HTML content for a single marker.
+			 * 
+			 * @since TBD
+			 * 
+			 * @param string $member_array['marker_content'] The HTML content for the marker's infowindow.
+			 * @param WP_User $member The user object for the member.
+			 */
+			$member_array['marker_content'] = apply_filters( 'pmpromd_single_marker_content', $member_array['marker_content'], $member );
 
 			$marker_array[] = $member_array;
 		}
 	}
 
 	return $marker_array;
+
+}
+
+/**
+ * Displays the address fields for the user
+ *
+ * @since TBD
+ * 
+ * @param mixed  $user_id User ID but not required
+ * @param string $layout  Layout type - choice of div or table
+ * @return string HTML The output of the address fields.
+ */
+function pmpromd_show_map_address_fields( $user_id = false, $layout = 'div' ) {
+
+	$pin_location = $pmpromd_street = $pmpromd_city = $pmpromd_state = $pmpromd_zip = $pmpromd_country = '';
+	$pmpromd_optin = false;
+
+    //No user ID provided, lets get the current user
+    if ( ! $user_id ) {        
+        $user_id = get_current_user_id();        
+    }
+
+	// Get the meta.
+    if ( $user_id ) {
+        $pin_location = pmpromd_get_member_address( $user_id );
+
+        if ( ! empty( $pin_location ) ) {
+            $pmpromm_street = isset( $pin_location['street'] ) ? $pin_location['street'] : '';
+			$pmpromm_city = isset( $pin_location['city'] ) ? $pin_location['city'] : '';
+			$pmpromm_state = isset( $pin_location['state'] ) ? $pin_location['state'] : '';
+			$pmpromm_zip = isset( $pin_location['zip'] ) ? $pin_location['zip'] : '';
+			$pmpromm_country = isset( $pin_location['country'] ) ? $pin_location['country'] : '';
+			$pmpromm_optin = isset( $pin_location['optin'] ) ? $pin_location['optin'] : false;
+        } else {
+			// Add support for older versions of the plugin and default to the old address fields.
+            $pmpromm_old_lat = get_user_meta( $user_id, 'pmpro_lat', true );
+            $pmpromm_old_lng = get_user_meta( $user_id, 'pmpro_lng', true );
+
+            if ( ! empty( $pmpromm_old_lat ) && ! empty( $pmpromm_old_lng ) ) {
+                $pmpromm_street = get_user_meta( $user_id, 'pmpro_baddress1', true ).' '.get_user_meta( $user_id, 'pmpro_baddress2', true );
+                $pmpromm_city = get_user_meta( $user_id, 'pmpro_bcity', true );
+                $pmpromm_state = get_user_meta( $user_id, 'pmpro_bstate', true );
+                $pmpromm_zip = get_user_meta( $user_id, 'pmpro_bzipcode', true );
+                $pmpromm_country = get_user_meta( $user_id, 'pmpro_bcountry', true );
+                $pmpromm_optin = true;
+            }   
+		}
+    }
+
+    if ( $layout == 'div' ) {
+        ?>
+		<fieldset id="pmpro_membership_maps_fields" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset' ) ); ?>">
+			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+					<legend class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_legend' ) ); ?>">
+						<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Membership Map Address', 'paid-memberships-pro' ); ?></h2>
+					</legend>
+					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-checkbox' ) ); ?>">
+						<label for="pmpromm_optin" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_form_label-inline pmpro_clickable' ) ); ?>">
+						<input type="checkbox" id="pmpromm_optin" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-checkbox' ) ); ?>" name="pmpromm_optin" value="1" <?php checked( 1, $pmpromm_optin ); ?> />
+						<?php esc_html_e( 'Show on Membership Map', 'pmpro-membership-maps' ); ?>
+						</label>
+					</div>
+					<br>
+					<div id="pmpromm_address_fields" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields pmpro_cols-2' ) ); ?>">
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-pmpromm_street_name' ) ); ?>">
+							<label for="pmpromm_street_name"><?php esc_html_e( 'Street Name', 'pmpro-membership-maps' ); ?></label>
+							<input type="text" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" id="pmpromm_street_name" name="pmpromm_street_name" value="<?php echo esc_attr( $pmpromm_street ); ?>" />
+						</div>
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-pmpromm_city' ) ); ?>">
+							<label for="pmpromm_city"><?php esc_html_e( 'City', 'pmpro-membership-maps' ); ?></label>
+							<input type="text" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" id="pmpromm_city" name="pmpromm_city" value="<?php echo esc_attr( $pmpromm_city ); ?>" />
+						</div>
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-pmpromm_state' ) ); ?>">
+							<label for="pmpromm_state"><?php esc_html_e( 'State', 'pmpro-membership-maps' ); ?></label>
+							<input type="text" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" id="pmpromm_state" name="pmpromm_state" value="<?php echo esc_attr( $pmpromm_state ); ?>" />
+						</div>
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-pmpromm_zip' ) ); ?>">
+							<label for="pmpromm_zip"><?php esc_html_e( 'Zip Code', 'pmpro-membership-maps' ); ?></label>
+							<input type="text" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" id="pmpromm_zip" name="pmpromm_zip" value="<?php echo esc_attr( $pmpromm_zip ); ?>" />
+						</div>
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-select pmpro_form_field-pmpromm_country' ) ); ?>">
+							<label for="pmpromm_country"><?php esc_html_e( 'Country', 'pmpro-membership-maps' ); ?></label>
+							<select name="pmpromm_country" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-select' ) ); ?>" id="pmpromm_country" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpromm_country' ) ); ?>">
+							<?php
+								global $pmpro_countries, $pmpro_default_country;
+								if ( ! $pmpromm_country ) {
+									$pmpromm_country = $pmpro_default_country;
+								}
+								foreach ( $pmpro_countries as $abbr => $country ) { ?>
+									<option value="<?php echo esc_attr( $abbr ); ?>" <?php selected( $abbr, $pmpromm_country ); ?>><?php echo esc_html( $country ); ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+    <?php
+    } else {
+        //Table layout
+        ?>
+        <table class="form-table">                
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_optin"><?php esc_html_e( 'Show on Membership Map', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <input type="checkbox" id="pmpromm_optin" name="pmpromm_optin" value="1" <?php checked( 1, $pmpromm_optin ); ?> />
+                    <p class="description"><?php esc_html_e( 'Check this box to include your address on the Membership Map. Unchecking this will empty the address fields.', 'pmpro-membership-maps' ); ?></p>
+                </td>
+            </tr>
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_street_name"><?php esc_html_e( 'Street Name', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <input type="text" id="pmpromm_street_name" name="pmpromm_street_name" value="<?php echo esc_attr( $pmpromm_street ); ?>" />
+                </td>
+            </tr>
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_city"><?php esc_html_e( 'City', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <input type="text" id="pmpromm_city" name="pmpromm_city" value="<?php echo esc_attr( $pmpromm_city ); ?>" />
+                </td>
+            </tr>
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_state"><?php esc_html_e( 'State', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <input type="text" id="pmpromm_state" name="pmpromm_state" value="<?php echo esc_attr( $pmpromm_state ); ?>" />
+                </td>
+            </tr>
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_zip"><?php esc_html_e( 'Zip Code', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <input type="text" id="pmpromm_zip" name="pmpromm_zip" value="<?php echo esc_attr( $pmpromm_zip ); ?>" />
+                </td>
+            </tr>
+            <tr class='form-field'>
+                <th>
+                    <label for="pmpromm_country"><?php esc_html_e( 'Country', 'pmpro-membership-maps' ); ?></label>
+                </th>
+                <td>
+                    <select name="pmpromm_country" id="pmpromm_country" class="<?php echo esc_attr( pmpro_get_element_class( '', 'bcountry' ) ); ?>">
+                        <?php
+                            global $pmpro_countries, $pmpro_default_country;
+                            if( ! $pmpromm_country ) {
+                                $pmpromm_country = $pmpro_default_country;
+                            }
+                            foreach($pmpro_countries as $abbr => $country) { ?>
+                                <option value="<?php echo esc_attr( $abbr ) ?>" <?php if($abbr == $pmpromm_country) { ?>selected="selected"<?php } ?>><?php echo esc_html( $country )?></option>
+                            <?php } ?>
+                    </select>
+                </td>
+            </tr> 
+        </table>
+        <?php
+    }
+}
+
+
+/// Refactor
+/**
+ * Saves the user's pin location to user meta
+ *
+ * @since TBD
+ * @param mixed  $user_id User ID but not required
+ * @return void
+ */
+function pmpromd_save_marker_location_for_user( $user_id = false ) {
+
+    // No user ID provided, lets get the current user
+    if ( ! $user_id ) { 
+		// Current user isn't logged in for some reason, bail
+        $user_id = get_current_user_id();
+        if ( ! $user_id ) {
+            return;
+        }
+    }
+
+	// // Lets make sure the site has a Maps API key set to continue further.
+	if ( ! get_option( 'pmpro_pmpromd_maps_api_key' ) ) {
+		return;
+	}
+
+
+    if ( ! empty( $_REQUEST['pmpromm_street_name'] ) ) {
+        //geocode address
+        $member_address = array(
+            'street'    => ( ! empty( $_REQUEST['pmpromm_street_name'] ) ) ? sanitize_text_field( $_REQUEST['pmpromm_street_name'] ) : '',
+            'city'      => ( ! empty( $_REQUEST['pmpromm_city'] ) ) ? sanitize_text_field( $_REQUEST['pmpromm_city'] ) : '',
+            'state'     => ( ! empty( $_REQUEST['pmpromm_state'] ) ) ? sanitize_text_field( $_REQUEST['pmpromm_state'] ) : '',
+            'zip'       => ( ! empty( $_REQUEST['pmpromm_zip'] ) ) ? sanitize_text_field( $_REQUEST['pmpromm_zip'] ) : '',
+            'country'   => ( ! empty( $_REQUEST['pmpromm_country'] ) ) ? sanitize_text_field( $_REQUEST['pmpromm_country'] ) : ''
+        );
+
+        if ( ! isset( $_REQUEST['pmpromm_optin'] ) ) {
+            $member_address['optin'] = false;
+        } else {
+            $member_address['optin'] = true;
+        }
+        
+        $coordinates = pmpromd_geocode_map_address( $member_address );
+ 
+        if ( is_array( $coordinates ) ) {
+            if ( !empty( $coordinates['lat'] ) && !empty( $coordinates['lng'] ) ){
+                $member_address['latitude'] = $coordinates['lat'];
+                $member_address['longitude'] = $coordinates['lng'];
+
+                //Only add to user meta if the address has been geocoded
+                update_user_meta( $user_id, 'pmpromd_map_location', $member_address );
+            } else {
+                //Cleanup map location
+				delete_user_meta( $user_id, 'pmpromd_map_location' );
+            }
+        }
+
+    } else {
+        //Cleanup map location
+        delete_user_meta( $user_id, 'pmpromd_map_location' );
+
+    }
+}
+
+/**
+ * Get the member's address from user meta.
+ *
+ * @since TBD
+ * 
+ * @param int|boolean $user_id The user ID to get the address for. If false, it will get the current user ID.
+ * @return array|boolean $map_location The member's address in an array format, or false if no address is found.
+ */
+function pmpromd_get_member_address( $user_id = false ) {
+	// No user ID provided, lets get the current user.
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	// If we don't have a user ID, we should return false.
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	// Get the map location from user meta.
+	$map_location = get_user_meta( $user_id, 'pmpromm_pin_location', true );
+	if ( ! empty( $map_location ) ) {
+		// Update the meta to the new one and then delete the old one.
+		update_user_meta( $user_id, 'pmpromd_map_location', $map_location );
+		delete_user_meta( $user_id, 'pmpromm_pin_location' );
+	} else {
+		$map_location = get_user_meta( $user_id, 'pmpromd_map_location', true );
+	}
+
+	return $map_location;
+}
+
+/**
+ * Geocode the passed address for the marker locations. Get the longitude and latitude of an address using the Google Maps Geocoding API.
+ *
+ * @since TBD
+ * 
+ * @param array $addr_array
+ * @param boolean $morder
+ * @param boolean $return_body /// This needs thought.
+ * @return void
+ */
+function pmpromd_geocode_map_address( $addr_array, $morder = false, $return_body = false ) {
+
+	// Turn the address array into a string for geocoding.
+	$address_string = implode( ", ", array_filter( $addr_array ) );
+
+	/**
+	 * Filter to adjust the geocoding API key. This is useful if you want to use a different API key for geocoding or test a key.
+	 * 
+	 * @deprecated TBD - use `pmpromd_maps_geocoding_api_key` instead.
+	 */
+	$map_api_key = apply_filters_deprecated( 'pmpromm_geocoding_api_key', array( get_option( 'pmpro_pmpromd_maps_api_key' ) ), 'TBD', 'pmpromd_maps_geocoding_api_key' );
+
+	$remote_request = wp_remote_get( 'https://maps.googleapis.com/maps/api/geocode/json', 
+		array( 'body' => array(
+			'key' 		=> apply_filters( 'pmpromd_maps_geocoding_api_key', $map_api_key ),
+			'address' 	=> $address_string
+		) ) 
+	);
+
+	if ( ! is_wp_error( $remote_request ) ) {
+
+		$request_body = wp_remote_retrieve_body( $remote_request );
+		$request_body = json_decode( $request_body );
+
+		// If we need to return the 'raw' response body, we can do that here. This is for testing.
+		if ( $return_body ) {
+			return $request_body;
+		}
+
+		// Let's get the returned data and return it if it's all okay.
+		if ( ! empty( $request_body->status ) && $request_body->status == 'OK' ) {
+			
+			if ( ! empty( $request_body->results[0] ) ) {
+
+				$lat = $request_body->results[0]->geometry->location->lat;
+				$lng = $request_body->results[0]->geometry->location->lng;
+
+				$geocoded_data = array( 'lat' => $lat, 'lng' => $lng );
+			}
+
+		} else {
+			// pmpromm_report_geocode_api_error( $request_body );
+			$geocoded_data = false;
+		}
+
+	}
+
+	return $geocoded_data;
 
 }
