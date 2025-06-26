@@ -26,7 +26,6 @@ function pmpromd_add_google_maps_api_key_setting( $fields ) {
 		$key_status = get_option( 'pmpro_pmpromd_maps_api_key_status' );
 	}
 	
-
 	if ( empty( $api_key ) ) {
 		$description = '<a href="https://www.paidmembershipspro.com/add-ons/member-directory/#google-maps-api-key" target="_BLANK">' . esc_html__( 'Obtain Your Google Maps API Key', 'pmpro-member-directory' ).'</a>';
 	} else {
@@ -111,3 +110,28 @@ function pmpromd_use_api_key_on_save( $api_key ) {
 
 	return $api_key;
 }
+
+/**
+ * Adds the API key status to site health
+ * 
+ * @since TBD
+ *
+ * @param array $fields The site health fields array.
+ */
+function pmpromd_maps_key_status_site_health( $fields ) {
+
+	if ( ! isset( $fields['pmpro'] ) ) {
+		return $fields;
+	}
+
+	$map_data = array( 'pmpromd_maps_api_key_status' => array(
+		'label' => __( 'Membership Maps API Key Status', 'paid-memberships-pro' ),
+		'value' => esc_html( get_option( 'pmpro_pmpromd_maps_api_key_status' ) ),
+	) );
+
+	$fields['pmpro']['fields'] = array_merge( $fields['pmpro']['fields'], $map_data );
+
+	return $fields;
+
+}
+add_filter( 'debug_information', 'pmpromd_maps_key_status_site_health', 11, 1 );

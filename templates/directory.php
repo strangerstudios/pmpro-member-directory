@@ -107,7 +107,7 @@ $sql_parts['JOIN'] = "
 	LEFT JOIN $wpdb->usermeta umlng 
 		ON umlng.meta_key = 'pmpro_lng' AND u.ID = umlng.user_id 
 	LEFT JOIN $wpdb->usermeta ummap 
-		ON ummap.meta_key = 'pmpromd_map_location' AND u.ID = ummap.user_id 
+		ON ummap.meta_key = 'pmpromd_pin_location' AND u.ID = ummap.user_id 
 ";
 
 $sql_parts['WHERE'] = "
