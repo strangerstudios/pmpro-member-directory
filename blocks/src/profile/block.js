@@ -86,7 +86,7 @@ export default registerBlockType(
           },
 		   show_map: {
 			type: 'boolean',
-			default: false
+			default: true
 		  },
 		  map_zoom: {
 			type: 'string',
