@@ -30,8 +30,8 @@ function pmpromd_show_google_map( $attributes, $members ) {
 		return;
 	}
 
-	// Make sure we have the Maps API key, if it's not set we shouldn't try to do anything.
-	$maps_api_key = get_option( 'pmpro_pmpromd_maps_api_key' );
+	// Make sure we have the Maps API key, including the deprecated one.
+	$maps_api_key = get_option( 'pmpro_pmpromd_maps_api_key' ) ?? get_option( 'pmpro_pmpromm_maps_api_key' );
 	if ( empty( $maps_api_key ) ) {
 		return;
 	}
