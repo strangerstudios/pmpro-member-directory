@@ -503,3 +503,26 @@ function pmpromd_map_process_map_address_after_checkout( $user_id, $morder ){
 	pmpromd_save_marker_location_for_user( $user_id );
 }
 add_action( 'pmpro_after_checkout', 'pmpromd_map_process_map_address_after_checkout', 10, 2 );
+
+/**
+ * Save the address from the member directory and profile preferences panel.
+ * 
+ * @since TBD
+ */
+function pmpromd_map_save_address_from_member_panel() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// If we're saving the address from the directory and profile preferences panel and the nonce is valid, assume we hit save and update the member's address.
+	if ( isset( $_REQUEST['pmpro_member_edit_panel'] ) && $_REQUEST['pmpro_member_edit_panel'] === 'user-fields-directory-and-profile-preferences' ) {
+
+		// Let's not do anything unless we have a verified nonce.
+		if ( ! isset( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) || ! wp_verify_nonce( $_REQUEST['pmpro_member_edit_saved_panel_nonce'], 'pmpro_member_edit_saved_panel_user-fields-directory-and-profile-preferences' ) ) {
+			return;
+		}
+
+		pmpromd_save_marker_location_for_user( $_REQUEST['user_id'] );
+	}
+}
+add_action( 'admin_init', 'pmpromd_map_save_address_from_member_panel' );
