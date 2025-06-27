@@ -10,7 +10,7 @@
  * @since TBD
  */
 function pmpromd_enqueue_extra_map_scripts() {
-	wp_enqueue_script( 'pmpro-directory-maps-extra-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/extras.js', array( 'jquery' ), PMPROMD_VERSION );
+	wp_enqueue_script( 'pmpro-directory-maps-extra-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/extras.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION );
 }
 add_action( 'wp_enqueue_scripts', 'pmpromd_enqueue_extra_map_scripts' );
 
@@ -20,7 +20,7 @@ add_action( 'wp_enqueue_scripts', 'pmpromd_enqueue_extra_map_scripts' );
  * @since TBD
  * 
  * @param array $attributes An array of attributes for the Google Map, often passed by a shortcode or block.
- * @param array $members An array of members to be displayed on the map. This is optional and can be used to filter the markers shown. (///TODO)
+ * @param array $members An array of members to be displayed on the map. This is optional and can be used to filter the markers shown.
  * @return string $map_output The HTML output for the Google Map.
  */
 function pmpromd_show_google_map( $attributes, $members ) {
@@ -278,13 +278,13 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 					}
 
 					// Add marker content to the infowindow and escape/sanitize it.
-					$marker_content .= '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_' . $element['class'] ) ) . '"> ' . wp_kses( $element[0], pmpromd_allowed_html() ) . '<br>' . wp_kses( $value , pmpromd_allowed_html() ) . '</p>';
+					$marker_content .= '<p class="' . esc_attr( pmpro_get_element_class('pmpro_member_directory_marker_field-' . strtok( $element[1], '|' ) ) ) . '"> ' . wp_kses( $element[0], pmpromd_allowed_html() ) . '<br>' . wp_kses( $value , pmpromd_allowed_html() ) . '</p>';
 				}
 
 				// Add the View Profile link at the end of the infowindow.
 				if ( ! empty( $link ) && ! empty( $profile_url ) ) {
 					$user_profile = pmpromd_build_profile_url( $member, $profile_url );
-					$profile_content = '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html( apply_filters( 'pmpromm_view_profile_text', __( 'View Profile', 'pmpro-membership-maps' ) ) ) . '</a></p>';
+					$profile_content = '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html( apply_filters( 'pmpromm_view_profile_text', __( 'View Profile', 'pmpro-member-directory' ) ) ) . '</a></p>';
 					$marker_content .= $profile_content;			
 				}
 				
