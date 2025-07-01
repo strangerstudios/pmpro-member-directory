@@ -11,7 +11,7 @@
  */
 function pmpromd_add_google_maps_api_key_setting( $fields ) {
 
-	remove_filter('pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20);
+	remove_filter( 'pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20 );
 
 	// Get the option for the API key and it's status. It will be filtered by the `option_{option_name}` filter.
 	$api_key = get_option( 'pmpro_pmpromd_maps_api_key' );
@@ -151,9 +151,11 @@ function pmpromd_compatibility_for_membership_maps() {
 	remove_action( 'edit_user_profile_update', 'pmpro_geocode_billing_address_fields_frontend', 10, 1 );
 	remove_action( 'pmpro_checkout_boxes', 'pmpromm_checkout_fields' );
 	remove_filter( 'pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20 );
+	remove_shortcode( 'pmpro_membership_maps', 'pmpromm_shortcode' );
+	remove_action( 'pmpro_member_directory_before', 'pmpromm_load_map_directory_page', 10, 2 );
 
 }
-add_action( 'init', 'pmpromd_compatibility_for_membership_maps', 1 );
+add_action( 'init', 'pmpromd_compatibility_for_membership_maps', 99 );
 
 
 /**
