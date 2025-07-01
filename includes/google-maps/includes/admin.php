@@ -11,27 +11,13 @@
  */
 function pmpromd_add_google_maps_api_key_setting( $fields ) {
 
-	// If we detect PMPro Membership Maps is active, let's remove this programmatically.
-	if ( isset( $fields['pmpromm_api_key'] ) ) {
-		unset( $fields['pmpromm_api_key'] );
-		unset( $fields['pmpromm_api_key_status'] );
-	}
+	remove_filter('pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20);
 
-	// Get the 'old' API key option.
-	$api_key = get_option( 'pmpro_pmpromm_api_key' );
-	$key_status = get_option( 'pmpro_pmpromm_api_key_status' );
-
-	// Backwards compatibility to update the option as we need it. TODO: Remove this in a future version.
-	if ( ! empty( $api_key ) ) {
-		update_option( 'pmpro_pmpromd_maps_api_key', $api_key );
-		update_option( 'pmpro_pmpromd_maps_api_key_status', $key_status );
-		delete_option( 'pmpro_pmpromm_api_key' );
-		delete_option( 'pmpro_pmpromm_api_key_status' );
-	} else {
-		$api_key = get_option( 'pmpro_pmpromd_maps_api_key' );
-		$key_status = get_option( 'pmpro_pmpromd_maps_api_key_status' );
-	}
+	// Get the option for the API key and it's status. It will be filtered by the `option_{option_name}` filter.
+	$api_key = get_option( 'pmpro_pmpromd_maps_api_key' );
+	$key_status = get_option( 'pmpro_pmpromd_maps_api_key_status' );
 	
+	// If there's no API key, then we show a link to getting the API key or we get the response.
 	if ( empty( $api_key ) ) {
 		$description = '<a href="https://www.paidmembershipspro.com/add-ons/member-directory/#google-maps-api-key" target="_BLANK">' . esc_html__( 'Obtain Your Google Maps API Key', 'pmpro-member-directory' ).'</a>';
 	} else {
@@ -47,8 +33,7 @@ function pmpromd_add_google_maps_api_key_setting( $fields ) {
 	
 	return $fields;
 }
-add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_setting', 50 );
-
+add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_setting', 5 );
 
 /**
  * Test the API key upon saving the PMPro Advanced Settings.
@@ -112,6 +97,11 @@ function pmpromd_use_api_key_on_save( $api_key ) {
 
 	if ( ! empty( $_REQUEST['pmpromd_maps_api_key'] ) ) {
 		$api_key = trim( sanitize_text_field( $_REQUEST['pmpromd_maps_api_key'] ) );
+
+		// Try to delete the old options for now.
+		// This should be deprecated later on.
+		delete_option( 'pmpro_pmpromm_api_key' );
+		delete_option( 'pmpro_pmpromm_api_key_status' );
 	}
 
 	return $api_key;
@@ -159,9 +149,28 @@ function pmpromd_compatibility_for_membership_maps() {
 	remove_action( 'pmpro_personal_options_update', 'pmpro_geocode_billing_address_fields_frontend', 10, 1 );
 	remove_action( 'personal_options_update', 'pmpro_geocode_billing_address_fields_frontend', 10, 1 );
 	remove_action( 'edit_user_profile_update', 'pmpro_geocode_billing_address_fields_frontend', 10, 1 );
+	remove_action( 'pmpro_checkout_boxes', 'pmpromm_checkout_fields' );
+	remove_filter( 'pmpro_custom_advanced_settings','pmpromm_advanced_settings_field', 20 );
 
 }
 add_action( 'init', 'pmpromd_compatibility_for_membership_maps', 1 );
+
+
+/**
+ * Backwards compatibility for get_option calls to get 'old' value for the API key as the default option.
+ * 
+ * @since TBD
+ */
+function pmpromd_default_maps_api_key_value( $default_value ) {
+	$old_value = get_option( 'pmpro_pmpromm_api_key' );
+	
+	if ( $old_value ) {
+		$default_value = $old_value;
+	}
+
+	return $default_value;
+}
+add_filter( 'default_option_pmpro_pmpromd_maps_api_key', 'pmpromd_default_maps_api_key_value' );
 
 /**
  * Add deprecated notice for Membership Maps with PMPro core.
@@ -188,4 +197,3 @@ function pmpromd_show_maps_deprecated_notice() {
 	<?php
 }
 add_action( 'admin_notices', 'pmpromd_show_maps_deprecated_notice', 1 );
-
