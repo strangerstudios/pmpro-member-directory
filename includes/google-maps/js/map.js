@@ -31,8 +31,6 @@ function pmpromd_init_map(){
 	//Initiating the map
 	var pmpro_map = new google.maps.Map( pmpromd_map_element, pmpromd_map_arguments);
 
-	console.log( 'pmpromd_map_element', pmpromd_map);
-
 	if( pmpromd_vars.map_styles !== "" ){
 		pmpro_map.setOptions({ styles:  JSON.parse( pmpromd_vars.map_styles ) });
 	}
