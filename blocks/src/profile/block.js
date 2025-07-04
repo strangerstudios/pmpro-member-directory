@@ -84,9 +84,33 @@ export default registerBlockType(
             type: 'boolean',
             default: false
           },
+		   show_map: {
+			type: 'boolean',
+			default: true
+		  },
+		  map_zoom: {
+			type: 'string',
+			default: '8'
+		  },
+		  map_height: {
+			type: 'string',
+			default: '400'
+		  },
+		  map_width: {
+			type: 'string',
+			default: '100'
+		  },
+		  map_max_zoom: {
+			type: 'string',
+			default: ''
+		  },
+		  map_infowindow_width: {
+			type: 'string',
+			default: '300'
+		  }
         },
         edit: props => {
-          const { attributes:  { avatar_size, fields, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, user_id },
+          const { attributes:  { avatar_size, fields, show_avatar, show_bio, show_billing, show_email, show_name, show_level, show_phone, show_search, show_startdate, show_map, map_zoom, map_height, map_width, map_max_zoom, map_infowindow_width, user_id },
           className, isSelected, setAttributes } = props;
 
           return [
@@ -165,6 +189,50 @@ export default registerBlockType(
                 />
 
               </PanelBody>
+
+			   <PanelBody title={ __( 'Map Options', 'pmpro-member-directory' ) } >
+				<CheckboxControl
+				  label={ __( 'Show Map', 'pmpro-member-directory' ) }
+				  checked={ show_map }
+				  onChange={ show_map => { setAttributes( { show_map } ) } }
+				/>
+
+				<TextControl 
+                  label={ __( 'Map Zoom', 'pmpro-member-directory' ) }
+                  value={ map_zoom }
+                  className={ !show_map ? "hidden" : "" }
+                  onChange={ map_zoom => { setAttributes( { map_zoom } ) } }
+                />
+
+				<TextControl 
+                  label={ __( 'Map Height', 'pmpro-member-directory' ) }
+                  value={ map_height }
+                  className={ !show_map ? "hidden" : "" }
+                  onChange={ map_height => { setAttributes( { map_height } ) } }
+                />
+
+				<TextControl 
+                  label={ __( 'Map Width', 'pmpro-member-directory' ) }
+                  value={ map_width }
+                  className={ !show_map ? "hidden" : "" }
+                  onChange={ map_width => { setAttributes( { map_width } ) } }
+                />
+
+				<TextControl 
+                  label={ __( 'Max Zoom Level', 'pmpro-member-directory' ) }
+                  value={ map_max_zoom }
+                  className={ !show_map ? "hidden" : "" }
+                  onChange={ map_max_zoom => { setAttributes( { map_max_zoom } ) } }
+                />
+
+				<TextControl 
+                  label={ __( 'Infowindow Width', 'pmpro-member-directory' ) }
+                  value={ map_infowindow_width }
+                  className={ !show_map ? "hidden" : "" }
+                  onChange={ map_infowindow_width => { setAttributes( { map_infowindow_width } ) } }
+                />
+			  </PanelBody>
+
               <PanelBody
                 title={ __('Extra Fields', 'pmpro-member-directory' ) }
               >
@@ -177,6 +245,10 @@ export default registerBlockType(
               </PanelBody>
               </InspectorControls>,
               <div className={ className } style={{ fontFamily: 'arial', fontSize: '14px' } }>
+				<div className={ !show_map ? "hidden" : "" }>
+                  <img src={ require('../components/icons/google-maps-placeholder.png') } alt="Map Placeholder" />
+                </div>
+				
                 <span style={{fontSize: '30px', fontWeight: 'bold'}}>{ __( 'Membership Profile', 'pmpro-member-directory' ) }</span><div className={ show_search ? '' : 'pmpro-member-directory-hide' } id="pmpro-member-profile-search" style={{ display: 'inline-block', float: 'right'}}>Search Members</div>
                 <br/>
 

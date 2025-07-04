@@ -229,3 +229,10 @@ div.pmpro_member_profile strong {display: block; }
 .pmpro_page_numbers a.pmpro_page_active {
 	font-weight: bold;
 }
+
+/* Membership Maps Styling */
+.pmpromd_infowindow h2,
+.pmpromd_infowindow h3,
+.pmpromd_infowindow p{margin: 4px 0 8px 0;}
+
+.pmpromd_map {margin-bottom: 2%;}
