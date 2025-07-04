@@ -24,7 +24,7 @@ If applicable, please attach a screenshot to make your issue clearer.
 A clear and concise description of what you expected to happen.
 
 **Isolating the problem (mark completed items with an [x]):**
-- [ ] I have deactivated other plugins and confirmed this bug occurs when only Paid Memberships Pro plugin is active.
+- [ ] I have deactivated all other plugins and confirmed that this bug occurs when only Paid Memberships Pro and Member Directory and Profile Pages are active.
 - [ ] This bug happens with a default WordPress theme active, or [Memberlite](https://www.paidmembershipspro.com/themes/memberlite/).
 - [ ] I can reproduce this bug consistently using the steps above.
 
