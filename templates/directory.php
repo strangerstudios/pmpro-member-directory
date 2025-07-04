@@ -87,8 +87,6 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 		u.user_nicename,
 		umf.meta_value AS first_name, 
 		uml.meta_value AS last_name,
-		umlng.meta_value as old_lng,
-		umlat.meta_value as old_lat,
 		ummap.meta_value AS maplocation
 	FROM $wpdb->users u 
 ";
@@ -102,10 +100,6 @@ $sql_parts['JOIN'] = "
 		ON umf.meta_key = 'first_name' AND u.ID = umf.user_id 
 	LEFT JOIN $wpdb->usermeta uml 
 		ON uml.meta_key = 'last_name' AND u.ID = uml.user_id 
-	LEFT JOIN $wpdb->usermeta umlat 
-		ON umlat.meta_key = 'pmpro_lat' AND u.ID = umlat.user_id 
-	LEFT JOIN $wpdb->usermeta umlng 
-		ON umlng.meta_key = 'pmpro_lng' AND u.ID = umlng.user_id 
 	LEFT JOIN $wpdb->usermeta ummap 
 		ON ummap.meta_key = 'pmpromd_pin_location' AND u.ID = ummap.user_id 
 ";
