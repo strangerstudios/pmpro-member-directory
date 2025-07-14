@@ -335,7 +335,7 @@ function pmpromd_build_profile_url( $pu, $profile_url = null, $separator = false
 	/**
 	 * Respect "trailing slash" option for the final URL.
 	 * user_trailingslashit() adds or removes the slash in accordance
-	 * with Settings → Permalinks → “Optional” trailing slash preference.
+	 * with Settings → Permalinks trailing slash preference.
 	 */
 	return user_trailingslashit( $profile_url . $pu );
 }
