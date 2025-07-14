@@ -222,16 +222,15 @@ function pmpromd_custom_rewrite_rules() {
 		return;
 	}
 
-	$structure = get_option( 'permalink_structure' );
-	if ( empty( $structure ) ) {
-		return;
-	}
-
 	// Get the profile permalink.
 	$profile_permalink = get_permalink( $pmpro_pages['profile'] );
 
 	// Parse the path from the permalink, taking subfolder installations into account.
-	$profile_base = trim( parse_url( $profile_permalink, PHP_URL_PATH ), '/' );
+	$profile_page = get_post( $pmpro_pages['profile'] );
+	if ( ! is_object( $profile_page ) || empty( $profile_page->post_name ) ) {
+		return;
+	}
+	$profile_base = $profile_page->post_name;
 
 	// Add the rewrite rule.
 	add_rewrite_rule(
