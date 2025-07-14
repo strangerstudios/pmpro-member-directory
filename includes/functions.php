@@ -287,49 +287,58 @@ function pmpromd_redirect_profile_links() {
 add_action( 'wp', 'pmpromd_redirect_profile_links' );
 
 /**
- * Build profile URL
+ * Build a user-profile URL that respects the site's permalink structure.
+ *
+ * @param int|string|WP_User $pu           User object, user ID or nicename.
+ * @param string|null        $profile_url  Base profile page URL (optional).
+ * @param string|false       $separator    Unused param kept for backward compat.
+ *
+ * @return string The final profile URL or an empty string if user not found.
  */
-function pmpromd_build_profile_url( $pu, $profile_url = false, $separator = false ) { 
+function pmpromd_build_profile_url( $pu, $profile_url = null, $separator = false ) {
 	global $pmpro_pages;
 
-	if ( ! empty( $pmpro_pages['profile'] ) && ! $profile_url ) {
-		$profile_url = apply_filters( 'pmpromd_profile_url', get_permalink( $pmpro_pages['profile'] ) );
+	// If there's no profile URL and the profile page is set, use it.
+	if ( empty( $profile_url ) && ! empty( $pmpro_pages['profile'] ) ) {
+		$profile_url = apply_filters(
+			'pmpromd_profile_url',
+			get_permalink( $pmpro_pages['profile'] )
+		);
 	}
 
-	$structure = get_option( 'permalink_structure' );	
+	// Bail early if the profile page is missing.
+	if ( empty( $profile_url ) ) {
+		return '';
+	}
 
+	// Figure out the user identifier.
 	if ( is_object( $pu ) ) {
-		//We can't use 'slug' directly when getting the user nicename
-		$user_identifier = strtolower( pmpromd_user_identifier() );
-
-		if ( $user_identifier == 'id' ) {
-			$pu = $pu->ID;
-		} else {
-			$pu = $pu->user_nicename;
-		}
+		$user_identifier = strtolower( pmpromd_user_identifier() ); // id | slug
+		$pu              = ( 'id' === $user_identifier ) ? $pu->ID : $pu->user_nicename;
 	}
 
+	// No user, no URL.
 	if ( empty( $pu ) ) {
 		return '';
 	}
 
-	if ( empty( $structure ) ) {
-		//We're using plain permalinks here. Query parameters to the rescue!
-		return add_query_arg( array( 'pu' => $pu ), $profile_url );
+	// If there's no structure found let's do a query arg ?pu=nice_name
+	if ( ! get_option( 'permalink_structure' ) ) {
+		// Plain permalinks – use the query-string format.
+		return add_query_arg( 'pu', $pu, $profile_url );
 	}
 
-	if ( strpos( $structure, 'post_id' ) !== FALSE ) {
-		//Numeric permalinks don't have a trailing slash for some readon
-		$separator = true;
-	}
+	// Friendly permalinks – append the slug / ID as an extra path part.
+	$pu          = sanitize_title( $pu );
+	$profile_url = trailingslashit( $profile_url );
 
-	if ( $separator ) { 
-		return $profile_url . '/' . sanitize_title( $pu );
-	} else {
-		return $profile_url . sanitize_title( $pu );
-	}
+	/**
+	 * Respect "trailing slash" option for the final URL.
+	 * user_trailingslashit() adds or removes the slash in accordance
+	 * with Settings → Permalinks trailing slash preference.
+	 */
+	return user_trailingslashit( $profile_url . $pu );
 }
-
 /**
  * Update the_title for the Profile page.
  */
