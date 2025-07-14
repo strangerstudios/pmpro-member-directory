@@ -42,12 +42,12 @@ add_action( 'admin_bar_menu', 'pmpromd_add_edit_profile', 100 );
 function pmpromd_extra_page_settings( $pages ) {
 	$pages['directory'] = array(
 		'title' => esc_html__( 'Directory', 'pmpro-member-directory' ),
-		'content' => '[pmpro_member_directory]',
+		'content' => '[pmpro_member_directory layout="3col" elements="avatar;display_name;membership_name"]',
 		'hint' => esc_html__( 'Include the shortcode [pmpro_member_directory].', 'pmpro-member-directory' ),
 	);
 	$pages['profile'] = array(
 		'title' => esc_html__( 'Profile', 'pmpro-member-directory' ),
-		'content' => '[pmpro_member_profile]',
+		'content' => '[pmpro_member_profile elements="avatar|256;Membership,membership_name;Member Since,membership_startdate" show_search="false"]',
 		'hint' => esc_html__( 'Include the shortcode [pmpro_member_profile].', 'pmpro-member-directory' ),
 	);
 
