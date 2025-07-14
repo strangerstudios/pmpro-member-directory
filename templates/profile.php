@@ -126,7 +126,14 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		$limit = 15;
 
 
-	$shortcode_atts = array(
+	/**
+	 * Filter to override the attributes passed into the shortcode.
+	 * 
+	 * @since TBD
+	 * 
+	 * @param array Contains all of the shortcode attributes used in the profile shortcode
+	 */
+	$shortcode_atts = apply_filters( 'pmpro_member_profile_before_atts', array(
 		'avatar_size' => $avatar_size,
 		'elements' => $elements,
 		'fields' => $fields,
@@ -148,7 +155,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'map_width' => $map_width,
 		'map_max_zoom' => $map_max_zoom,
 		'map_infowindow_width' 	=> $map_infowindow_width,
-	);
+	) );
 
 	ob_start();
 	?>
