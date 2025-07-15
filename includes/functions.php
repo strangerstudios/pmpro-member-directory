@@ -34,105 +34,107 @@ function pmpromd_add_user_fields() {
 		)
 	);
 
-	// Add map address fields and checkbox.
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_map_optin',
-			'checkbox',
-			array(
-				'label' => esc_html__( 'Show location on map', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false
+	if ( get_option( 'pmpro_pmpromd_maps_api_key' ) ) {
+		global $pmpro_default_country;
+		// Add map address fields and checkbox.
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_map_optin',
+				'checkbox',
+				array(
+					'label' => esc_html__( 'Show location on map', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false
+				)
 			)
-		)
-	);
+		);
 
-	// Street address field. Note: We cannot support a street 2 address field (i.e. Apartment, Suite, etc.) because the Google Maps API does not support it.
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_street_name',
-			'text',
-			array(
-				'label' => esc_html__( 'Street Name', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false,
-				'class' => 'pmpromd-map-address-field'
+		// Street address field. Note: We cannot support a street 2 address field (i.e. Apartment, Suite, etc.) because the Google Maps API does not support it.
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_street_name',
+				'text',
+				array(
+					'label' => esc_html__( 'Street Name', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false,
+					'class' => 'pmpromd-map-address-field'
+				)
 			)
-		)
-	);
+		);
 
-	// City field.
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_city',
-			'text',
-			array(
-				'label' => esc_html__( 'City', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false,
-				'class' => 'pmpromd-map-address-field'
+		// City field.
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_city',
+				'text',
+				array(
+					'label' => esc_html__( 'City', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false,
+					'class' => 'pmpromd-map-address-field'
+				)
 			)
-		)
-	);
+		);
 
-	// State
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_state',
-			'text',
-			array(
-				'label' => esc_html__( 'State', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false,
-				'class' => 'pmpromd-map-address-field'
+		// State
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_state',
+				'text',
+				array(
+					'label' => esc_html__( 'State', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false,
+					'class' => 'pmpromd-map-address-field'
+				)
 			)
-		)
-	);
+		);
 
-	// Zip code
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_zip',
-			'text',
-			array(
-				'label' => esc_html__( 'Zip Code', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false,
-				'class' => 'pmpromd-map-address-field'
+		// Zip code
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_zip',
+				'text',
+				array(
+					'label' => esc_html__( 'Zip Code', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false,
+					'class' => 'pmpromd-map-address-field'
+				)
 			)
-		)
-	);
+		);
 
-	// Get the list of countries from PMPro core.
-	if ( function_exists( 'pmpro_get_countries' ) ) {
-		$countries = pmpro_get_countries();
-	} else {
-		global $pmpro_countries;
-		$countries = $pmpro_countries;
+		// Get the list of countries from PMPro core.
+		if ( function_exists( 'pmpro_get_countries' ) ) {
+			$countries = pmpro_get_countries();
+		} else {
+			global $pmpro_countries;
+			$countries = $pmpro_countries;
+		}
+
+		// Generate this with the PMPro Country field.
+		pmpro_add_user_field(
+			$field_group_name,
+			new PMPro_Field(
+				'pmpromd_country',
+				'select',
+				array(
+					'label' => esc_html__( 'Country', 'pmpro-member-directory' ),
+					'profile' => true,
+					'required' => false,
+					'options' => $countries,
+					'class' => 'pmpromd-map-address-field',
+					'default' => $pmpro_default_country
+				)
+			)
+		);
 	}
-
-	// Generate this with the PMPro Country field.
-	pmpro_add_user_field(
-		$field_group_name,
-		new PMPro_Field(
-			'pmpromd_country',
-			'select',
-			array(
-				'label' => esc_html__( 'Country', 'pmpro-member-directory' ),
-				'profile' => true,
-				'required' => false,
-				'options' => $countries,
-				'class' => 'pmpromd-map-address-field'
-			)
-		)
-	);
-
-
 }
 add_action( 'init', 'pmpromd_add_user_fields' );
 
