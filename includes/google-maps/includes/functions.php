@@ -206,7 +206,6 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			// Try to get the member's address.
 			$member_address = isset( $member->maplocation ) ? maybe_unserialize( $member->maplocation ) : array();
 			
-
 			// Let's get the member's latitude and longitude values.
 			$used_old_location = false;
 			if ( empty( $member_address ) ) {
@@ -504,6 +503,49 @@ function pmpromd_map_process_map_address_after_checkout( $user_id, $morder ){
 }
 add_action( 'pmpro_after_checkout', 'pmpromd_map_process_map_address_after_checkout', 10, 2 );
 
+
+/**
+ * Retroactively update user fields data for a PMPro member.
+ * Runs if we detect empty street name fields. This also fixes if things get out of sync.
+ *
+ * @since TBD
+ * @param int $user_id The WP user ID to update. If NULL, it will use the current user ID.
+ */
+function pmpromd_retroactively_update_user_map_fields( $user_id = NULL ) {
+	// If no user ID is provided, get the current user ID.	
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	// User not logged-in, let's bail.
+	if ( ! $user_id ) {
+		return;
+	}
+
+	// We've got the new PMPro option, so let's not update the user fields values.
+	if ( ! empty( get_user_meta( $user_id, 'pmpromd_street_name', true ) ) ) {
+		return;
+	}
+
+	// Get the old PMPro user meta values.
+	$pin_location = pmpromd_get_member_address( $user_id );
+	if ( empty( $pin_location ) || ! is_array( $pin_location ) ) {
+		return;
+	}
+
+	// Retroactively update data that may be out of sync.
+	if ( ! empty( $pin_location['street'] ) ) {
+		// Update the new user fields with the old values.
+		update_user_meta( $user_id, 'pmpromd_map_optin', $pin_location['optin'] );
+		update_user_meta( $user_id, 'pmpromd_street_name', $pin_location['street'] );
+		update_user_meta( $user_id, 'pmpromd_city', $pin_location['city'] );
+		update_user_meta( $user_id, 'pmpromd_state', $pin_location['state'] );
+		update_user_meta( $user_id, 'pmpromd_zip', $pin_location['zip'] );
+		update_user_meta( $user_id, 'pmpromd_country', $pin_location['country'] );
+	}
+
+}
+
 /**
  * Save the address from the member directory and profile preferences panel.
  * 
@@ -526,3 +568,45 @@ function pmpromd_map_save_address_from_member_panel() {
 	}
 }
 add_action( 'admin_init', 'pmpromd_map_save_address_from_member_panel' );
+
+
+/**
+ * Move over 'old' PMPro pin location data to the new user fields retroactively.
+ * 
+ * @since TBD
+ */
+function pmpromd_migrate_map_data_frontend() {	
+	global $pmpro_pages;
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	// Only run this on the account page or checkout.
+	if ( is_page( $pmpro_pages['account'] ) || is_page( $pmpro_pages['member_profile_edit'] ) || pmpro_is_checkout() ) {
+		pmpromd_retroactively_update_user_map_fields();
+	}
+}
+add_action( 'wp', 'pmpromd_migrate_map_data_frontend', 10 );
+
+/**
+ * Move over 'old' PMPro pin location data to the new user fields retroactively (in the admin).
+ * 
+ * @since TBD
+ */
+function pmpromd_migrate_map_data_backend() {
+	// User is not an admin, let's bail.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	// Bail when we're not on the edit member page.
+	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-member' ) {
+		return;
+	}
+
+	// Get the user ID we are trying to migrate.
+	$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : get_current_user_id();
+
+	// If we're editing a member profile, let's migrate the data now.
+	pmpromd_retroactively_update_user_map_fields( $user_id );
+}
+add_action( 'admin_init', 'pmpromd_migrate_map_data_backend', 10 );
