@@ -317,8 +317,8 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 				 */
 				do_action( 'pmpro_member_directory_before', $sqlQuery, $shortcode_atts );
 
-				/// PUT THE MAP IN HERE.
-				echo pmpromd_show_google_map( $shortcode_atts, $theusers );
+				// Try to show the Google Map. The function will check if the API key is set to show the map or not.
+				echo wp_kses_post( pmpromd_show_google_map( $shortcode_atts, $theusers ) );
 			?>
 		</div> <!-- end pmpro_member_directory_before -->
 

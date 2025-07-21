@@ -178,8 +178,8 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 				 */
 				do_action( 'pmpro_member_profile_before', $pu );
 
-				/// Try to show the Google Map.
-				echo pmpromd_show_google_map( $shortcode_atts, $pu );
+				// Try to show the Google Map. The function will check if the API key is set to show the map or not.
+				echo wp_kses_post( pmpromd_show_google_map( $shortcode_atts, $pu ) );
 			?>
 
 		

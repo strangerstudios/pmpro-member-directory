@@ -44,7 +44,7 @@ add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_s
 function pmpromd_test_maps_api() {
 
 	// Only load this function if the PMPro Advanced Settings page is being loaded.
-	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-advanced-settings' ) {
+	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-advanced-settings' || ! check_admin_referer( 'savesettings', 'pmpro_advancedsettings_nonce' ) ) {
 		return;
 	}
 
@@ -121,7 +121,7 @@ function pmpromd_maps_key_status_site_health( $fields ) {
 	}
 
 	$map_data = array( 'pmpromd_maps_api_key_status' => array(
-		'label' => __( 'Membership Maps API Key Status', 'paid-memberships-pro' ),
+		'label' => __( 'Membership Maps API Key Status', 'pmpro-member-directory' ),
 		'value' => esc_html( get_option( 'pmpro_pmpromd_maps_api_key_status' ) ),
 	) );
 
