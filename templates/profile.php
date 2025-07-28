@@ -22,7 +22,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 		'show_startdate' => true,
 		'user_id' => NULL,
 		'show_map' => true,
-		'map_zoom' => sanitize_text_field( apply_filters( 'pmpromm_default_zoom_level', '8' ) ),
+		'map_zoom' => sanitize_text_field( apply_filters( 'pmpromd_default_map_zoom_level', '8' ) ),
 		'map_height' => '400',
 		'map_width' => '100',
 		'map_max_zoom' => NULL,
