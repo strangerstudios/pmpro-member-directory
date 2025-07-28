@@ -4,7 +4,7 @@
  * Adds API Key field to advanced settings page
  * Note: The filter escapes during it's output and not needed within this function.
  * 
- * @since TBD
+ * @since 2.1
  * 
  * @param array $fields The existing fields on the PMPro Advanced Settings page.
  * @return array $fields The modified fields with the Google Maps API Key field added.
@@ -38,7 +38,7 @@ add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_s
 /**
  * Test the API key upon saving the PMPro Advanced Settings.
  * 
- * @since TBD
+ * @since 2.1
  *
  */
 function pmpromd_test_maps_api() {
@@ -88,7 +88,7 @@ add_action( 'admin_init', 'pmpromd_test_maps_api' );
 /**
  * Sets the geocoding API key to the $_REQUEST value instead of a stored value. This is used when testing the API key.
  * 
- * @since TBD
+ * @since 2.1
  * 
  * @param  string $api_key The current API Key
  * @return string The API key found in the $_REQUEST var
@@ -110,7 +110,7 @@ function pmpromd_use_api_key_on_save( $api_key ) {
 /**
  * Adds the API key status to site health
  * 
- * @since TBD
+ * @since 2.1
  *
  * @param array $fields The site health fields array.
  */
@@ -135,7 +135,7 @@ add_filter( 'debug_information', 'pmpromd_maps_key_status_site_health', 11, 1 );
 /**
  * Backwards compatibility for get_option calls to get 'old' value for the API key as the default option.
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_default_maps_api_key_value( $default_value ) {
 	$old_value = get_option( 'pmpro_pmpromm_api_key' );

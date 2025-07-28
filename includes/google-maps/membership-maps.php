@@ -5,7 +5,7 @@
  * 
  * This is to ensure a smooth transition for users and developers who have the Membership Maps Add On installed.
  * 
- * @since TBD
+ * @since 2.1
  */
 define( 'PMPRO_MEMBER_DIRECTORY_MAPS_DIR', dirname( __FILE__ ) );
 
@@ -15,7 +15,7 @@ include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/admin.php' );
 /**
  * Unhook Membership Maps hooks to avoid duplicate functionality.
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_compatibility_for_membership_maps() {
 	if ( ! defined( 'PMPROMM_VERSION' ) ) {
@@ -39,7 +39,7 @@ add_action( 'init', 'pmpromd_compatibility_for_membership_maps', 5 );
 /**
  * Add deprecated notice for Membership Maps with PMPro core.
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_show_maps_deprecated_notice() {
 	// Only run this if the Membership Maps Add On is active.

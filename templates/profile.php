@@ -129,7 +129,7 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	/**
 	 * Filter to override the attributes passed into the shortcode.
 	 * 
-	 * @since TBD
+	 * @since 2.1
 	 * 
 	 * @param array Contains all of the shortcode attributes used in the profile shortcode
 	 */

@@ -7,7 +7,7 @@
  * Load the custom JS we need to show/hide fields as we need, and any other related JS scripts.
  * Note: This does not include the Google Maps API script, which is loaded in the `pmpromd_show_google_map` function and enqueued with map.js
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_enqueue_extra_map_scripts() {
 	wp_enqueue_script( 'pmpro-directory-maps-extra-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/extras.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION );
@@ -17,7 +17,7 @@ add_action( 'wp_enqueue_scripts', 'pmpromd_enqueue_extra_map_scripts' );
 /**
  * A wrapper function to build and display a Google Map. This replaces the previous membership_map shortcode.
  *
- * @since TBD
+ * @since 2.1
  * 
  * @param array $attributes An array of attributes for the Google Map, often passed by a shortcode or block.
  * @param array $members An array of members to be displayed on the map. This is optional and can be used to filter the markers shown.
@@ -40,14 +40,14 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	extract( $attributes );
 
 	/**
-	 * @deprecated TBD - use `pmpromd_map_id` instead.
+	 * @deprecated 2.1 - use `pmpromd_map_id` instead.
 	 */
-	$map_id = sanitize_text_field( apply_filters_deprecated( 'pmpromm_map_id', array( '1' ), 'pmpromd_map_id', 'TBD' ) );
+	$map_id = sanitize_text_field( apply_filters_deprecated( 'pmpromm_map_id', array( '1' ), 'pmpromd_map_id', '2.1' ) );
 
 	/**
 	 * A unique identifier for the map, should we want styling and some recipes rely on it.
 	 * 
-	 * @since TBD
+	 * @since 2.1
 	 * 
 	 * @param string $map_id The ID of the map.
 	 * @param array $attributes The attributes passed to the map.
@@ -55,19 +55,19 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	$map_id = apply_filters( 'pmpromd_map_id', $map_id, $attributes );
 
 	/**
-	 * @deprecated TBD - use `pmpromd_map_failed_to_load_notice` instead.
+	 * @deprecated 2.1 - use `pmpromd_map_failed_to_load_notice` instead.
 	 */
 	$notice = apply_filters_deprecated(
 		'pmpromm_default_map_notice',
 		array( __( 'This map could not be loaded. Please ensure that you have entered your Google Maps API Key and that there are no JavaScript errors on the page.', 'pmpro-member-directory' ) ),
 		'pmpromd_map_failed_to_load_notice',
-		'TBD'
+		'2.1'
 	);
 	
 	/**
 	 * Adjust the notice that is displayed when the map fails to load.
 	 * 
-	 * @since TBD
+	 * @since 2.1
 	 * 
 	 * @param string $notice The notice to display when the map fails to load.
 	 * @param string $map_id The ID of the map that failed to load.
@@ -80,17 +80,17 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	/**
 	 * Filter the map styles.
 	 *
-	 * @deprecated TBD - use `pmpromd_map_styles` instead.
+	 * @deprecated 2.1 - use `pmpromd_map_styles` instead.
 	 *
   	 * @param string $styles JSON string of map styles
 	 * @param string $map ID of the current map
 	 */
-	$map_styles = apply_filters_deprecated( 'pmpromm_map_styles', array( '', $map_id ), 'pmpromd_map_styles', 'TBD'  );
+	$map_styles = apply_filters_deprecated( 'pmpromm_map_styles', array( '', $map_id ), 'pmpromd_map_styles', '2.1'  );
 
 	/**
 	 * Filter the style of the map.
 	 * 
-	 * @since TBD
+	 * @since 2.1
 	 * 
 	 * @param string $map_styles JSON string of map styles.
 	 * @param string $map_id The ID of the map.
@@ -106,7 +106,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	/**
 	 * Add any additional query parameters to the Google Maps API request. Such as libraries etc.
 	 * 
-	 * @since TBD
+	 * @since 2.1
 	 * 
 	 * @param array $query_params An array of query parameters to be added to the Google Maps API request.
 	 */
@@ -125,20 +125,20 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	wp_register_script( 'pmpromd-google-maps-javascript', plugin_dir_url( dirname( __FILE__ ) ) . 'js/map.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION ); // This changes to `map.js`
 		
 	/**
-	 * @deprecated TBD - use `pmpromd_default_map_start` instead.
+	 * @deprecated 2.1 - use `pmpromd_default_map_start` instead.
 	 */
-	$default_start_location = apply_filters_deprecated( 'pmpromm_default_map_start', array( array( 'lat' => -34.397, 'lng' => 150.644 ), $map_id ), 'pmpromd_default_map_start', 'TBD' );
+	$default_start_location = apply_filters_deprecated( 'pmpromm_default_map_start', array( array( 'lat' => -34.397, 'lng' => 150.644 ), $map_id ), 'pmpromd_default_map_start', '2.1' );
 	
 	/**
-	 * @deprecated TBD - use `pmpromd_override_first_marker` instead.
+	 * @deprecated 2.1 - use `pmpromd_override_first_marker` instead.
 	 */
-	$override_first_marker_location = apply_filters_deprecated( 'pmpromm_override_first_marker', array( '__return_false', $map_id ), 'pmpromd_override_first_marker', 'TBD' );
+	$override_first_marker_location = apply_filters_deprecated( 'pmpromm_override_first_marker', array( '__return_false', $map_id ), 'pmpromd_override_first_marker', '2.1' );
 		
 	$pmpromd_map_attributes = array(
 		/**
 		 * Adjust the map starting point location. This gets overridden when there are markers on the map.
 		 * 
-		 * @since TBD
+		 * @since 2.1
 		 * 
 		 * @param array $default_start_location An array containing the latitude and longitude of the default starting location.
 		 * @param string $map_id The ID of the map.
@@ -148,7 +148,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
 		/**
 		 * Override the first marker location. This is useful when you want to show a specific location on the map first.
 		 * 
-		 * @since TBD
+		 * @since 2.1
 		 * 
 		 * @param bool $override_first_marker_location Whether to override the first marker location.
 		 * @param string $map_id The ID of the map.
@@ -171,7 +171,7 @@ function pmpromd_show_google_map( $attributes, $members ) {
 /**
  * Generate the marker data for the Google Maps.
  * 
- * @since TBD
+ * @since 2.1
  *
  * @param Object $members An array of members (WP_User or stdClass) to be displayed on the map.
  * @param array $marker_attributes An array of marker attributes.
@@ -292,14 +292,14 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			$member_array['marker_content'] = $marker_content;
 			
 			/**
-			 * @deprecated TBD - use `pmpromd_single_marker_content` instead.
+			 * @deprecated 2.1 - use `pmpromd_single_marker_content` instead.
 			 */
-			$member_array['marker_content'] = apply_filters_deprecated( 'pmpromm_single_marker_content', array( $member_array['marker_content'], $member ), 'pmpromd_single_marker_content', 'TBD' );
+			$member_array['marker_content'] = apply_filters_deprecated( 'pmpromm_single_marker_content', array( $member_array['marker_content'], $member ), 'pmpromd_single_marker_content', '2.1' );
 
 			/**
 			 *  Filter the infowindow HTML content for a single marker.
 			 * 
-			 * @since TBD
+			 * @since 2.1
 			 * 
 			 * @param string $member_array['marker_content'] The HTML content for the marker's infowindow.
 			 * @param WP_User $member The user object for the member.
@@ -317,7 +317,7 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 /**
  * Saves the user's pin location to user meta and include latitude and longitude.
  *
- * @since TBD
+ * @since 2.1
  * @param mixed  $user_id User ID but not required
  * @return void
  */
@@ -383,7 +383,7 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
  * Get the member's address from user meta and support backwards compatibility for older versions of membership maps.
  * Note: This function should be slightly refactored in the future to remove the backwards compatibility.
  * 
- * @since TBD
+ * @since 2.1
  * 
  * @param int|boolean $user_id The user ID to get the address for. If false, it will get the current user ID.
  * @return array|boolean $map_location The member's address in an array format, or false if no address is found.
@@ -417,7 +417,7 @@ function pmpromd_get_member_address( $user_id = false ) {
 /**
  * Geocode the passed address for the marker locations. Get the longitude and latitude of an address using the Google Maps Geocoding API.
  *
- * @since TBD
+ * @since 2.1
  * 
  * @param array $addr_array An array of the address components to be geocoded. This should include street, city, state, zip, and country.
  * @param object $morder The Paid Memberships Pro order object, if available. This is optional and can be used to pass additional data.
@@ -433,9 +433,9 @@ function pmpromd_geocode_map_address( $addr_array, $morder = false, $return_body
 	/**
 	 * Filter to adjust the geocoding API key. This is useful if you want to use a different API key for geocoding or test a key.
 	 * 
-	 * @deprecated TBD - use `pmpromd_maps_geocoding_api_key` instead.
+	 * @deprecated 2.1 - use `pmpromd_maps_geocoding_api_key` instead.
 	 */
-	$map_api_key = apply_filters_deprecated( 'pmpromm_geocoding_api_key', array( get_option( 'pmpro_pmpromd_maps_api_key' ) ), 'TBD', 'pmpromd_maps_geocoding_api_key' );
+	$map_api_key = apply_filters_deprecated( 'pmpromm_geocoding_api_key', array( get_option( 'pmpro_pmpromd_maps_api_key' ) ), '2.1', 'pmpromd_maps_geocoding_api_key' );
 
 	$remote_request = wp_remote_get( 'https://maps.googleapis.com/maps/api/geocode/json', 
 		array( 'body' => array(
@@ -479,7 +479,7 @@ function pmpromd_geocode_map_address( $addr_array, $morder = false, $return_body
 /**
  * Geocode map fields when saving/updating a user profile
  *
- * @since TBD
+ * @since 2.1
  * 
  * @param integer $user_id The user ID to geocode the address for.
  */
@@ -493,7 +493,7 @@ add_action( 'edit_user_profile_update', 'pmpromd_geocode_map_address_for_user', 
 /**
  * Geocode the address fields after checkout and save the location data.
  * 
- * @since TBD
+ * @since 2.1
  *
  * @param integer $user_id The user ID to geocode the address for.
  * @param object $morder The Paid Memberships Pro order object, if available.
@@ -508,7 +508,7 @@ add_action( 'pmpro_after_checkout', 'pmpromd_map_process_map_address_after_check
  * Retroactively update user fields data for a PMPro member.
  * Runs if we detect empty street name fields. This also fixes if things get out of sync.
  *
- * @since TBD
+ * @since 2.1
  * @param int $user_id The WP user ID to update. If NULL, it will use the current user ID.
  */
 function pmpromd_retroactively_update_user_map_fields( $user_id = NULL ) {
@@ -549,7 +549,7 @@ function pmpromd_retroactively_update_user_map_fields( $user_id = NULL ) {
 /**
  * Save the address from the member directory and profile preferences panel.
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_map_save_address_from_member_panel() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -573,7 +573,7 @@ add_action( 'admin_init', 'pmpromd_map_save_address_from_member_panel' );
 /**
  * Move over 'old' PMPro pin location data to the new user fields retroactively.
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_migrate_map_data_frontend() {	
 	global $pmpro_pages;
@@ -591,7 +591,7 @@ add_action( 'wp', 'pmpromd_migrate_map_data_frontend', 10 );
 /**
  * Move over 'old' PMPro pin location data to the new user fields retroactively (in the admin).
  * 
- * @since TBD
+ * @since 2.1
  */
 function pmpromd_migrate_map_data_backend() {
 	// User is not an admin, let's bail.
