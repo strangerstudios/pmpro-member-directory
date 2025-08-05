@@ -181,11 +181,11 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 
 	global $pmpro_pages;
 
-	$show_avatar = filter_var( $marker_attributes['show_avatar'], FILTER_VALIDATE_BOOLEAN );
-	$link = filter_var( $marker_attributes['link'], FILTER_VALIDATE_BOOLEAN );
-	$show_email = filter_var( $marker_attributes['show_email'], FILTER_VALIDATE_BOOLEAN );
-	$show_level = filter_var( $marker_attributes['show_level'], FILTER_VALIDATE_BOOLEAN );
-	$show_startdate = filter_var( $marker_attributes['show_startdate'], FILTER_VALIDATE_BOOLEAN );
+	$show_avatar = isset( $marker_attributes['show_avatar'] ) ? filter_var( $marker_attributes['show_avatar'], FILTER_VALIDATE_BOOLEAN ) : false;
+	$link = isset( $marker_attributes['link'] ) ? filter_var( $marker_attributes['link'], FILTER_VALIDATE_BOOLEAN ) : false;
+	$show_email = isset( $marker_attributes['show_email'] ) ? filter_var( $marker_attributes['show_email'], FILTER_VALIDATE_BOOLEAN ) : false;
+	$show_level = isset( $marker_attributes['show_level'] ) ? filter_var( $marker_attributes['show_level'], FILTER_VALIDATE_BOOLEAN ) : false;
+	$show_startdate = isset( $marker_attributes['show_startdate'] ) ? filter_var( $marker_attributes['show_startdate'], FILTER_VALIDATE_BOOLEAN ) : false;
 
 	$elements_array = ! empty( $marker_attributes['elements'] ) ? pmpromd_prepare_elements_array( $marker_attributes['elements'] ) : false;
 
