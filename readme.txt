@@ -72,7 +72,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
-= 2.1 - YYYY-MM-DD =
+= 2.1 - 2025-08-05 =
 * ENHANCEMENT: Added Google Maps functionality to the directory and profile pages. See our documentation for new actions and filters - most are borrowed from the Membership Maps Add On with `pmpromd_` prefix instead of `pmpromm_` (@andrewlimaza)
 * ENHANCEMENT: Adjusted the default generated shortcodes for both the directory and profile pages to include the `elements` attribute with a default set of elements. (@kimcoleman)
 * ENHANCEMENT: Added a new filter `pmpro_member_profile_before_atts` to allow customization of the attributes for the profile shortcode. This follows the existing directory filter logic that is available. (@ipokkel)
