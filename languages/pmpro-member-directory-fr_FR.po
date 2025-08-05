@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.4\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-14T12:00:00+00:00\n"
+"POT-Creation-Date: 2025-08-05T08:21:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -319,6 +319,7 @@ msgstr "Date de début"
 #: blocks/dist/directory/block.build.js:465
 #: blocks/dist/directory/block.build.js:474
 #: blocks/dist/directory/block.build.js:483
+#: includes/google-maps/includes/functions.php:286
 msgid "View Profile"
 msgstr "Voir le profil"
 
@@ -791,6 +792,7 @@ msgstr ""
 #: includes/functions.php:505
 #: includes/functions.php:526
 #: includes/functions.php:634
+#: includes/functions.php:636
 msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
 msgstr ""
 
@@ -798,6 +800,7 @@ msgstr ""
 #: includes/functions.php:518
 #: includes/functions.php:539
 #: includes/functions.php:647
+#: includes/functions.php:649
 msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
 msgstr ""
 
@@ -858,26 +861,32 @@ msgid "Member Directory Pagination"
 msgstr ""
 
 #: includes/functions.php:44
+#: includes/functions.php:46
 msgid "Show location on map"
 msgstr ""
 
 #: includes/functions.php:58
+#: includes/functions.php:60
 msgid "Street Name"
 msgstr ""
 
 #: includes/functions.php:73
+#: includes/functions.php:75
 msgid "City"
 msgstr ""
 
 #: includes/functions.php:88
+#: includes/functions.php:90
 msgid "State"
 msgstr ""
 
 #: includes/functions.php:103
+#: includes/functions.php:105
 msgid "Zip Code"
 msgstr ""
 
 #: includes/functions.php:126
+#: includes/functions.php:128
 msgid "Country"
 msgstr ""
 
@@ -894,6 +903,7 @@ msgid "Google Maps API Key"
 msgstr ""
 
 #: includes/google-maps/includes/admin.php:197
+#: includes/google-maps/membership-maps.php:59
 msgid "The Paid Memberships Pro - Membership Maps Add On is now part of the Member Directory and Profile Add On. Please deactivate the Paid Memberships Pro - Membership Maps Add On."
 msgstr ""
 
@@ -907,6 +917,7 @@ msgstr ""
 #: blocks/src/profile/block.js:193
 #: blocks/dist/directory/block.build.js:816
 #: blocks/dist/profile/block.build.js:358
+#: blocks/dist/profile/block.build.js:1
 msgid "Map Options"
 msgstr ""
 
@@ -916,6 +927,7 @@ msgstr ""
 #: blocks/src/profile/block.js:195
 #: blocks/dist/directory/block.build.js:818
 #: blocks/dist/profile/block.build.js:360
+#: blocks/dist/profile/block.build.js:1
 msgid "Show Map"
 msgstr ""
 
@@ -925,6 +937,7 @@ msgstr ""
 #: blocks/src/profile/block.js:201
 #: blocks/dist/directory/block.build.js:824
 #: blocks/dist/profile/block.build.js:366
+#: blocks/dist/profile/block.build.js:1
 msgid "Map Zoom"
 msgstr ""
 
@@ -934,6 +947,7 @@ msgstr ""
 #: blocks/src/profile/block.js:208
 #: blocks/dist/directory/block.build.js:831
 #: blocks/dist/profile/block.build.js:373
+#: blocks/dist/profile/block.build.js:1
 msgid "Map Height"
 msgstr ""
 
@@ -943,6 +957,7 @@ msgstr ""
 #: blocks/src/profile/block.js:215
 #: blocks/dist/directory/block.build.js:838
 #: blocks/dist/profile/block.build.js:380
+#: blocks/dist/profile/block.build.js:1
 msgid "Map Width"
 msgstr ""
 
@@ -952,6 +967,7 @@ msgstr ""
 #: blocks/src/profile/block.js:222
 #: blocks/dist/directory/block.build.js:845
 #: blocks/dist/profile/block.build.js:387
+#: blocks/dist/profile/block.build.js:1
 msgid "Max Zoom Level"
 msgstr ""
 
@@ -961,5 +977,10 @@ msgstr ""
 #: blocks/src/profile/block.js:229
 #: blocks/dist/directory/block.build.js:852
 #: blocks/dist/profile/block.build.js:394
+#: blocks/dist/profile/block.build.js:1
 msgid "Infowindow Width"
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:124
+msgid "Membership Maps API Key Status"
 msgstr ""

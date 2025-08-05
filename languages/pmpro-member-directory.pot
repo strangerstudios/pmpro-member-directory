@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.0.4\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-14T11:59:58+00:00\n"
+"POT-Creation-Date: 2025-08-05T08:21:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -102,35 +102,35 @@ msgstr ""
 msgid "Hide from %s?"
 msgstr ""
 
-#: includes/functions.php:44
+#: includes/functions.php:46
 msgid "Show location on map"
 msgstr ""
 
-#: includes/functions.php:58
+#: includes/functions.php:60
 msgid "Street Name"
 msgstr ""
 
-#: includes/functions.php:73
+#: includes/functions.php:75
 msgid "City"
 msgstr ""
 
-#: includes/functions.php:88
+#: includes/functions.php:90
 msgid "State"
 msgstr ""
 
-#: includes/functions.php:103
+#: includes/functions.php:105
 msgid "Zip Code"
 msgstr ""
 
-#: includes/functions.php:126
+#: includes/functions.php:128
 msgid "Country"
 msgstr ""
 
-#: includes/functions.php:634
+#: includes/functions.php:636
 msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
 msgstr ""
 
-#: includes/functions.php:647
+#: includes/functions.php:649
 msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
 msgstr ""
 
@@ -146,30 +146,26 @@ msgstr ""
 msgid "Google Maps API Key"
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:197
-msgid "The Paid Memberships Pro - Membership Maps Add On is now part of the Member Directory and Profile Add On. Please deactivate the Paid Memberships Pro - Membership Maps Add On."
+#: includes/google-maps/includes/admin.php:124
+msgid "Membership Maps API Key Status"
 msgstr ""
 
 #: includes/google-maps/includes/functions.php:62
 msgid "This map could not be loaded. Please ensure that you have entered your Google Maps API Key and that there are no JavaScript errors on the page."
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:287
+#: includes/google-maps/includes/functions.php:286
 #: templates/directory.php:367
 #: templates/directory.php:420
-#: blocks/dist/directory/block.build.js:1000
-#: blocks/dist/directory/block.build.js:1024
-#: blocks/dist/directory/block.build.js:1048
-#: blocks/dist/directory/block.build.js:1072
 #: blocks/src/directory/templates/table.js:31
 #: blocks/src/directory/templates/table.js:40
 #: blocks/src/directory/templates/table.js:49
 #: blocks/src/directory/templates/table.js:58
-#: blocks/dist/directory/block.build.js:456
-#: blocks/dist/directory/block.build.js:465
-#: blocks/dist/directory/block.build.js:474
-#: blocks/dist/directory/block.build.js:483
 msgid "View Profile"
+msgstr ""
+
+#: includes/google-maps/membership-maps.php:59
+msgid "The Paid Memberships Pro - Membership Maps Add On is now part of the Member Directory and Profile Add On. Please deactivate the Paid Memberships Pro - Membership Maps Add On."
 msgstr ""
 
 #: includes/search.php:20
@@ -233,49 +229,36 @@ msgid "No matching profiles found."
 msgstr ""
 
 #: templates/directory.php:233
-#: blocks/dist/directory/block.build.js:958
 #: blocks/src/directory/templates/table.js:15
-#: blocks/dist/directory/block.build.js:440
 msgid "Avatar"
 msgstr ""
 
 #: templates/directory.php:235
-#: blocks/dist/directory/block.build.js:960
 #: blocks/src/directory/templates/table.js:16
-#: blocks/dist/directory/block.build.js:441
 msgid "Member"
 msgstr ""
 
 #: templates/directory.php:243
 #: templates/profile.php:89
-#: blocks/dist/directory/block.build.js:963
-#: blocks/dist/profile/block.build.js:664
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:17
 #: blocks/src/profile/block.js:267
-#: blocks/dist/directory/block.build.js:442
-#: blocks/dist/profile/block.build.js:432
 msgid "Email Address"
 msgstr ""
 
 #: templates/directory.php:247
 #: templates/profile.php:93
-#: blocks/dist/directory/block.build.js:969
-#: blocks/dist/profile/block.build.js:673
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:19
 #: blocks/src/profile/block.js:272
-#: blocks/dist/directory/block.build.js:444
-#: blocks/dist/profile/block.build.js:437
 msgid "Level"
 msgstr ""
 
 #: templates/directory.php:250
 #: templates/profile.php:96
-#: blocks/dist/directory/block.build.js:972
-#: blocks/dist/profile/block.build.js:682
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:20
 #: blocks/src/profile/block.js:277
-#: blocks/dist/directory/block.build.js:445
-#: blocks/dist/profile/block.build.js:442
 msgid "Start Date"
 msgstr ""
 
@@ -284,23 +267,20 @@ msgid "Member Directory Pagination"
 msgstr ""
 
 #: templates/profile.php:86
-#: blocks/dist/profile/block.build.js:655
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:262
-#: blocks/dist/profile/block.build.js:427
 msgid "Biographical Info"
 msgstr ""
 
 #: templates/profile.php:99
-#: blocks/dist/profile/block.build.js:691
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:282
-#: blocks/dist/profile/block.build.js:447
 msgid "Address"
 msgstr ""
 
 #: templates/profile.php:102
-#: blocks/dist/profile/block.build.js:700
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:292
-#: blocks/dist/profile/block.build.js:457
 msgid "Phone Number"
 msgstr ""
 
@@ -308,281 +288,198 @@ msgstr ""
 msgid "Edit Profile"
 msgstr ""
 
-#: blocks/dist/directory/block.build.js:966
-#: blocks/src/directory/templates/table.js:18
-#: blocks/dist/directory/block.build.js:443
-msgid "More Information"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1247
-#: blocks/src/directory/block.js:30
-#: blocks/dist/directory/block.build.js:598
-msgid "Members Directory"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1248
-#: blocks/src/directory/block.js:31
-#: blocks/dist/directory/block.build.js:599
-msgid "Display a directory of members."
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1397
-#: blocks/src/directory/block.js:171
-#: blocks/dist/directory/block.build.js:739
-msgid "Levels Selected: "
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1402
-#: blocks/src/directory/block.js:180
-#: blocks/dist/directory/block.build.js:748
-msgid "Display Options"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1405
-#: blocks/src/directory/block.js:184
-#: blocks/dist/directory/block.build.js:752
-msgid "Select levels"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1406
-#: blocks/src/directory/block.js:185
-#: blocks/dist/directory/block.build.js:753
-msgid "List of level IDs that allow profiles. Default: All"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1423
-#: blocks/src/directory/block.js:196
-#: blocks/dist/directory/block.build.js:764
-msgid "div"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1426
-#: blocks/src/directory/block.js:197
-#: blocks/dist/directory/block.build.js:765
-msgid "table"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1429
-#: blocks/src/directory/block.js:198
-#: blocks/dist/directory/block.build.js:766
-msgid "2col"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1432
-#: blocks/src/directory/block.js:199
-#: blocks/dist/directory/block.build.js:767
-msgid "3col"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1435
-#: blocks/src/directory/block.js:200
-#: blocks/dist/directory/block.build.js:768
-msgid "4col"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1497
-#: blocks/dist/profile/block.build.js:539
-#: blocks/src/directory/block.js:248
-#: blocks/src/profile/block.js:193
-#: blocks/dist/directory/block.build.js:816
-#: blocks/dist/profile/block.build.js:358
-msgid "Map Options"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1499
-#: blocks/dist/profile/block.build.js:541
-#: blocks/src/directory/block.js:250
-#: blocks/src/profile/block.js:195
-#: blocks/dist/directory/block.build.js:818
-#: blocks/dist/profile/block.build.js:360
-msgid "Show Map"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1507
-#: blocks/dist/profile/block.build.js:549
-#: blocks/src/directory/block.js:256
-#: blocks/src/profile/block.js:201
-#: blocks/dist/directory/block.build.js:824
-#: blocks/dist/profile/block.build.js:366
-msgid "Map Zoom"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1516
-#: blocks/dist/profile/block.build.js:558
-#: blocks/src/directory/block.js:263
-#: blocks/src/profile/block.js:208
-#: blocks/dist/directory/block.build.js:831
-#: blocks/dist/profile/block.build.js:373
-msgid "Map Height"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1525
-#: blocks/dist/profile/block.build.js:567
-#: blocks/src/directory/block.js:270
-#: blocks/src/profile/block.js:215
-#: blocks/dist/directory/block.build.js:838
-#: blocks/dist/profile/block.build.js:380
-msgid "Map Width"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1534
-#: blocks/dist/profile/block.build.js:576
-#: blocks/src/directory/block.js:277
-#: blocks/src/profile/block.js:222
-#: blocks/dist/directory/block.build.js:845
-#: blocks/dist/profile/block.build.js:387
-msgid "Max Zoom Level"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1543
-#: blocks/dist/profile/block.build.js:585
-#: blocks/src/directory/block.js:284
-#: blocks/src/profile/block.js:229
-#: blocks/dist/directory/block.build.js:852
-#: blocks/dist/profile/block.build.js:394
-msgid "Infowindow Width"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1553
-#: blocks/dist/profile/block.build.js:595
-#: blocks/src/directory/block.js:292
-#: blocks/src/profile/block.js:237
-#: blocks/dist/directory/block.build.js:860
-#: blocks/dist/profile/block.build.js:402
-msgid "Extra Fields"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1565
-#: blocks/src/directory/block.js:303
-#: blocks/dist/directory/block.build.js:871
-msgid "Filtering Options"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1575
-#: blocks/src/directory/block.js:310
-#: blocks/dist/directory/block.build.js:878
-msgid "Display Name"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1578
-#: blocks/src/directory/block.js:311
-#: blocks/dist/directory/block.build.js:879
-msgid "User Email"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1581
-#: blocks/src/directory/block.js:312
-#: blocks/dist/directory/block.build.js:880
-msgid "User Login"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1584
-#: blocks/src/directory/block.js:313
-#: blocks/dist/directory/block.build.js:881
-msgid "User Registered"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1587
-#: blocks/src/directory/block.js:314
-#: blocks/dist/directory/block.build.js:882
-msgid "Membership Level"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1590
-#: blocks/src/directory/block.js:315
-#: blocks/dist/directory/block.build.js:883
-msgid "Membership Start Date"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1593
-#: blocks/src/directory/block.js:316
-#: blocks/dist/directory/block.build.js:884
-msgid "Join Date"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1605
-#: blocks/src/directory/block.js:325
-#: blocks/dist/directory/block.build.js:893
-msgid "ASC"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1608
-#: blocks/src/directory/block.js:326
-#: blocks/dist/directory/block.build.js:894
-msgid "DESC"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1643
-#: blocks/src/directory/block.js:343
-#: blocks/dist/directory/block.build.js:911
-msgid "Membership Directory"
-msgstr ""
-
-#: blocks/dist/directory/block.build.js:1657
-#: blocks/dist/profile/block.build.js:713
-#: blocks/src/directory/block.js:350
-#: blocks/src/profile/block.js:301
-#: blocks/dist/directory/block.build.js:918
-#: blocks/dist/profile/block.build.js:466
-msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
-msgstr ""
-
-#: blocks/dist/profile/block.build.js:335
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:25
-#: blocks/dist/profile/block.build.js:190
 msgid "Member Profile"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:336
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:26
-#: blocks/dist/profile/block.build.js:191
 msgid "Display a profile for a Member."
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:446
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:119
-#: blocks/dist/profile/block.build.js:284
 msgid "Display Settings"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:536
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:188
-#: blocks/dist/profile/block.build.js:353
 msgid "Set this to a user ID to show a profile of a specific user. Leave blank for current user."
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:604
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:248
+#: blocks/src/profile/block.js:193
+msgid "Map Options"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:250
+#: blocks/src/profile/block.js:195
+msgid "Show Map"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:256
+#: blocks/src/profile/block.js:201
+msgid "Map Zoom"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:263
+#: blocks/src/profile/block.js:208
+msgid "Map Height"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:270
+#: blocks/src/profile/block.js:215
+msgid "Map Width"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:277
+#: blocks/src/profile/block.js:222
+msgid "Max Zoom Level"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:284
+#: blocks/src/profile/block.js:229
+msgid "Infowindow Width"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:292
+#: blocks/src/profile/block.js:237
+msgid "Extra Fields"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:243
-#: blocks/dist/profile/block.build.js:408
 msgid "Accepts a list of label names and metakeys per line. (i.e. Label,meta_key)"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:624
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:252
-#: blocks/dist/profile/block.build.js:417
 msgid "Membership Profile"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:649
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:258
-#: blocks/dist/profile/block.build.js:423
 msgid "August Dibble"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:667
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:268
-#: blocks/dist/profile/block.build.js:433
 msgid "August.Dibble@mail.com"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:676
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:273
-#: blocks/dist/profile/block.build.js:438
 msgid "Free"
 msgstr ""
 
-#: blocks/dist/profile/block.build.js:685
+#: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:278
-#: blocks/dist/profile/block.build.js:443
 msgid "Jan 21, 2019"
+msgstr ""
+
+#: blocks/dist/profile/block.build.js:1
+#: blocks/src/directory/block.js:350
+#: blocks/src/profile/block.js:301
+msgid "Example data for reference purposes only. Any resemblance to actual persons, living or dead is purely coincidental."
+msgstr ""
+
+#: blocks/src/directory/block.js:30
+msgid "Members Directory"
+msgstr ""
+
+#: blocks/src/directory/block.js:31
+msgid "Display a directory of members."
+msgstr ""
+
+#: blocks/src/directory/block.js:171
+msgid "Levels Selected: "
+msgstr ""
+
+#: blocks/src/directory/block.js:180
+msgid "Display Options"
+msgstr ""
+
+#: blocks/src/directory/block.js:184
+msgid "Select levels"
+msgstr ""
+
+#: blocks/src/directory/block.js:185
+msgid "List of level IDs that allow profiles. Default: All"
+msgstr ""
+
+#: blocks/src/directory/block.js:196
+msgid "div"
+msgstr ""
+
+#: blocks/src/directory/block.js:197
+msgid "table"
+msgstr ""
+
+#: blocks/src/directory/block.js:198
+msgid "2col"
+msgstr ""
+
+#: blocks/src/directory/block.js:199
+msgid "3col"
+msgstr ""
+
+#: blocks/src/directory/block.js:200
+msgid "4col"
+msgstr ""
+
+#: blocks/src/directory/block.js:303
+msgid "Filtering Options"
+msgstr ""
+
+#: blocks/src/directory/block.js:310
+msgid "Display Name"
+msgstr ""
+
+#: blocks/src/directory/block.js:311
+msgid "User Email"
+msgstr ""
+
+#: blocks/src/directory/block.js:312
+msgid "User Login"
+msgstr ""
+
+#: blocks/src/directory/block.js:313
+msgid "User Registered"
+msgstr ""
+
+#: blocks/src/directory/block.js:314
+msgid "Membership Level"
+msgstr ""
+
+#: blocks/src/directory/block.js:315
+msgid "Membership Start Date"
+msgstr ""
+
+#: blocks/src/directory/block.js:316
+msgid "Join Date"
+msgstr ""
+
+#: blocks/src/directory/block.js:325
+msgid "ASC"
+msgstr ""
+
+#: blocks/src/directory/block.js:326
+msgid "DESC"
+msgstr ""
+
+#: blocks/src/directory/block.js:343
+msgid "Membership Directory"
+msgstr ""
+
+#: blocks/src/directory/templates/table.js:18
+msgid "More Information"
 msgstr ""
