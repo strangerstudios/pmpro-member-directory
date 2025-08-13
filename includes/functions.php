@@ -234,6 +234,14 @@ function pmpromd_custom_rewrite_rules() {
 	}
 	$profile_base = $profile_page->post_name;
 
+	// Add support for profile parent if it's configured.
+	if ( ! empty( $profile_page->post_parent ) ) {
+		$profile_parent = get_post( $profile_page->post_parent );
+		if ( is_object( $profile_parent ) && ! empty( $profile_parent->post_name ) ) {
+			$profile_base = $profile_parent->post_name . '/' . $profile_base;
+		}
+	}
+
 	// Add the rewrite rule.
 	add_rewrite_rule(
 		'^' . preg_quote( $profile_base, '#' ) . '/([^/]+)/?$',
