@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.1\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.1.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-05T08:21:20+00:00\n"
+"POT-Creation-Date: 2025-08-19T09:39:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -793,6 +793,7 @@ msgstr ""
 #: includes/functions.php:526
 #: includes/functions.php:634
 #: includes/functions.php:636
+#: includes/functions.php:644
 msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
 msgstr ""
 
@@ -801,6 +802,7 @@ msgstr ""
 #: includes/functions.php:539
 #: includes/functions.php:647
 #: includes/functions.php:649
+#: includes/functions.php:657
 msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
 msgstr ""
 
