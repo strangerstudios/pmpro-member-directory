@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 6.8
-Stable tag: 2.0.4
+Stable tag: 2.1.1
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.1.1 - 2025-08-19 =
+* BUG FIX: Resolved an issue where the profile page did not correctly support parent pages. (@andrewlimaza)
+
 = 2.1 - 2025-08-05 =
 * ENHANCEMENT: Added Google Maps functionality to the directory and profile pages. See our documentation for new actions and filters - most are borrowed from the Membership Maps Add On with `pmpromd_` prefix instead of `pmpromm_` (@andrewlimaza)
 * ENHANCEMENT: Adjusted the default generated shortcodes for both the directory and profile pages to include the `elements` attribute with a default set of elements. (@kimcoleman)
