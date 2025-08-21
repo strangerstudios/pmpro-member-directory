@@ -15,7 +15,17 @@ jQuery(document).ready(function() {
 			} else {
 				jQuery('#pmpromd_map_optin').closest('div').show();
 				if( jQuery('#pmpromd_map_optin').is(':checked') ) {
-					jQuery('.pmpromd-map-address-field, .pmpromd-map-address-field').closest('div').show();
+			jQuery('.pmpromd-map-address-field').closest('div').hide();
+		}
+
+		jQuery('#pmpromd_hide_directory').on('change', function() { 
+			if ( jQuery(this).is(':checked') ) {
+					jQuery('#pmpromd_map_optin').closest('div').hide();
+					jQuery('.pmpromd-map-address-field').closest('div').hide();
+			} else {
+				jQuery('#pmpromd_map_optin').closest('div').show();
+				if( jQuery('#pmpromd_map_optin').is(':checked') ) {
+					jQuery('.pmpromd-map-address-field').closest('div').show();
 				}
 			}
 		});
