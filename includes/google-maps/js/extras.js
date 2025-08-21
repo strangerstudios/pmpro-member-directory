@@ -3,7 +3,7 @@ jQuery(document).ready(function() {
 	// Only show the #pmpromd_map_optin if the pmpromd_hide_directory is unchecked.
 	if ( jQuery('#pmpromd_hide_directory').length ) {
 	
-		if ( !jQuery('#pmpromd_hide_directory').is(':checked') ) {
+		if ( jQuery('#pmpromd_hide_directory').is(':checked') ) {
 			jQuery('#pmpromd_map_optin').closest('div').hide();
 			jQuery('.pmpromd-map-address-field, .pmpromd-map-address-field').closest('div').hide();
 		}
