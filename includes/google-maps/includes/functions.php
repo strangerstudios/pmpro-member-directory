@@ -283,8 +283,8 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 				// Add the View Profile link at the end of the infowindow.
 				if ( ! empty( $link ) && ! empty( $profile_url ) ) {
 					$user_profile = pmpromd_build_profile_url( $member, $profile_url );
-					$profile_content = '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html( apply_filters( 'pmpromm_view_profile_text', __( 'View Profile', 'pmpro-member-directory' ) ) ) . '</a></p>';
-					$marker_content .= $profile_content;			
+					$profile_content = '<p class="' . esc_attr( pmpro_get_element_class( 'pmpromd_profile' ) ) . '"><a href="' . esc_url( $user_profile ) . '">' . esc_html__( 'View Profile', 'pmpro-member-directory' ) . '</a></p>';
+					$marker_content .= $profile_content;
 				}
 				
 			}
