@@ -629,7 +629,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				$value = pmpro_member_directory_get_member_display_name( $pu );
 				break;
 			case 'avatar':
-				$value = get_avatar( $pu->ID, $avatar_size, NULL, $pu->display_name );
+				$value = get_avatar( $pu->ID, $avatar_size, NULL, esc_attr( $pu->display_name ) );
 				break;
 			case 'membership_name':
 				$value = $pu->membership_levels;
