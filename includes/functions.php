@@ -578,8 +578,18 @@ function pmpromd_prepare_elements_array( $elements ) {
 
 /**
  * Get the value of a specific element from a string of HTML.
+ *
+ * @since TBD Added the `$row` parameter so extra columns added to the directory
+ *            query through the SQL filters can be displayed.
+ *
+ * @param string      $element          The element to get the value for.
+ * @param WP_User     $pu               The user object.
+ * @param string|null $displayed_levels The levels to display.
+ * @param object|null $row              Optional. The query row for this member, which may
+ *                                      contain extra columns from the SQL filters.
+ * @return string The value of the element.
  */
-function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
+function pmpromd_get_display_value( $element, $pu, $displayed_levels = null, $row = null ) {
 
 	// No user object, return an empty result instead.
 	if ( ! ( $pu instanceof WP_User ) ) {
@@ -747,6 +757,13 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 			}
 		}
 
+		// Still no value? Check the query row for an extra column added through the SQL filters.
+		// This runs last so a custom column never takes over a real user field. A strict check is
+		// used instead of empty() so a column value of 0 is kept.
+		if ( ( '' === $value || null === $value ) && is_object( $row ) && isset( $row->$element ) ) {
+			$value = $row->$element;
+		}
+
 		// Format the date fields.
 		if ( in_array( $element, $date_fields ) && ! empty( $value ) ) {
 			if ( ! is_numeric( $value ) ) {
@@ -761,14 +778,16 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 	 * Filter the value of a specific element from a string of HTML.
 	 *
 	 * @since 2.0
-	 * @param string $value The value of the element.
-	 * @param string $element The element to get the value for.
-	 * @param object $pu The user object.
-	 * @param string $displayed_levels The levels to display.
+	 * @since TBD Added the `$row` parameter.
+	 * @param string      $value The value of the element.
+	 * @param string      $element The element to get the value for.
+	 * @param object      $pu The user object.
+	 * @param string      $displayed_levels The levels to display.
+	 * @param object|null $row The query row for this member, which may contain extra columns from the SQL filters.
 	 *
 	 * @return string The value of the element.
 	 */
-	$value = apply_filters( 'pmpromd_get_display_value', $value, $element, $pu, $displayed_levels );
+	$value = apply_filters( 'pmpromd_get_display_value', $value, $element, $pu, $displayed_levels, $row );
 
 	return $value;
 }
