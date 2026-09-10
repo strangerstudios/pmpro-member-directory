@@ -72,6 +72,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.4 =
+* ENHANCEMENT: Migrated the Google Map markers to the AdvancedMarkerElement API, which replaces the deprecated google.maps.Marker API. Set a Google Map ID in Memberships > Settings > Advanced to use it, otherwise the classic markers are still used. #232 (@faisalahammad)
+* ENHANCEMENT: Added a "Google Maps Map ID" field to the PMPro Advanced Settings and the new `pmpromd_maps_map_id` filter. #232 (@faisalahammad)
+* ENHANCEMENT: Replaced the bundled marker clusterer with the @googlemaps/markerclusterer library, which works with both the classic and advanced markers. #230 (@faisalahammad)
+* BUG FIX: Fixed a race condition where the map could fail to load with "pmpromd_init_map is not a function" when the Google Maps API loaded before our map script. #232 (@faisalahammad)
+
 = 2.3.1 - 2026-08-19 =
 * SECURITY: Fixed an issue where profiles for members who are hidden from the directory, do not have an active membership, or are pending approval could still be viewed when the profile shortcode or block was placed on a page other than the assigned profile page. #233 (@flintfromthebasement)
 * ENHANCEMENT: Members with an active membership can now view their own profile even if they are hidden from the directory or pending approval. #233 (@flintfromthebasement)

@@ -36,6 +36,36 @@ function pmpromd_add_google_maps_api_key_setting( $fields ) {
 add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_api_key_setting', 5 );
 
 /**
+ * Adds the Google Map ID field to advanced settings page
+ * Note: The filter escapes during it's output and not needed within this function.
+ * 
+ * @since 2.4
+ * 
+ * @param array $fields The existing fields on the PMPro Advanced Settings page.
+ * @return array $fields The modified fields with the Google Maps Map ID field added.
+ */
+function pmpromd_add_google_maps_map_id_setting( $fields ) {
+
+	// Show the map ID that is saved, or a link to the docs for creating one.
+	$map_id = get_option( 'pmpro_pmpromd_maps_map_id' );
+	if ( empty( $map_id ) ) {
+		$description = '<a href="https://developers.google.com/maps/documentation/get-map-id" target="_BLANK">' . esc_html__( 'Create a Map ID in the Google Cloud Console', 'pmpro-member-directory' ) . '</a>. ' . esc_html__( 'Optional, but required to use the newer advanced map markers.', 'pmpro-member-directory' );
+	} else {
+		$description = esc_html__( 'Map ID in use.', 'pmpro-member-directory' ) . ' ' . esc_html__( 'The map styling is managed in the Google Cloud Console and the styles set through the pmpromd_map_styles filter are ignored.', 'pmpro-member-directory' );
+	}
+
+	$fields['pmpromd_maps_map_id'] = array(
+		'field_name' => 'pmpromd_maps_map_id',
+		'field_type' => 'text',
+		'label' => __( 'Google Maps Map ID', 'pmpro-member-directory' ),
+		'description' => $description
+	);
+
+	return $fields;
+}
+add_filter( 'pmpro_custom_advanced_settings', 'pmpromd_add_google_maps_map_id_setting', 6 );
+
+/**
  * Test the API key upon saving the PMPro Advanced Settings.
  * 
  * @since 2.1
