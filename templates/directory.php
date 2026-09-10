@@ -185,11 +185,33 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 		}
 	}
 
-	// Update end to match totalrows if total rows is small.
-	if ( $totalrows < $end )
-		$end = $totalrows;
+	/**
+	 * Filter the users shown in the member directory.
+	 *
+	 * @param array $theusers  The users found for the current page of the directory.
+	 * @param int   $totalrows The total number of users found before filtering.
+	 */
+	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers, $totalrows );
 
-	$theusers = apply_filters( 'pmpromd_user_directory_results', $theusers );
+	/**
+	 * Filter the total number of rows used for the directory count and pagination.
+	 *
+	 * Use this to keep the result count and pagination in sync when the
+	 * pmpromd_user_directory_results filter adds or removes users.
+	 *
+	 * @since [version]
+	 *
+	 * @param int   $totalrows The total number of users found before filtering.
+	 * @param array $theusers  The users found for the current page of the directory.
+	 * @param int   $start     The offset of the first user on the current page.
+	 * @param int   $limit     The number of users shown per page.
+	 */
+	$totalrows = (int) apply_filters( 'pmpromd_user_directory_total_rows', $totalrows, $theusers, $start, $limit );
+
+	// Update end to match the filtered results so the count reflects what is displayed.
+	$displayed = is_array( $theusers ) ? count( $theusers ) : $limit;
+	$end = min( $start + $displayed, $totalrows );
+
 	ob_start();
 	?>
 	<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro' ) ); ?>">
@@ -208,7 +230,7 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 					<?php esc_html_e('Viewing All Profiles','pmpro-member-directory'); ?>
 				<?php } ?>
 			</h2>
-			<?php if ( $totalrows > 0 ) { ?>
+			<?php if ( $totalrows > 0 && ! empty( $theusers ) ) { ?>
 				<p>
 					<?php
 						if ( $totalrows == 1 ) {
