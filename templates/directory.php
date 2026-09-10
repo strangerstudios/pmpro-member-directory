@@ -371,13 +371,14 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 							<tbody>
 								<?php
 									// Loop through the users and output the content.
-									foreach ( $theusers as $auser ) {
-										$auser = get_userdata( $auser->ID );
+									foreach ( $theusers as $thisuser ) {
+										// Keep the query row around so extra columns added through the SQL filters can be displayed.
+										$auser = get_userdata( $thisuser->ID );
 										?>
 										<tr id="pmpro_member_directory_row-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory_row' ) ); ?>">
 											<?php
 												foreach ( $elements_array as $element ) {
-													$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels );
+													$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels, $thisuser );
 													// Wrap the value in a link if the element is in the linked elements array.
 													if ( ! empty( $link ) && ! empty( $profile_url ) && in_array( $element[1], $linked_elements ) ) {
 														$value = '<a href="' . esc_url( pmpromd_build_profile_url( $auser, $profile_url ) ) . '">' . $value . '</a>';
@@ -408,15 +409,16 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 				</div> <!-- end pmpro_card -->
 				<?php
 			} else {
-				foreach ( $theusers as $auser ) {
-					$auser = get_userdata( $auser->ID );
+				foreach ( $theusers as $thisuser ) {
+					// Keep the query row around so extra columns added through the SQL filters can be displayed.
+					$auser = get_userdata( $thisuser->ID );
 					?>
 					<div id="pmpro_member-<?php echo esc_attr( $auser->ID ); ?>" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_member_directory-item pmpro_card', 'pmpro_member-' . esc_attr( $auser->ID ) ) ); ?>">
 						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 							<?php
 								// Loop through the elements and output the content.
 								foreach ( $elements_array as $element ) {
-									$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels );
+									$value = pmpromd_get_display_value( $element[1], $auser, $displayed_levels, $thisuser );
 									if ( ! empty( $value ) || $value === '0' ) {
 										// Wrap the value in a link if the element is in the linked elements array.
 										if ( ! empty( $link ) && ! empty( $profile_url ) &&in_array( $element[1], $linked_elements ) ) {

@@ -214,11 +214,11 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 	// Let's put all the marker data together to display on the map.
 	$marker_array = array();
 	if ( ! empty( $members ) ) {
-		foreach( $members as $member ) {
+		foreach( $members as $thisuser ) {
 
-			// Sometimes the $member data that is passed through isn't an object when on the profile page (for some reason - so skip it).
+			// Sometimes the row data that is passed through isn't an object when on the profile page (for some reason - so skip it).
 			// It should either be an object or a WP_User object.
-			if ( ! is_object( $member ) ) {
+			if ( ! is_object( $thisuser ) ) {
 				continue;
 			}
 
@@ -226,19 +226,19 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 			$member_array = array();
 
 			// Try to get the member's address.
-			$member_address = isset( $member->maplocation ) ? maybe_unserialize( $member->maplocation ) : array();
+			$member_address = isset( $thisuser->maplocation ) ? maybe_unserialize( $thisuser->maplocation ) : array();
 			
 			// Let's get the member's latitude and longitude values.
 			$used_old_location = false;
 			if ( empty( $member_address ) ) {
-				if ( ! empty( $member->old_lat ) && ! empty( $member->old_lng ) ) {
+				if ( ! empty( $thisuser->old_lat ) && ! empty( $thisuser->old_lng ) ) {
 					$used_old_location = true;
-					$latitude = $member->old_lat;
-					$longitude = $member->old_lng;
+					$latitude = $thisuser->old_lat;
+					$longitude = $thisuser->old_lng;
 				} else {
-					$member_address = pmpromd_get_member_address( $member->ID );
-					$latitude = ! empty( $member_address['latitude'] ) ? $member_address['latitude'] : get_user_meta( $member->ID, 'pmpro_lat', true );
-					$longitude = ! empty( $member_address['longitude'] ) ? $member_address['longitude'] : get_user_meta( $member->ID, 'pmpro_lng', true );
+					$member_address = pmpromd_get_member_address( $thisuser->ID );
+					$latitude = ! empty( $member_address['latitude'] ) ? $member_address['latitude'] : get_user_meta( $thisuser->ID, 'pmpro_lat', true );
+					$longitude = ! empty( $member_address['longitude'] ) ? $member_address['longitude'] : get_user_meta( $thisuser->ID, 'pmpro_lng', true );
 				}
 			} else {
 				$latitude = isset( $member_address['latitude'] ) ? $member_address['latitude'] : null;
@@ -255,8 +255,9 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 				continue;
 			}
 
-			$member_array['ID'] = $member->ID;
-			$member = get_userdata( $member->ID );
+			$member_array['ID'] = $thisuser->ID;
+			// Keep the query row in $thisuser so extra columns added through the SQL filters can still be displayed.
+			$member = get_userdata( $thisuser->ID );
 			$profile_url = get_permalink( $pmpro_pages['profile'] );
 
 			// Set the member marker meta location now using longitude and latitude values.
@@ -280,10 +281,10 @@ function pmpromd_generate_marker_data( $members, $marker_attributes ) {
 					}
 
 					// Get the field value.
-					$value = pmpromd_get_display_value( $element[1], $member );
+					$value = pmpromd_get_display_value( $element[1], $member, null, $thisuser );
 
-					// If the value is empty, skip this element.
-					if ( empty( $value ) ) {
+					// If the value is empty, skip this element. A zero value is still shown.
+					if ( empty( $value ) && $value !== '0' && $value !== 0 ) {
 						continue;
 					}
 
