@@ -71,7 +71,14 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
+= Where do I change the slug used in member profile URLs? =
+
+Go to Memberships > Advanced Settings and set the "Profile URL Slug" option to Username, User ID, or First and Last Name. Choosing First and Last Name changes the profile URL of existing members (for example /profile/jarryd-long) and also changes their WordPress author archive URL, so links that were already shared can stop working. Members without a first or last name keep their current URL. Switching the setting away from First and Last Name restores the previous URLs.
+
 == Changelog ==
+= 2.4 =
+* ENHANCEMENT: Added a "Profile URL Slug" setting under Memberships > Advanced Settings to choose between the username, the user ID, or the member's first and last name for member profile URLs. #194
+
 = 2.3.1 - 2026-08-19 =
 * SECURITY: Fixed an issue where profiles for members who are hidden from the directory, do not have an active membership, or are pending approval could still be viewed when the profile shortcode or block was placed on a page other than the assigned profile page. #233 (@flintfromthebasement)
 * ENHANCEMENT: Members with an active membership can now view their own profile even if they are hidden from the directory or pending approval. #233 (@flintfromthebasement)
@@ -188,7 +195,7 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * ENHANCEMENT: Added "Edit Profile" link for administrators when viewing the profile page. Redirects to the edit profile WordPress page.
 * ENHANCEMENT: New filter `pmpromd_try_oembed_url` added to allow trying to embed possible fields first. Set this false if you don't want to automatically embed embeddable URL's.
 * ENHANCEMENT: New filter `pmpromd_format_profile_field` added to allow how to format any fields that may be clickable and allows custom output for fields.
-* ENHANCEMENT: New filter `pmpromd_user_identifier` added to allow how to identify/retrieve the user information. Defaults to "slug" (user_nicename) or can use user ID to retrieve relevant information in the directory or profile page.
+* ENHANCEMENT: New filter `pmpromd_user_identifier` added to allow how to identify/retrieve the user information. Defaults to "slug" (user_nicename) or can use user ID to retrieve relevant information in the directory or profile page. The value now defaults to the "Profile URL Slug" setting and the filter still takes precedence.
 * ENHANCEMENT: New filter `pmpro_member_directory_sql_search_where` added to allow filtering of search WHERE SQL conditions to offer more specific search results.
 * ENHANCEMENT: Profile page title no longer changes to the user's name.
 * ENHANCEMENTX: Improved the displaying of level dependent custom fields.
