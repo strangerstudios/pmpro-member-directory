@@ -161,20 +161,49 @@ function pmpro_member_directory_get_member_display_name( $user ) {
 }
 
 /**
+ * Sanitize a profile slug source value.
+ *
+ * @since 2.4
+ *
+ * @param string $source The slug source to check.
+ * @return string One of "slug", "id", or "first_last", falling back to "slug".
+ */
+function pmpromd_sanitize_profile_slug_source( $source ) {
+	if ( ! in_array( $source, array( 'slug', 'id', 'first_last' ), true ) ) {
+		return 'slug';
+	}
+
+	return $source;
+}
+
+/**
+ * Get the source used to identify members in profile URLs.
+ *
+ * @since 2.4
+ *
+ * @return string One of "slug", "id", or "first_last".
+ */
+function pmpromd_get_profile_slug_source() {
+	return pmpromd_sanitize_profile_slug_source( get_option( 'pmpro_pmpromd_profile_slug_source', 'slug' ) );
+}
+
+/**
  * Filters the user identifier used in permalinks
  *
  * @since 1.2.0
  *
- * @param string $display_name The name to display for the user.
+ * @return string The identifier to look users up by, either "slug" or "id".
  */
 function pmpromd_user_identifier() {
+	$default = ( 'id' === pmpromd_get_profile_slug_source() ) ? 'id' : 'slug';
+
 	/**
 	 * Filter to change how user identifiers are presented. Choose between slug and ID
 	 * Note: Value is case sensitive
 	 * 
 	 * @since 1.2.0
 	 */
-	return apply_filters( 'pmpromd_user_identifier', 'slug' );
+	return apply_filters( 'pmpromd_user_identifier', $default );
 }
 
 /**
@@ -188,6 +217,253 @@ function pmpromd_get_user_by_identifier( $value ) {
 	$user_identifier = pmpromd_user_identifier();
 	return get_user_by( $user_identifier, sanitize_text_field( $value ) );
 }
+
+/**
+ * Trim a nicename so it fits in the user_nicename column.
+ *
+ * A percent escape that gets cut in half would leave an invalid character in
+ * the URL, so an incomplete escape is dropped.
+ *
+ * @since 2.4
+ *
+ * @param string $nicename   The nicename to trim.
+ * @param int    $max_length The number of characters to keep.
+ * @return string The trimmed nicename.
+ */
+function pmpromd_truncate_nicename( $nicename, $max_length ) {
+	$length = function_exists( 'mb_strlen' ) ? mb_strlen( $nicename ) : strlen( $nicename );
+
+	if ( $length > $max_length ) {
+		$nicename = function_exists( 'mb_substr' )
+			? mb_substr( $nicename, 0, $max_length )
+			: substr( $nicename, 0, $max_length );
+	}
+
+	// Remove a percent escape that was cut off part way through.
+	$nicename = preg_replace( '/%[0-9a-fA-F]?$/', '', $nicename );
+
+	return rtrim( $nicename, '-' );
+}
+
+/**
+ * Build a nicename from a member's first and last name.
+ *
+ * @since 2.4
+ *
+ * @param WP_User $user The user to build a nicename for.
+ * @return string The nicename, or an empty string when no usable name is found.
+ */
+function pmpromd_get_first_last_nicename( $user ) {
+	if ( ! $user instanceof WP_User ) {
+		return '';
+	}
+
+	$first_name = trim( (string) $user->first_name );
+	$last_name  = trim( (string) $user->last_name );
+
+	// Members without a name keep the nicename they already have.
+	if ( '' === $first_name && '' === $last_name ) {
+		return '';
+	}
+
+	$nicename = sanitize_title( trim( $first_name . '-' . $last_name, '-' ) );
+
+	if ( '' === $nicename ) {
+		return '';
+	}
+
+	// The user_nicename column is varchar(50), so leave room for a collision suffix.
+	return pmpromd_truncate_nicename( $nicename, 45 );
+}
+
+/**
+ * Make a nicename unique so two members with the same name get their own profile URL.
+ *
+ * @since 2.4
+ *
+ * @param string $nicename The nicename to check.
+ * @param int    $user_id  The user the nicename belongs to, so their own nicename is not treated as a conflict.
+ * @return string A unique nicename.
+ */
+function pmpromd_get_unique_nicename( $nicename, $user_id = 0 ) {
+	$unique_nicename = $nicename;
+	$suffix          = 2;
+
+	while ( $suffix < 1000 ) {
+		$existing_user = get_user_by( 'slug', $unique_nicename );
+
+		// Nothing is using it, or the member already has it.
+		if ( ! $existing_user || (int) $existing_user->ID === (int) $user_id ) {
+			return $unique_nicename;
+		}
+
+		$unique_nicename = $nicename . '-' . $suffix;
+		$suffix++;
+	}
+
+	// Fall back to the user ID when a name is already used an unusual number of times.
+	if ( ! $user_id ) {
+		return $unique_nicename;
+	}
+
+	$suffix = '-' . $user_id;
+
+	return pmpromd_truncate_nicename( $nicename, 50 - strlen( $suffix ) ) . $suffix;
+}
+
+/**
+ * Save a new nicename for a member and refresh anything that may have cached the old one.
+ *
+ * @since 2.4
+ *
+ * @param int    $user_id    The user ID.
+ * @param string $nicename   The nicename to save.
+ * @param bool   $bump_cache Whether to invalidate the directory cache. Pass false when converting many members at once.
+ * @return bool True when the nicename was saved.
+ */
+function pmpromd_update_user_nicename( $user_id, $nicename, $bump_cache = true ) {
+	global $wpdb;
+
+	// Write directly so the profile_update hooks do not run again.
+	$updated = $wpdb->update(
+		$wpdb->users,
+		array( 'user_nicename' => $nicename ),
+		array( 'ID' => $user_id ),
+		array( '%s' ),
+		array( '%d' )
+	);
+
+	if ( false === $updated ) {
+		return false;
+	}
+
+	clean_user_cache( $user_id );
+
+	if ( $bump_cache ) {
+		// Cached directory results may already hold the old profile URL.
+		pmpromd_bump_cache_version();
+	}
+
+	return true;
+}
+
+/**
+ * Set a member's nicename to match their first and last name.
+ *
+ * @since 2.4
+ *
+ * @param int  $user_id    The user ID.
+ * @param bool $bump_cache Whether to invalidate the directory cache. Pass false when converting many members at once.
+ * @return bool True when the nicename was changed.
+ */
+function pmpromd_set_first_last_nicename( $user_id, $bump_cache = true ) {
+	$user = get_userdata( $user_id );
+
+	if ( ! $user ) {
+		return false;
+	}
+
+	$nicename = pmpromd_get_first_last_nicename( $user );
+
+	if ( '' === $nicename ) {
+		return false;
+	}
+
+	$nicename = pmpromd_get_unique_nicename( $nicename, $user_id );
+
+	if ( $nicename === $user->user_nicename ) {
+		return false;
+	}
+
+	// Keep the original nicename so it can be restored if the setting changes again.
+	if ( ! metadata_exists( 'user', $user_id, 'pmpromd_original_nicename' ) ) {
+		update_user_meta( $user_id, 'pmpromd_original_nicename', $user->user_nicename );
+	}
+
+	return pmpromd_update_user_nicename( $user_id, $nicename, $bump_cache );
+}
+
+/**
+ * Restore the nicename a member had before their first and last name was used.
+ *
+ * @since 2.4
+ *
+ * @param int  $user_id    The user ID.
+ * @param bool $bump_cache Whether to invalidate the directory cache. Pass false when converting many members at once.
+ * @return bool True when the nicename was restored.
+ */
+function pmpromd_restore_user_nicename( $user_id, $bump_cache = true ) {
+	$original_nicename = get_user_meta( $user_id, 'pmpromd_original_nicename', true );
+
+	if ( empty( $original_nicename ) ) {
+		return false;
+	}
+
+	$user = get_userdata( $user_id );
+
+	if ( ! $user ) {
+		return false;
+	}
+
+	$nicename = pmpromd_get_unique_nicename( $original_nicename, $user_id );
+
+	// Nothing to change, so the stored value is no longer needed.
+	if ( $nicename === $user->user_nicename ) {
+		delete_user_meta( $user_id, 'pmpromd_original_nicename' );
+		return false;
+	}
+
+	// Keep the stored original if the update fails so the restore can be retried.
+	if ( ! pmpromd_update_user_nicename( $user_id, $nicename, $bump_cache ) ) {
+		return false;
+	}
+
+	delete_user_meta( $user_id, 'pmpromd_original_nicename' );
+
+	return true;
+}
+
+/**
+ * Keep a member's nicename in step with their name when first and last names are used as the slug.
+ *
+ * @since 2.4
+ *
+ * @param int $user_id The user ID.
+ * @return void
+ */
+function pmpromd_maybe_update_nicename( $user_id ) {
+	if ( 'first_last' !== pmpromd_get_profile_slug_source() ) {
+		return;
+	}
+
+	pmpromd_set_first_last_nicename( $user_id );
+}
+add_action( 'user_register', 'pmpromd_maybe_update_nicename', 20 );
+add_action( 'profile_update', 'pmpromd_maybe_update_nicename', 20 );
+
+/**
+ * Update the nicename when a name is saved without a profile update.
+ *
+ * PMPro saves its profile fields straight to usermeta, which does not fire
+ * profile_update, so the nicename has to follow the meta changes instead.
+ *
+ * @since 2.4
+ *
+ * @param int    $meta_id    Meta row ID.
+ * @param int    $object_id  User ID.
+ * @param string $meta_key   Meta key being changed.
+ * @param mixed  $meta_value New value.
+ * @return void
+ */
+function pmpromd_maybe_update_nicename_on_meta( $meta_id, $object_id, $meta_key, $meta_value ) {
+	if ( ! in_array( $meta_key, array( 'first_name', 'last_name' ), true ) ) {
+		return;
+	}
+
+	pmpromd_maybe_update_nicename( $object_id );
+}
+add_action( 'added_user_meta', 'pmpromd_maybe_update_nicename_on_meta', 20, 4 );
+add_action( 'updated_user_meta', 'pmpromd_maybe_update_nicename_on_meta', 20, 4 );
 
 /**
  * Gets a user from the pu URL value
