@@ -10,6 +10,10 @@ Text Domain: pmpro-member-directory
 Domain Path: /languages
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // Definitions
 define( 'PMPRO_MEMBER_DIRECTORY_VERSION', '2.3.1' );
 define( 'PMPRO_MEMBER_DIRECTORY_BASE_FILE', __FILE__ );

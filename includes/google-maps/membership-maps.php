@@ -7,6 +7,11 @@
  * 
  * @since 2.1
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 define( 'PMPRO_MEMBER_DIRECTORY_MAPS_DIR', dirname( __FILE__ ) );
 
 include_once( PMPRO_MEMBER_DIRECTORY_MAPS_DIR . '/includes/functions.php' );
@@ -49,7 +54,7 @@ function pmpromd_show_maps_deprecated_notice() {
 
 
 	// Only show on a certain page.
-	if ( ! isset( $_REQUEST['page'] ) || strpos( sanitize_text_field( $_REQUEST['page'] ), 'pmpro' ) === false  ) {
+	if ( ! isset( $_REQUEST['page'] ) || strpos( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ), 'pmpro' ) === false  ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only decides whether to show an admin notice.
 			return;
 	}
 

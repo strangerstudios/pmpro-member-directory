@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Show the content for the [pmpro_member_profile] shortcode.
  */
@@ -139,8 +143,8 @@ function pmpromd_profile_shortcode( $atts, $content=null, $code="" ) {
 	// Set the displayed_levels variable to use for displaying values.
 	$displayed_levels = empty( $levels ) ? 'all' : $levels;
 
-	if(isset($_REQUEST['limit']))
-		$limit = intval($_REQUEST['limit']);
+	if(isset($_REQUEST['limit'])) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display setting.
+		$limit = intval($_REQUEST['limit']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display setting.
 	elseif(empty($limit))
 		$limit = 15;
 

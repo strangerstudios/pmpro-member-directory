@@ -5,6 +5,10 @@
  * @since 2.0
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Check for deprecated filters.
  */
