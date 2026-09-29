@@ -3,6 +3,10 @@
  * All map related functions to be used in this file.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Load the custom JS we need to show/hide fields as we need, and any other related JS scripts.
  * Note: This does not include the Google Maps API script, which is loaded in the `pmpromd_show_google_map` function and enqueued with map.js
@@ -360,6 +364,9 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
 	}
 
 	// Let's see if the fields are set in the request and geocode the address passed in.
+	// Nonce is verified by each caller: WP profile update, PMPro frontend profile edit, PMPro checkout, or the Edit Member panel save.
+	// Values are not unslashed because update_user_meta() unslashes them itself.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
     if ( ! empty( $_REQUEST['pmpromd_street_name'] ) ) {
     
 		// Create an array of the member's address. We will save this purely for reference purposes. We use the latitude and longitude values actually.
@@ -377,6 +384,7 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
         } else {
             $member_address['optin'] = true;
         }
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		// Let's build the address array to geocode.
         $coordinates = pmpromd_geocode_map_address( $member_address );
@@ -589,11 +597,11 @@ function pmpromd_map_save_address_from_member_panel() {
 	if ( isset( $_REQUEST['pmpro_member_edit_panel'] ) && $_REQUEST['pmpro_member_edit_panel'] === 'user-fields-directory-and-profile-preferences' ) {
 
 		// Let's not do anything unless we have a verified nonce.
-		if ( ! isset( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) || ! wp_verify_nonce( $_REQUEST['pmpro_member_edit_saved_panel_nonce'], 'pmpro_member_edit_saved_panel_user-fields-directory-and-profile-preferences' ) ) {
+		if ( ! isset( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) ), 'pmpro_member_edit_saved_panel_user-fields-directory-and-profile-preferences' ) ) {
 			return;
 		}
 
-		pmpromd_save_marker_location_for_user( $_REQUEST['user_id'] );
+		pmpromd_save_marker_location_for_user( isset( $_REQUEST['user_id'] ) ? intval( $_REQUEST['user_id'] ) : false );
 	}
 }
 add_action( 'admin_init', 'pmpromd_map_save_address_from_member_panel' );
@@ -628,12 +636,12 @@ function pmpromd_migrate_map_data_backend() {
 		return;
 	}
 	// Bail when we're not on the edit member page.
-	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-member' ) {
+	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-member' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin page routing only; capability checked above.
 		return;
 	}
 
 	// Get the user ID we are trying to migrate.
-	$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : get_current_user_id();
+	$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : get_current_user_id(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Selects which member's stored map data to migrate; capability checked above.
 
 	// If we're editing a member profile, let's migrate the data now.
 	pmpromd_retroactively_update_user_map_fields( $user_id );

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Set up user fields for the directory and profile pages.
  *
@@ -204,9 +208,9 @@ function pmpromd_get_user( $user_id = false ) {
 	} elseif ( ! empty( $wp_query->get( 'pu' ) ) ) {
 		//Using the new permalinks /profile/user
 		$pu = pmpromd_get_user_by_identifier( $wp_query->get( 'pu' ) );
-	} elseif ( ! empty( $_REQUEST['pu'] ) ) {
+	} elseif ( ! empty( $_REQUEST['pu'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile lookup from a public URL.
 		//Using old url structure /profile/?pu=user
-		$pu = pmpromd_get_user_by_identifier( $_REQUEST['pu'] );
+		$pu = pmpromd_get_user_by_identifier( sanitize_text_field( wp_unslash( $_REQUEST['pu'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile lookup from a public URL.
 	} elseif ( ! empty( $current_user->ID ) ) {
 		$pu = $current_user;
 	} else {
@@ -280,7 +284,7 @@ function pmpromd_redirect_profile_links() {
     }
 
     //The pu param isn't present
-    if ( empty( $_REQUEST['pu'] ) ) {
+    if ( empty( $_REQUEST['pu'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only redirect to the pretty profile URL.
         return;
     }
 	
@@ -291,7 +295,8 @@ function pmpromd_redirect_profile_links() {
         return;
     }
 	
-    wp_redirect( pmpromd_build_profile_url( $_REQUEST['pu'], false, true ), 302, 'WordPress' );
+    // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect, WordPress.Security.NonceVerification.Recommended -- Profile URL is filterable via pmpromd_profile_url and may be on another host; read-only redirect.
+    wp_redirect( pmpromd_build_profile_url( sanitize_text_field( wp_unslash( $_REQUEST['pu'] ) ), false, true ), 302, 'WordPress' );
     exit();
     
 }
@@ -466,7 +471,7 @@ function pmpromd_profile_page_preheader() {
 
 	// If the profile user should not be visible, go to directory or home.
 	if ( ! pmpromd_profile_user_is_visible( $pu ) ) {
-		wp_redirect( $redirect );
+		wp_redirect( $redirect ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Directory permalink or home_url(); get_permalink() is filterable, so keep wp_redirect().
 		exit;
 	}
 
@@ -483,7 +488,7 @@ function pmpromd_profile_page_preheader() {
 	// If they don't have that level, redirect away.
 	$levels = pmpro_getMatches( "/ levels?=[\"']([^\"^']*)[\"']/", $post->post_content, true );
 	if ( ! empty( $levels ) && ! pmpro_hasMembershipLevel( explode( ",", $levels ), $pu->ID ) ) {
-		wp_redirect( $redirect );
+		wp_redirect( $redirect ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Directory permalink or home_url(); get_permalink() is filterable, so keep wp_redirect().
 		exit;
 	}
 }

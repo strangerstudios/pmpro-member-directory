@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Adds API Key field to advanced settings page
@@ -57,7 +60,7 @@ function pmpromd_test_maps_api() {
 	if ( ! empty( $_REQUEST['pmpromd_maps_api_key'] ) && current_user_can( 'manage_options' ) ) {
 
 		$current_key = get_option( 'pmpro_pmpromd_maps_api_key' );
-		$new_key = trim( sanitize_text_field( $_REQUEST['pmpromd_maps_api_key'] ) );
+		$new_key = trim( sanitize_text_field( wp_unslash( $_REQUEST['pmpromd_maps_api_key'] ) ) );
 		$api_key_status = get_option( 'pmpro_pmpromd_maps_api_key_status' );
 
 		//API key differs or the status is not OK, let's test the key.
@@ -100,8 +103,9 @@ add_action( 'admin_init', 'pmpromd_test_maps_api' );
  */
 function pmpromd_use_api_key_on_save( $api_key ) {
 
-	if ( ! empty( $_REQUEST['pmpromd_maps_api_key'] ) ) {
-		$api_key = trim( sanitize_text_field( $_REQUEST['pmpromd_maps_api_key'] ) );
+	// Only hooked from pmpromd_test_maps_api(), after check_admin_referer( 'savesettings' ) and the manage_options check.
+	if ( ! empty( $_REQUEST['pmpromd_maps_api_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in pmpromd_test_maps_api().
+		$api_key = trim( sanitize_text_field( wp_unslash( $_REQUEST['pmpromd_maps_api_key'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in pmpromd_test_maps_api().
 
 		// Try to delete the old options for now.
 		// This should be deprecated later on.
