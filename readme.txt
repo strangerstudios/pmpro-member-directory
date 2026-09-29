@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
-Tested up to: 7.0
-Stable tag: 2.3.1
+Tested up to: 7.1
+Stable tag: 2.3.2
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -76,7 +76,13 @@ Please visit our premium support site at http://www.paidmembershipspro.com for m
 * ENHANCEMENT: Migrated the Google Map markers to the AdvancedMarkerElement API, which replaces the deprecated google.maps.Marker API. Set a Google Map ID in Memberships > Settings > Advanced to use it, otherwise the classic markers are still used. #232 (@faisalahammad)
 * ENHANCEMENT: Added a "Google Maps Map ID" field to the PMPro Advanced Settings and the new `pmpromd_maps_map_id` filter. #232 (@faisalahammad)
 * ENHANCEMENT: Replaced the bundled marker clusterer with the @googlemaps/markerclusterer library, which works with both the classic and advanced markers. #230 (@faisalahammad)
+* ENHANCEMENT: Marker clusters now draw their own circular icons instead of the bundled cluster images. Clusters are blue, and turn red when they hold more markers than usual. The new `pmpromd_maps_cluster_options` filter can adjust the clustering zoom and radius. #230 (@faisalahammad)
 * BUG FIX: Fixed a race condition where the map could fail to load with "pmpromd_init_map is not a function" when the Google Maps API loaded before our map script. #232 (@faisalahammad)
+
+= 2.3.2 - 2026-09-29 =
+* SECURITY: Flushing rewrite rules when Page Settings are saved now requires the proper capability and a nonce. #239 (@dparker1005)
+* SECURITY: Added direct file access protection and improved input sanitization and unslashing. #238 (@dparker1005)
+* BUG FIX: Fixed directory searches containing an apostrophe showing a stray backslash in the search box. #238 (@dparker1005)
 
 = 2.3.1 - 2026-08-19 =
 * SECURITY: Fixed an issue where profiles for members who are hidden from the directory, do not have an active membership, or are pending approval could still be viewed when the profile shortcode or block was placed on a page other than the assigned profile page. #233 (@flintfromthebasement)

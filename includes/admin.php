@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Adds an edit profile link when on the Profile page
  */
@@ -63,7 +67,10 @@ function pmpromd_pagesettings_flush() {
 		! empty( $_REQUEST['page'] ) && 
 		$_REQUEST['page'] == 'pmpro-pagesettings' && //Are we on the PMPro Page Settings
 		! empty( $_REQUEST['savesettings']) && //Are we hitting the save button
-		! empty( $_REQUEST['profile_page_id'] ) //Is there a profile page present
+		! empty( $_REQUEST['profile_page_id'] ) && //Is there a profile page present
+		( current_user_can( 'manage_options' ) || current_user_can( 'pmpro_pagesettings' ) ) && //Can they save the page settings
+		! empty( $_REQUEST['pmpro_pagesettings_nonce'] ) &&
+		wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['pmpro_pagesettings_nonce'] ) ), 'savesettings' ) //Is the nonce valid
 	) {
 		flush_rewrite_rules( true );
 	}

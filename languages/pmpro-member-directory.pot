@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.3.1\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.3.2\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-19T17:24:41+00:00\n"
+"POT-Creation-Date: 2026-09-29T20:31:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -39,124 +39,144 @@ msgstr ""
 msgid "https://www.paidmembershipspro.com/"
 msgstr ""
 
-#: includes/admin.php:24
-#: includes/admin.php:27
+#: includes/admin.php:28
+#: includes/admin.php:31
 msgid "Edit Member"
 msgstr ""
 
-#: includes/admin.php:44
+#: includes/admin.php:48
 msgid "Directory"
 msgstr ""
 
-#: includes/admin.php:46
+#: includes/admin.php:50
 msgid "Include the shortcode [pmpro_member_directory]."
 msgstr ""
 
-#: includes/admin.php:49
+#: includes/admin.php:53
 msgid "Profile"
 msgstr ""
 
-#: includes/admin.php:51
+#: includes/admin.php:55
 msgid "Include the shortcode [pmpro_member_profile]."
 msgstr ""
 
-#: includes/admin.php:190
+#: includes/admin.php:197
 msgid "View Documentation"
 msgstr ""
 
-#: includes/admin.php:190
+#: includes/admin.php:197
 msgid "Docs"
 msgstr ""
 
-#: includes/admin.php:191
+#: includes/admin.php:198
 msgid "Visit Customer Support Forum"
 msgstr ""
 
-#: includes/admin.php:191
+#: includes/admin.php:198
 msgid "Support"
 msgstr ""
 
 #. translators: 1: the old hook name, 2: the new or replacement hook name
-#: includes/deprecated.php:25
+#: includes/deprecated.php:29
 #, php-format
 msgid "The %1$s hook has been deprecated in the Member Directory Add On for Paid Memberships Pro. Please use the %2$s hook instead."
 msgstr ""
 
 #. translators: 1: the old hook name
-#: includes/deprecated.php:36
+#: includes/deprecated.php:40
 #, php-format
 msgid "The %1$s hook has been deprecated in  Member Directory Add On for Paid Memberships Pro and may not be available in future versions."
 msgstr ""
 
-#: includes/functions.php:16
+#: includes/functions.php:20
 msgid "Directory and Profile Preferences"
 msgstr ""
 
-#: includes/functions.php:20
+#: includes/functions.php:24
 msgid "directory"
 msgstr ""
 
 #. translators: placeholder is the title of the directory page.
-#: includes/functions.php:30
+#: includes/functions.php:34
 #, php-format
 msgid "Hide from %s?"
 msgstr ""
 
-#: includes/functions.php:46
+#: includes/functions.php:50
 msgid "Show location on map"
 msgstr ""
 
-#: includes/functions.php:60
+#: includes/functions.php:64
 msgid "Street Name"
 msgstr ""
 
-#: includes/functions.php:75
+#: includes/functions.php:79
 msgid "City"
 msgstr ""
 
-#: includes/functions.php:90
+#: includes/functions.php:94
 msgid "State"
 msgstr ""
 
-#: includes/functions.php:105
+#: includes/functions.php:109
 msgid "Zip Code"
 msgstr ""
 
-#: includes/functions.php:130
+#: includes/functions.php:134
 msgid "Country"
 msgstr ""
 
-#: includes/functions.php:680
+#: includes/functions.php:685
 msgid "The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields."
 msgstr ""
 
-#: includes/functions.php:693
+#: includes/functions.php:698
 msgid "The show_phone attribute is deprecated. We recommend collecting member phone numbers through a User Field."
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:22
+#: includes/google-maps/includes/admin.php:25
 msgid "Obtain Your Google Maps API Key"
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:24
+#: includes/google-maps/includes/admin.php:27
 msgid "API Key Status"
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:30
+#: includes/google-maps/includes/admin.php:33
 msgid "Google Maps API Key"
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:129
+#: includes/google-maps/includes/admin.php:55
+msgid "Create a Map ID in the Google Cloud Console"
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:55
+msgid "Optional, but required to use the newer advanced map markers."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:57
+msgid "Map ID in use."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:57
+msgid "The map styling is managed in the Google Cloud Console and the styles set through the pmpromd_map_styles filter are ignored."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:63
+msgid "Google Maps Map ID"
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:163
 msgid "Membership Maps API Key Status"
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:62
+#: includes/google-maps/includes/functions.php:77
 msgid "This map could not be loaded. Please ensure that you have entered your Google Maps API Key and that there are no JavaScript errors on the page."
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:308
-#: templates/directory.php:396
-#: templates/directory.php:449
+#: includes/google-maps/includes/functions.php:374
+#: templates/directory.php:403
+#: templates/directory.php:456
 #: blocks/src/directory/templates/table.js:33
 #: blocks/src/directory/templates/table.js:42
 #: blocks/src/directory/templates/table.js:51
@@ -164,148 +184,148 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:398
+#: includes/google-maps/includes/functions.php:468
 #, php-format
 msgid "There was an error with the Google Maps API: %s"
 msgstr ""
 
-#: includes/google-maps/membership-maps.php:59
+#: includes/google-maps/membership-maps.php:64
 msgid "The Paid Memberships Pro - Membership Maps Add On is now part of the Member Directory and Profile Add On. Please deactivate the Paid Memberships Pro - Membership Maps Add On."
 msgstr ""
 
-#: includes/search.php:20
+#: includes/search.php:24
 msgid "Search for:"
 msgstr ""
 
-#: includes/search.php:21
+#: includes/search.php:25
 msgid "Search Members"
 msgstr ""
 
-#: includes/search.php:26
+#: includes/search.php:30
 msgid "Submit"
 msgstr ""
 
-#: pmpro-member-directory.php:173
+#: pmpro-member-directory.php:177
 msgid "Yes"
 msgstr ""
 
-#: pmpro-member-directory.php:175
+#: pmpro-member-directory.php:179
 msgid "No"
 msgstr ""
 
-#: templates/directory.php:36
-#: templates/profile.php:36
+#: templates/directory.php:40
+#: templates/profile.php:40
 msgid "Admin Only Alert: You must activate Paid Memberships Pro to use the Member Directory Add On."
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:206
+#: templates/directory.php:213
 #, php-format
 msgid "Profiles Within %s."
 msgstr ""
 
-#: templates/directory.php:208
+#: templates/directory.php:215
 msgid "Viewing All Profiles"
 msgstr ""
 
-#: templates/directory.php:215
+#: templates/directory.php:222
 msgid "Showing 1 Result"
 msgstr ""
 
 #. translators: placeholders are for result numbers
-#: templates/directory.php:218
+#: templates/directory.php:225
 #, php-format
 msgid "Showing %1$s-%2$s of %3$s Results"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:231
+#: templates/directory.php:238
 #, php-format
 msgid "No matching profiles found within <em>%s</em>."
 msgstr ""
 
-#: templates/directory.php:236
-#: templates/profile.php:246
+#: templates/directory.php:243
+#: templates/profile.php:250
 msgid "View All Members"
 msgstr ""
 
-#: templates/directory.php:240
+#: templates/directory.php:247
 msgid "No matching profiles found."
 msgstr ""
 
-#: templates/directory.php:262
+#: templates/directory.php:269
 #: blocks/src/directory/templates/table.js:16
 msgid "Avatar"
 msgstr ""
 
-#: templates/directory.php:264
+#: templates/directory.php:271
 #: blocks/src/directory/templates/table.js:17
 msgid "Member"
 msgstr ""
 
-#: templates/directory.php:272
-#: templates/profile.php:108
+#: templates/directory.php:279
+#: templates/profile.php:112
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:18
 #: blocks/src/profile/block.js:292
 msgid "Email Address"
 msgstr ""
 
-#: templates/directory.php:276
-#: templates/profile.php:112
+#: templates/directory.php:283
+#: templates/profile.php:116
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:20
 #: blocks/src/profile/block.js:297
 msgid "Level"
 msgstr ""
 
-#: templates/directory.php:279
-#: templates/profile.php:115
+#: templates/directory.php:286
+#: templates/profile.php:119
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:21
 #: blocks/src/profile/block.js:302
 msgid "Start Date"
 msgstr ""
 
-#: templates/directory.php:493
+#: templates/directory.php:500
 msgid "Member Directory Pagination"
 msgstr ""
 
-#: templates/profile.php:52
+#: templates/profile.php:56
 msgid "Unable to retrieve member profile."
 msgstr ""
 
-#: templates/profile.php:54
+#: templates/profile.php:58
 msgid "Go back to Directory"
 msgstr ""
 
-#: templates/profile.php:56
+#: templates/profile.php:60
 msgid "Please contact the site administrator for assistance."
 msgstr ""
 
-#: templates/profile.php:64
+#: templates/profile.php:68
 msgid "This profile is not available."
 msgstr ""
 
-#: templates/profile.php:105
+#: templates/profile.php:109
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:287
 msgid "Biographical Info"
 msgstr ""
 
-#: templates/profile.php:118
+#: templates/profile.php:122
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:307
 msgid "Address"
 msgstr ""
 
-#: templates/profile.php:121
+#: templates/profile.php:125
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/profile/block.js:317
 msgid "Phone Number"
 msgstr ""
 
-#: templates/profile.php:258
+#: templates/profile.php:262
 msgid "Edit Profile"
 msgstr ""
 

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Show the content for the [pmpro_member_directory] shortcode.
  */
@@ -71,9 +75,11 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	}
 
 	// Set some values from the request or defaults.
-	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( $_REQUEST['ps'] ) : ''; // Search string.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only public directory search and pagination.
+	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) : ''; // Search string.
 	$pn = isset( $_REQUEST['pn'] ) ? intval( $_REQUEST['pn'] ) : 1; // Page number.
 	$limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : (empty($limit) ? 15 : intval( $limit ) );
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$end = $pn * $limit;
 	$start = $end - $limit;
@@ -161,7 +167,8 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 		$theusers  = $cached['users'];
 		$totalrows = (int) $cached['totalrows'];
 	} else {
-		$theusers = $wpdb->get_results($sqlQuery);
+		// Every dynamic part of $sqlQuery is escaped above: search via esc_sql(), ORDER BY via a [a-z._] whitelist and ASC/DESC, LIMIT via intval(), levels via a [0-9,] whitelist.
+		$theusers = $wpdb->get_results($sqlQuery); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Query built from escaped parts; results cached via pmpromd_set_cached_results().
 
 		// Build the count query.
 		// Replace SELECT list with COUNT(DISTINCT u.ID).
@@ -178,7 +185,7 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 			'',
 			$count_sql
 		);
-		$totalrows = (int) $wpdb->get_var( $count_sql );
+		$totalrows = (int) $wpdb->get_var( $count_sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Derived from the escaped $sqlQuery above; cached via pmpromd_set_cached_results().
 
 		if ( function_exists( 'pmpromd_set_cached_results' ) ) {
 			pmpromd_set_cached_results( $sqlQuery, $theusers, $totalrows );

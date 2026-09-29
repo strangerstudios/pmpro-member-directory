@@ -3,6 +3,10 @@
  * All map related functions to be used in this file.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Load the custom JS we need to show/hide fields as we need, and any other related JS scripts.
  * Note: This does not include the Google Maps API script, which is loaded in the `pmpromd_show_google_map` function and enqueued with map.js
@@ -197,6 +201,40 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	if ( $enable_marker_clustering ) {
 		$pmpromd_map_attributes['show_cluster'] = true;
 
+		$cluster_option_defaults = array(
+			'maxZoom' => 10,
+			'radius'  => 50,
+		);
+
+		/**
+		 * Filter the options passed to the marker clustering library.
+		 *
+		 * The map broke markers out of their clusters at zoom level 10 with a 50 pixel radius before
+		 * the clustering library was replaced. These defaults keep that behavior instead of the
+		 * library defaults, which keep markers clustered until zoom level 16.
+		 *
+		 * @since 2.4
+		 *
+		 * @param array $cluster_options The clustering options. Supports 'maxZoom' and 'radius'.
+		 * @param string $map_id The ID of the map.
+		 */
+		$cluster_options = apply_filters( 'pmpromd_maps_cluster_options', $cluster_option_defaults, $map_id );
+
+		// A filter should hand back an array, so fall back to the defaults if it does not.
+		if ( ! is_array( $cluster_options ) ) {
+			$cluster_options = $cluster_option_defaults;
+		}
+
+		// The two options we document are numeric, so clean them up and leave any others alone.
+		if ( isset( $cluster_options['maxZoom'] ) ) {
+			$cluster_options['maxZoom'] = absint( $cluster_options['maxZoom'] );
+		}
+		if ( isset( $cluster_options['radius'] ) ) {
+			$cluster_options['radius'] = absint( $cluster_options['radius'] );
+		}
+
+		$pmpromd_map_attributes['cluster_options'] = $cluster_options;
+
 		wp_enqueue_script( 'pmpromd-google-maps-cluster', plugin_dir_url( dirname( __FILE__ ) ) . 'js/markerclusterer.min.js', array(), PMPRO_MEMBER_DIRECTORY_VERSION );
 	} else {
 		$pmpromd_map_attributes['show_cluster'] = false;
@@ -388,6 +426,9 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
 	}
 
 	// Let's see if the fields are set in the request and geocode the address passed in.
+	// Nonce is verified by each caller: WP profile update, PMPro frontend profile edit, PMPro checkout, or the Edit Member panel save.
+	// Values are not unslashed because update_user_meta() unslashes them itself.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
     if ( ! empty( $_REQUEST['pmpromd_street_name'] ) ) {
     
 		// Create an array of the member's address. We will save this purely for reference purposes. We use the latitude and longitude values actually.
@@ -405,6 +446,7 @@ function pmpromd_save_marker_location_for_user( $user_id = false ) {
         } else {
             $member_address['optin'] = true;
         }
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		// Let's build the address array to geocode.
         $coordinates = pmpromd_geocode_map_address( $member_address );
@@ -617,11 +659,11 @@ function pmpromd_map_save_address_from_member_panel() {
 	if ( isset( $_REQUEST['pmpro_member_edit_panel'] ) && $_REQUEST['pmpro_member_edit_panel'] === 'user-fields-directory-and-profile-preferences' ) {
 
 		// Let's not do anything unless we have a verified nonce.
-		if ( ! isset( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) || ! wp_verify_nonce( $_REQUEST['pmpro_member_edit_saved_panel_nonce'], 'pmpro_member_edit_saved_panel_user-fields-directory-and-profile-preferences' ) ) {
+		if ( ! isset( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['pmpro_member_edit_saved_panel_nonce'] ) ), 'pmpro_member_edit_saved_panel_user-fields-directory-and-profile-preferences' ) ) {
 			return;
 		}
 
-		pmpromd_save_marker_location_for_user( $_REQUEST['user_id'] );
+		pmpromd_save_marker_location_for_user( isset( $_REQUEST['user_id'] ) ? intval( $_REQUEST['user_id'] ) : false );
 	}
 }
 add_action( 'admin_init', 'pmpromd_map_save_address_from_member_panel' );
@@ -656,12 +698,12 @@ function pmpromd_migrate_map_data_backend() {
 		return;
 	}
 	// Bail when we're not on the edit member page.
-	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-member' ) {
+	if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== 'pmpro-member' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin page routing only; capability checked above.
 		return;
 	}
 
 	// Get the user ID we are trying to migrate.
-	$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : get_current_user_id();
+	$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : get_current_user_id(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Selects which member's stored map data to migrate; capability checked above.
 
 	// If we're editing a member profile, let's migrate the data now.
 	pmpromd_retroactively_update_user_map_fields( $user_id );

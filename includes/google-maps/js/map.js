@@ -126,11 +126,19 @@ function pmpromd_init_map(){
 		// Only show clusters if PHP filter is enabled. 
 		if ( pmpromd_vars.show_cluster === true || pmpromd_vars.show_cluster === "1" || pmpromd_vars.show_cluster === 1 ) {
 			if( typeof markerClusterer !== 'undefined' && typeof markerClusterer.MarkerClusterer !== 'undefined' ) {
-				// The clusterer adds the markers to the map and picks the matching marker type for us.
-				new markerClusterer.MarkerClusterer({
+				var pmpromd_cluster_options = {
 					map: pmpro_map,
 					markers: pmpromd_markers
-				});
+				};
+
+				// Pass the zoom and radius the map used before instead of the library defaults,
+				//  which keep markers clustered until a much closer zoom level.
+				if( typeof markerClusterer.SuperClusterAlgorithm !== 'undefined' && typeof pmpromd_vars.cluster_options !== 'undefined' ) {
+					pmpromd_cluster_options.algorithm = new markerClusterer.SuperClusterAlgorithm( pmpromd_vars.cluster_options );
+				}
+
+				// The clusterer adds the markers to the map and picks the matching marker type for us.
+				new markerClusterer.MarkerClusterer( pmpromd_cluster_options );
 			} else {
 				// Place all markers on the map if the clusterer library did not load.
 				pmpromd_place_markers();
