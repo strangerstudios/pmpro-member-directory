@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
-Tested up to: 7.0
-Stable tag: 2.3.1
+Tested up to: 7.1
+Stable tag: 2.3.2
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.3.2 - 2026-09-29 =
+* SECURITY: Flushing rewrite rules when Page Settings are saved now requires the proper capability and a nonce. #239 (@dparker1005)
+* SECURITY: Added direct file access protection and improved input sanitization and unslashing. #238 (@dparker1005)
+* BUG FIX: Fixed directory searches containing an apostrophe showing a stray backslash in the search box. #238 (@dparker1005)
+
 = 2.3.1 - 2026-08-19 =
 * SECURITY: Fixed an issue where profiles for members who are hidden from the directory, do not have an active membership, or are pending approval could still be viewed when the profile shortcode or block was placed on a page other than the assigned profile page. #233 (@flintfromthebasement)
 * ENHANCEMENT: Members with an active membership can now view their own profile even if they are hidden from the directory or pending approval. #233 (@flintfromthebasement)
