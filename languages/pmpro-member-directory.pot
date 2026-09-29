@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29T18:37:36+00:00\n"
+"POT-Creation-Date: 2026-09-29T20:31:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -146,15 +146,35 @@ msgstr ""
 msgid "Google Maps API Key"
 msgstr ""
 
-#: includes/google-maps/includes/admin.php:133
+#: includes/google-maps/includes/admin.php:55
+msgid "Create a Map ID in the Google Cloud Console"
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:55
+msgid "Optional, but required to use the newer advanced map markers."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:57
+msgid "Map ID in use."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:57
+msgid "The map styling is managed in the Google Cloud Console and the styles set through the pmpromd_map_styles filter are ignored."
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:63
+msgid "Google Maps Map ID"
+msgstr ""
+
+#: includes/google-maps/includes/admin.php:163
 msgid "Membership Maps API Key Status"
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:66
+#: includes/google-maps/includes/functions.php:77
 msgid "This map could not be loaded. Please ensure that you have entered your Google Maps API Key and that there are no JavaScript errors on the page."
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:312
+#: includes/google-maps/includes/functions.php:374
 #: templates/directory.php:403
 #: templates/directory.php:456
 #: blocks/src/directory/templates/table.js:33
@@ -164,7 +184,7 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: includes/google-maps/includes/functions.php:406
+#: includes/google-maps/includes/functions.php:468
 #, php-format
 msgid "There was an error with the Google Maps API: %s"
 msgstr ""
