@@ -405,6 +405,7 @@ add_filter( 'document_title_parts', 'pmpromd_document_title_parts' );
  *
  * Hooked to filters that are always followed by the matching filter in
  * pmpromd_readd_title_filters_in_menus(), so the filters can't be left off.
+ * On WordPress versions before 6.3, falls back to the filters around wp_nav_menu().
  *
  * @since 2.0
  * @since TBD Hooked per menu item and around wp_page_menu() instead of around wp_nav_menu().
@@ -414,12 +415,10 @@ add_filter( 'document_title_parts', 'pmpromd_document_title_parts' );
  * @return mixed The unchanged value.
  */
 function pmpromd_remove_title_filters_in_menus( $value ) {
-	global $pmpromd_removed_title_filters;
+	global $pmpromd_removed_title_filters, $wp_filter;
 
-	$pmpromd_removed_title_filters = array();
-
-	// If another filter is short-circuiting the menu item setup, wp_setup_nav_menu_item won't run to restore our filters.
-	if ( 'pre_wp_setup_nav_menu_item' === current_filter() && null !== $value ) {
+	// If another filter is short-circuiting the menu, the matching filter won't run to restore our filters.
+	if ( in_array( current_filter(), array( 'pre_wp_setup_nav_menu_item', 'pre_wp_nav_menu' ), true ) && null !== $value ) {
 		return $value;
 	}
 
@@ -429,17 +428,24 @@ function pmpromd_remove_title_filters_in_menus( $value ) {
 		'the_title' => 'pmpromd_the_title_profile_page',
 		'wp_title'  => 'pmpromd_wp_title',
 	);
+	$removed_filters = array();
 	foreach ( $title_filters as $hook => $callback ) {
 		$priority = has_filter( $hook, $callback );
 		if ( false !== $priority ) {
+			$accepted_args = $wp_filter[ $hook ]->callbacks[ $priority ][ $callback ]['accepted_args'];
 			remove_filter( $hook, $callback, $priority );
-			$pmpromd_removed_title_filters[] = array( $hook, $callback, $priority );
+			$removed_filters[] = array( $hook, $callback, $priority, $accepted_args );
 		}
 	}
 
+	// Keep a stack so that a menu built while another is being built doesn't lose the outer record.
+	if ( ! is_array( $pmpromd_removed_title_filters ) ) {
+		$pmpromd_removed_title_filters = array();
+	}
+	$pmpromd_removed_title_filters[] = $removed_filters;
+
 	return $value;
 }
-add_filter( 'pre_wp_setup_nav_menu_item', 'pmpromd_remove_title_filters_in_menus', PHP_INT_MAX );
 add_filter( 'wp_page_menu_args', 'pmpromd_remove_title_filters_in_menus' );
 
 /**
@@ -456,16 +462,23 @@ function pmpromd_readd_title_filters_in_menus( $value ) {
 	global $pmpromd_removed_title_filters;
 
 	if ( ! empty( $pmpromd_removed_title_filters ) ) {
-		foreach ( $pmpromd_removed_title_filters as $filter ) {
-			add_filter( $filter[0], $filter[1], $filter[2], 2 );
+		foreach ( array_pop( $pmpromd_removed_title_filters ) as $filter ) {
+			add_filter( $filter[0], $filter[1], $filter[2], $filter[3] );
 		}
 	}
-	$pmpromd_removed_title_filters = array();
 
 	return $value;
 }
-add_filter( 'wp_setup_nav_menu_item', 'pmpromd_readd_title_filters_in_menus' );
 add_filter( 'wp_page_menu', 'pmpromd_readd_title_filters_in_menus' );
+
+// pre_wp_setup_nav_menu_item was added in WordPress 6.3. On older versions, fall back to removing the filters around the whole menu.
+if ( version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ) {
+	add_filter( 'pre_wp_setup_nav_menu_item', 'pmpromd_remove_title_filters_in_menus', PHP_INT_MAX );
+	add_filter( 'wp_setup_nav_menu_item', 'pmpromd_readd_title_filters_in_menus' );
+} else {
+	add_filter( 'pre_wp_nav_menu', 'pmpromd_remove_title_filters_in_menus', PHP_INT_MAX );
+	add_filter( 'wp_nav_menu_items', 'pmpromd_readd_title_filters_in_menus' );
+}
 
 /**
  * Preheader operations for the profile page.
