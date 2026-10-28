@@ -203,8 +203,6 @@ if ( $s ) {
 
 	/**
 	 * Filter the usermeta keys that the directory search looks in.
-	 *
-	 * @since TBD
 	 * The display name, user_email, user_login and user_url are searched separately. The display name is always searched.
 	 *
 	 * @since TBD
