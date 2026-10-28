@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 7.1
-Stable tag: 2.3.2
+Stable tag: 2.3.3
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,15 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.3.3 - 2026-10-28 =
+* SECURITY: The directory search now only searches member names and the fields shown in the directory, respects user field level restrictions, and matches search terms literally. #242 (@dparker1005)
+* SECURITY: Member display names and addresses are now escaped before output. #242 (@dparker1005)
+* ENHANCEMENT: Added the `pmpro_member_directory_search_meta_keys` filter to change which user meta the directory search looks in. #242 (@dparker1005)
+* ENHANCEMENT: The `limit` URL parameter on the directory is now capped at 100 or the shortcode's `limit`, whichever is larger. #242 (@dparker1005)
+* BUG FIX: Fixed the profile page title showing the page's own title instead of the member's name when a theme menu location had no menu assigned. #241 (@dparker1005)
+* BUG FIX: Menus no longer re-add the profile page title filter if a site removed it or moved it to another priority. #241 (@dparker1005)
+* BUG FIX: Fixed a database error when the directory page number in the URL was zero or negative. #242 (@dparker1005)
+
 = 2.3.2 - 2026-09-29 =
 * SECURITY: Flushing rewrite rules when Page Settings are saved now requires the proper capability and a nonce. #239 (@dparker1005)
 * SECURITY: Added direct file access protection and improved input sanitization and unslashing. #238 (@dparker1005)

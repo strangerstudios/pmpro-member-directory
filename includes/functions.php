@@ -409,7 +409,7 @@ add_filter( 'document_title_parts', 'pmpromd_document_title_parts' );
  * On WordPress versions before 6.3, falls back to the filters around wp_nav_menu().
  *
  * @since 2.0
- * @since TBD Hooked per menu item and around wp_page_menu() instead of around wp_nav_menu().
+ * @since 2.3.3 Hooked per menu item and around wp_page_menu() instead of around wp_nav_menu().
  *
  * @param mixed $value The value being filtered.
  *
@@ -453,7 +453,7 @@ add_filter( 'wp_page_menu_args', 'pmpromd_remove_title_filters_in_menus' );
  * Restore the title filters removed by pmpromd_remove_title_filters_in_menus().
  *
  * @since 2.0
- * @since TBD Hooked per menu item and around wp_page_menu() instead of around wp_nav_menu().
+ * @since 2.3.3 Hooked per menu item and around wp_page_menu() instead of around wp_nav_menu().
  *
  * @param mixed $value The value being filtered.
  *

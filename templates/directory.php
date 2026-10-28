@@ -205,7 +205,7 @@ if ( $s ) {
 	 * Filter the usermeta keys that the directory search looks in.
 	 * The display name, user_email, user_login and user_url are searched separately. The display name is always searched.
 	 *
-	 * @since TBD
+	 * @since 2.3.3
 	 * @param array $search_meta_keys The usermeta keys to search. Defaults to first_name and last_name (always searched, even if not shown) plus the fields shown in the directory.
 	 * @param array $elements_array The elements shown in the directory.
 	 */
