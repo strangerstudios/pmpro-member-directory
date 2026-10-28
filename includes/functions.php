@@ -371,7 +371,8 @@ function pmpromd_the_title_profile_page( $title, $post_id = NULL ) {
 		$display_name = pmpro_member_directory_get_member_display_name( $pu );
 
 		if( ! empty( $display_name ) ){
-			$title = $display_name;
+			// Titles are output as HTML, so escape the display name.
+			$title = esc_html( $display_name );
 		}
 	}
 	return $title;
@@ -708,7 +709,7 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 		// Additional formatting and special cases.
 		switch ( $element ) {
 			case 'display_name':
-				$value = pmpro_member_directory_get_member_display_name( $pu );
+				$value = esc_html( pmpro_member_directory_get_member_display_name( $pu ) );
 				break;
 			case 'avatar':
 				$value = get_avatar( $pu->ID, $avatar_size, NULL, esc_attr( $pu->display_name ) );
@@ -724,15 +725,16 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				break;
 			case 'pmpro_billing_address':
 				_doing_it_wrong( __FUNCTION__, esc_html__( 'The show_billing attribute is deprecated. We recommend collecting member addresses using the Mailing Address Add On or through User Fields.', 'pmpro-member-directory' ), '2.0' );
+				// Escape each part since pmpro_formatAddress() returns HTML and doesn't escape the values.
 				$value = pmpro_formatAddress(
-					trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ),
-					$pu->pmpro_baddress1,
-					$pu->pmpro_baddress2,
-					$pu->pmpro_bcity,
-					$pu->pmpro_bstate,
-					$pu->pmpro_bzipcode,
-					$pu->pmpro_bcountry,
-					$pu->pmpro_bphone
+					esc_html( trim( $pu->pmpro_bfirstname . ' ' . $pu->pmpro_blastname ) ),
+					esc_html( $pu->pmpro_baddress1 ),
+					esc_html( $pu->pmpro_baddress2 ),
+					esc_html( $pu->pmpro_bcity ),
+					esc_html( $pu->pmpro_bstate ),
+					esc_html( $pu->pmpro_bzipcode ),
+					esc_html( $pu->pmpro_bcountry ),
+					esc_html( $pu->pmpro_bphone )
 				);
 				break;
 			case 'pmpro_bphone':
@@ -740,15 +742,16 @@ function pmpromd_get_display_value( $element, $pu, $displayed_levels = null ) {
 				break;
 			case 'pmpro_shipping_address':
 			case 'pmpro_mailing_address':
+				// Escape each part since pmpro_formatAddress() returns HTML and doesn't escape the values.
 				$value = pmpro_formatAddress(
-					trim( $pu->pmpro_sfirstname . ' ' . $pu->pmpro_slastname ),
-					$pu->pmpro_saddress1,
-					$pu->pmpro_saddress2,
-					$pu->pmpro_scity,
-					$pu->pmpro_sstate,
-					$pu->pmpro_szipcode,
-					$pu->pmpro_scountry,
-					$pu->pmpro_sphone
+					esc_html( trim( $pu->pmpro_sfirstname . ' ' . $pu->pmpro_slastname ) ),
+					esc_html( $pu->pmpro_saddress1 ),
+					esc_html( $pu->pmpro_saddress2 ),
+					esc_html( $pu->pmpro_scity ),
+					esc_html( $pu->pmpro_sstate ),
+					esc_html( $pu->pmpro_szipcode ),
+					esc_html( $pu->pmpro_scountry ),
+					esc_html( $pu->pmpro_sphone )
 				);
 				break;
 		}

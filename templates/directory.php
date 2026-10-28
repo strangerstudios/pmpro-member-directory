@@ -77,12 +77,61 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	// Set some values from the request or defaults.
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only public directory search and pagination.
 	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) : ''; // Search string.
-	$pn = isset( $_REQUEST['pn'] ) ? intval( $_REQUEST['pn'] ) : 1; // Page number.
-	$limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : (empty($limit) ? 15 : intval( $limit ) );
+	$pn = isset( $_REQUEST['pn'] ) ? max( 1, intval( $_REQUEST['pn'] ) ) : 1; // Page number.
+	if ( isset( $_REQUEST['limit'] ) ) {
+		// Cap the limit from the URL so that the whole directory can't be pulled in one request.
+		$limit = min( intval( $_REQUEST['limit'] ), max( 100, intval( $limit ) ) );
+	} else {
+		$limit = empty( $limit ) ? 15 : intval( $limit );
+	}
+	$limit = max( 1, $limit );
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$end = $pn * $limit;
 	$start = $end - $limit;
+
+	// Build our elements array. If we have an elements attribute on the shortcode, use that and ignore any other legacy attributes.
+	if ( ! empty( $elements ) ) {
+		$elements_array = pmpromd_prepare_elements_array( $elements );
+	} else {
+		// We need to support the legacy attributes for backwards compatibility.
+		$elements = '';
+		if ( $layout == 'table' ) {
+			if ( ! empty( $show_avatar ) ) {
+				$elements .= __( 'Avatar', 'pmpro-member-directory' ) . ',avatar|' . $avatar_size . ';';
+			}
+			$elements .= __( 'Member', 'pmpro-member-directory' ) . ',display_name;';
+		} else {
+			if ( ! empty( $show_avatar ) ) {
+				$elements .= 'avatar|' . $avatar_size . ';';
+			}
+			$elements .= 'display_name;';
+		}
+		if ( ! empty( $show_email ) ) {
+			$elements .= __( 'Email Address', 'pmpro-member-directory' ) . ', user_email;';
+		}
+		// These are the fields that are not part of the user object and need special handling.
+		if ( ! empty( $show_level ) ) {
+			$elements .= __( 'Level', 'pmpro-member-directory' ) . ',membership_name;';
+		}
+		if ( ! empty( $show_startdate ) ) {
+			$elements .= __( 'Start Date', 'pmpro-member-directory' ) . ',membership_startdate;';
+		}
+		if ( ! empty( $fields ) ) {
+			$elements .= $fields;
+		}
+		$elements_array = pmpromd_prepare_elements_array( $elements );
+	}
+
+	/**
+	* Filter the elements array for the member directory.
+	*
+	* @since 2.0
+	* @param array $elements_array The array of elements to display on the member directory.
+	* @param object $pu The user object.
+	* @return array $elements_array The array of elements to display on the member directory.
+	*/
+	$elements_array = apply_filters( 'pmpro_member_directory_elements', $elements_array );
 
 	// Build SQL into parts to make it easier to add in specific sections to the SQL.
 	$sql_parts = array();
@@ -126,21 +175,66 @@ $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 
 // If search is provided
 if ( $s ) {
-	$escaped_s = esc_sql( $s );
+	$escaped_s = esc_sql( $wpdb->esc_like( $s ) );
+
+	// Only search names and the fields shown in the directory so that search results can't be used to guess hidden user data.
+	$search_columns = array( 'u.display_name' );
+	$search_meta_keys = array( 'first_name', 'last_name' );
+	$address_meta_keys = array( 'firstname', 'lastname', 'address1', 'address2', 'city', 'state', 'zipcode', 'country', 'phone' );
+	foreach ( $elements_array as $element ) {
+		$field = strtok( $element[1], '|' );
+		if ( in_array( $field, array( 'user_login', 'user_email', 'user_url' ), true ) ) {
+			$search_columns[] = 'u.' . $field;
+		} elseif ( in_array( $field, array( 'avatar', 'display_name', 'membership_name', 'membership_startdate', 'membership_enddate', 'user_registered', 'ID' ), true ) ) {
+			// These elements aren't usermeta, so there's nothing to search.
+			continue;
+		} elseif ( 'pmpro_billing_address' === $field ) {
+			foreach ( $address_meta_keys as $address_meta_key ) {
+				$search_meta_keys[] = 'pmpro_b' . $address_meta_key;
+			}
+		} elseif ( in_array( $field, array( 'pmpro_shipping_address', 'pmpro_mailing_address' ), true ) ) {
+			foreach ( $address_meta_keys as $address_meta_key ) {
+				$search_meta_keys[] = 'pmpro_s' . $address_meta_key;
+			}
+		} else {
+			$search_meta_keys[] = $field;
+		}
+	}
+
+	/**
+	 * Filter the usermeta keys that the directory search looks in.
+	 * The display name, user_email, user_login and user_url are searched separately. The display name is always searched.
+	 *
+	 * @since TBD
+	 * @param array $search_meta_keys The usermeta keys to search. Defaults to first_name and last_name (always searched, even if not shown) plus the fields shown in the directory.
+	 * @param array $elements_array The elements shown in the directory.
+	 */
+	$search_meta_keys = apply_filters( 'pmpro_member_directory_search_meta_keys', $search_meta_keys, $elements_array );
+
+	// User fields limited to certain levels are only searched for members with one of those levels, matching pmpromd_get_display_value().
+	$search_meta_conditions = array();
+	foreach ( array_unique( $search_meta_keys ) as $search_meta_key ) {
+		$search_meta_condition = "um.meta_key = '" . esc_sql( $search_meta_key ) . "'";
+		$user_field = class_exists( 'PMPro_Field_Group' ) ? PMPro_Field_Group::get_field( $search_meta_key ) : pmpro_get_user_field( $search_meta_key );
+		if ( ! empty( $user_field ) && ! empty( $user_field->levels ) ) {
+			$search_meta_condition .= ' AND mu.membership_id IN (' . implode( ',', array_map( 'intval', (array) $user_field->levels ) ) . ')';
+		}
+		$search_meta_conditions[] = '( ' . $search_meta_condition . ' )';
+	}
+	$search_meta_conditions = empty( $search_meta_conditions ) ? '1 = 0' : implode( ' OR ', $search_meta_conditions );
+
 	$sql_search_where = "
 		AND (
-			u.user_login LIKE '%$escaped_s%'
-			OR u.user_email LIKE '%$escaped_s%'
-			OR u.display_name LIKE '%$escaped_s%'
+			" . implode( " LIKE '%$escaped_s%' OR ", $search_columns ) . " LIKE '%$escaped_s%'
 			OR um.meta_value LIKE '%$escaped_s%'
 		)
 	";
 
 	$sql_search_where = apply_filters( 'pmpro_member_directory_sql_search_where', $sql_search_where, $s );
 
-	// Include generic usermeta join for search
+	// Include usermeta join for search, limited to the searchable meta keys.
 	$sql_parts['JOIN'] .= "
-		LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id 
+		LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id AND ( $search_meta_conditions )
 	";
 	$sql_parts['WHERE'] .= $sql_search_where;
 }
@@ -167,7 +261,7 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 		$theusers  = $cached['users'];
 		$totalrows = (int) $cached['totalrows'];
 	} else {
-		// Every dynamic part of $sqlQuery is escaped above: search via esc_sql(), ORDER BY via a [a-z._] whitelist and ASC/DESC, LIMIT via intval(), levels via a [0-9,] whitelist.
+		// Every dynamic part of $sqlQuery is escaped above: search and meta keys via esc_sql(), ORDER BY via a [a-z._] whitelist and ASC/DESC, LIMIT via intval(), levels via a [0-9,] whitelist.
 		$theusers = $wpdb->get_results($sqlQuery); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Query built from escaped parts; results cached via pmpromd_set_cached_results().
 
 		// Build the count query.
@@ -258,49 +352,6 @@ $sqlQuery = apply_filters( 'pmpro_member_directory_sql', $sqlQuery, $levels, $s,
 			?>
 
 			<?php
-				// Build our elements array. If we have an elements attribute on the shortcode, use that and ignore any other legacy attributes.
-				if ( ! empty( $elements ) ) {
-					$elements_array = pmpromd_prepare_elements_array( $elements );
-				} else {
-					// We need to support the legacy attributes for backwards compatibility.
-					$elements = '';
-					if ( $layout == 'table' ) {
-						if ( ! empty( $show_avatar ) ) {
-							$elements .= __( 'Avatar', 'pmpro-member-directory' ) . ',avatar|' . $avatar_size . ';';
-						}
-						$elements .= __( 'Member', 'pmpro-member-directory' ) . ',display_name;';
-					} else {
-						if ( ! empty( $show_avatar ) ) {
-							$elements .= 'avatar|' . $avatar_size . ';';
-						}
-						$elements .= 'display_name;';
-					}
-					if ( ! empty( $show_email ) ) {
-						$elements .= __( 'Email Address', 'pmpro-member-directory' ) . ', user_email;';
-					}
-					// These are the fields that are not part of the user object and need special handling.
-					if ( ! empty( $show_level ) ) {
-						$elements .= __( 'Level', 'pmpro-member-directory' ) . ',membership_name;';
-					}
-					if ( ! empty( $show_startdate ) ) {
-						$elements .= __( 'Start Date', 'pmpro-member-directory' ) . ',membership_startdate;';
-					}
-					if ( ! empty( $fields ) ) {
-						$elements .= $fields;
-					}
-					$elements_array = pmpromd_prepare_elements_array( $elements );
-				}
-
-				/**
-				* Filter the elements array for the member directory.
-				*
-				* @since 2.0
-				* @param array $elements_array The array of elements to display on the member directory.
-				* @param object $pu The user object.
-				* @return array $elements_array The array of elements to display on the member directory.
-				*/
-				$elements_array = apply_filters( 'pmpro_member_directory_elements', $elements_array );
-
 				// Set up an array of items that will be linked to the user's profile.
 				$linked_elements = array( 'display_name' );
 				foreach ( $elements_array as $element ) {
