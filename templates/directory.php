@@ -77,7 +77,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	// Set some values from the request or defaults.
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only public directory search and pagination.
 	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) : ''; // Search string.
-	$pn = isset( $_REQUEST['pn'] ) ? intval( $_REQUEST['pn'] ) : 1; // Page number.
+	$pn = isset( $_REQUEST['pn'] ) ? max( 1, intval( $_REQUEST['pn'] ) ) : 1; // Page number.
 	if ( isset( $_REQUEST['limit'] ) ) {
 		// Cap the limit from the URL so that the whole directory can't be pulled in one request.
 		$limit = min( intval( $_REQUEST['limit'] ), max( 100, intval( $limit ) ) );
@@ -177,14 +177,17 @@ $sql_parts['LIMIT'] = "LIMIT $start, $limit";
 if ( $s ) {
 	$escaped_s = esc_sql( $wpdb->esc_like( $s ) );
 
-	// Only search fields that are shown in the directory so that search results can't be used to guess hidden user data.
+	// Only search names and the fields shown in the directory so that search results can't be used to guess hidden user data.
 	$search_columns = array( 'u.display_name' );
 	$search_meta_keys = array( 'first_name', 'last_name' );
 	$address_meta_keys = array( 'firstname', 'lastname', 'address1', 'address2', 'city', 'state', 'zipcode', 'country', 'phone' );
 	foreach ( $elements_array as $element ) {
 		$field = strtok( $element[1], '|' );
-		if ( in_array( $field, array( 'user_login', 'user_email' ), true ) ) {
+		if ( in_array( $field, array( 'user_login', 'user_email', 'user_url' ), true ) ) {
 			$search_columns[] = 'u.' . $field;
+		} elseif ( in_array( $field, array( 'avatar', 'display_name', 'membership_name', 'membership_startdate', 'membership_enddate', 'user_registered', 'ID' ), true ) ) {
+			// These elements aren't usermeta, so there's nothing to search.
+			continue;
 		} elseif ( 'pmpro_billing_address' === $field ) {
 			foreach ( $address_meta_keys as $address_meta_key ) {
 				$search_meta_keys[] = 'pmpro_b' . $address_meta_key;
@@ -202,11 +205,25 @@ if ( $s ) {
 	 * Filter the usermeta keys that the directory search looks in.
 	 *
 	 * @since TBD
-	 * @param array $search_meta_keys The usermeta keys to search. Defaults to first_name, last_name, and the fields shown in the directory.
+	 * The display name, user_email, user_login and user_url are searched separately. The display name is always searched.
+	 *
+	 * @since TBD
+	 * @param array $search_meta_keys The usermeta keys to search. Defaults to first_name and last_name (always searched, even if not shown) plus the fields shown in the directory.
 	 * @param array $elements_array The elements shown in the directory.
 	 */
 	$search_meta_keys = apply_filters( 'pmpro_member_directory_search_meta_keys', $search_meta_keys, $elements_array );
-	$search_meta_keys = empty( $search_meta_keys ) ? 'NULL' : "'" . implode( "','", array_map( 'esc_sql', array_unique( $search_meta_keys ) ) ) . "'";
+
+	// User fields limited to certain levels are only searched for members with one of those levels, matching pmpromd_get_display_value().
+	$search_meta_conditions = array();
+	foreach ( array_unique( $search_meta_keys ) as $search_meta_key ) {
+		$search_meta_condition = "um.meta_key = '" . esc_sql( $search_meta_key ) . "'";
+		$user_field = class_exists( 'PMPro_Field_Group' ) ? PMPro_Field_Group::get_field( $search_meta_key ) : pmpro_get_user_field( $search_meta_key );
+		if ( ! empty( $user_field ) && ! empty( $user_field->levels ) ) {
+			$search_meta_condition .= ' AND mu.membership_id IN (' . implode( ',', array_map( 'intval', (array) $user_field->levels ) ) . ')';
+		}
+		$search_meta_conditions[] = '( ' . $search_meta_condition . ' )';
+	}
+	$search_meta_conditions = empty( $search_meta_conditions ) ? '1 = 0' : implode( ' OR ', $search_meta_conditions );
 
 	$sql_search_where = "
 		AND (
@@ -219,7 +236,7 @@ if ( $s ) {
 
 	// Include usermeta join for search, limited to the searchable meta keys.
 	$sql_parts['JOIN'] .= "
-		LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id AND um.meta_key IN ( $search_meta_keys )
+		LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id AND ( $search_meta_conditions )
 	";
 	$sql_parts['WHERE'] .= $sql_search_where;
 }
