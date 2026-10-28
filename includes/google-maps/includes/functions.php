@@ -44,6 +44,17 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	extract( $attributes );
 
 	/**
+	 * The Google Map ID used for this map. The Map ID is required by the newer AdvancedMarkerElement API,
+	 * and it also lets Google apply cloud based styling to the map.
+	 *
+	 * @since 2.4
+	 *
+	 * @param string $google_map_id The Google Map ID.
+	 * @param array $attributes The attributes passed to the map.
+	 */
+	$google_map_id = trim( sanitize_text_field( apply_filters( 'pmpromd_maps_map_id', get_option( 'pmpro_pmpromd_maps_map_id' ), $attributes ) ) );
+
+	/**
 	 * @deprecated 2.1 - use `pmpromd_map_id` instead.
 	 */
 	$map_id = sanitize_text_field( apply_filters_deprecated( 'pmpromm_map_id', array( '1' ), 'pmpromd_map_id', '2.1' ) );
@@ -113,22 +124,32 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	 * @since 2.1
 	 * 
 	 * @param array $query_params An array of query parameters to be added to the Google Maps API request.
+	 * @param string $google_map_id The Google Map ID for the map.
 	 */
 	$query_params = apply_filters( 'pmpromd_maps_query_params', array( 
 		'key' => $maps_api_key,
 		'callback' => 'pmpromd_init_map', 
 		'loading' => 'async', 
-		'v' => '3', 
-		'style' => $map_styles 
-	) );
+		'v' => '3'
+	), $google_map_id );
+
+	// The marker library is only needed when a Map ID is set, since that is when we load advanced markers.
+	// Merge with any libraries a site added through the filter above instead of overwriting them.
+	if ( ! empty( $google_map_id ) ) {
+		$libraries = ! empty( $query_params['libraries'] ) ? explode( ',', $query_params['libraries'] ) : array();
+		if ( ! in_array( 'marker', $libraries, true ) ) {
+			$libraries[] = 'marker';
+		}
+		$query_params['libraries'] = implode( ',', $libraries );
+	}
 
 	// Let's work through the query parameters and clean/sanitize them.
 	$query_params = array_map( 'sanitize_text_field', $query_params );
 
-	// Build the Google Maps API URL. The API is loaded asynchronously and immediately invokes the
-	//  `pmpromd_init_map` callback once it loads, so that callback (and the MarkerClusterer library it may use) must already be defined when the API runs.
+	// Build the Google Maps API URL. The API invokes the `pmpromd_init_map` callback as soon as it loads,
+	//  so map.js (and the clusterer library it may use) have to be printed and run before the API script.
 	$maps_api_url = add_query_arg( $query_params, 'https://maps.googleapis.com/maps/api/js' );
-	wp_register_script( 'pmpromd-google-maps-javascript', plugin_dir_url( dirname( __FILE__ ) ) . 'js/map.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION ); // This changes to `map.js`
+	wp_register_script( 'pmpromd-google-maps-javascript', plugin_dir_url( dirname( __FILE__ ) ) . 'js/map.js', array( 'jquery' ), PMPRO_MEMBER_DIRECTORY_VERSION );
 		
 	/**
 	 * @deprecated 2.1 - use `pmpromd_default_map_start` instead.
@@ -165,7 +186,8 @@ function pmpromd_show_google_map( $attributes, $members ) {
 		'zoom_level' => $map_zoom,
 		'max_zoom' => $map_max_zoom,
 		'infowindow_classes' => pmpro_get_element_class( 'pmpromd_infowindow' ),
-		'map_styles' => $map_styles		
+		'map_styles' => $map_styles,
+		'google_map_id' => $google_map_id
 	);
 
 	/**
@@ -177,10 +199,43 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	 */
 	$enable_marker_clustering = apply_filters( 'pmpromd_map_cluster_markers', true );
 	if ( $enable_marker_clustering ) {
-		$pmpromd_map_attributes['plugin_url'] = plugin_dir_url( dirname( __FILE__ ) );
 		$pmpromd_map_attributes['show_cluster'] = true;
 
-		wp_enqueue_script( 'pmpromd-google-maps-cluster', plugin_dir_url( dirname( __FILE__ ) ) . 'js/marker-cluster.min.js', array(), PMPRO_MEMBER_DIRECTORY_VERSION );
+		$cluster_option_defaults = array(
+			'maxZoom' => 10,
+			'radius'  => 50,
+		);
+
+		/**
+		 * Filter the options passed to the marker clustering library.
+		 *
+		 * The map broke markers out of their clusters at zoom level 10 with a 50 pixel radius before
+		 * the clustering library was replaced. These defaults keep that behavior instead of the
+		 * library defaults, which keep markers clustered until zoom level 16.
+		 *
+		 * @since 2.4
+		 *
+		 * @param array $cluster_options The clustering options. Supports 'maxZoom' and 'radius'.
+		 * @param string $map_id The ID of the map.
+		 */
+		$cluster_options = apply_filters( 'pmpromd_maps_cluster_options', $cluster_option_defaults, $map_id );
+
+		// A filter should hand back an array, so fall back to the defaults if it does not.
+		if ( ! is_array( $cluster_options ) ) {
+			$cluster_options = $cluster_option_defaults;
+		}
+
+		// The two options we document are numeric, so clean them up and leave any others alone.
+		if ( isset( $cluster_options['maxZoom'] ) ) {
+			$cluster_options['maxZoom'] = absint( $cluster_options['maxZoom'] );
+		}
+		if ( isset( $cluster_options['radius'] ) ) {
+			$cluster_options['radius'] = absint( $cluster_options['radius'] );
+		}
+
+		$pmpromd_map_attributes['cluster_options'] = $cluster_options;
+
+		wp_enqueue_script( 'pmpromd-google-maps-cluster', plugin_dir_url( dirname( __FILE__ ) ) . 'js/markerclusterer.min.js', array(), PMPRO_MEMBER_DIRECTORY_VERSION );
 	} else {
 		$pmpromd_map_attributes['show_cluster'] = false;
 	}
@@ -188,8 +243,15 @@ function pmpromd_show_google_map( $attributes, $members ) {
 	wp_localize_script( 'pmpromd-google-maps-javascript', 'pmpromd_vars', $pmpromd_map_attributes );
 	wp_enqueue_script( 'pmpromd-google-maps-javascript' );
 
-	// Enqueue the Google Maps API last so its <script> tag is printed after map.js and the cluster library.
-	wp_enqueue_script( 'pmpromd-google-maps', $maps_api_url, array(), PMPRO_MEMBER_DIRECTORY_VERSION, array( 'strategy' => 'async' ) );
+	// The Google Maps API invokes the `pmpromd_init_map` callback as soon as it runs, so the scripts it
+	//  depends on have to be loaded first. Declaring the dependencies and deferring the API script keeps
+	//  that order without blocking the rest of the page.
+	$maps_api_dependencies = array( 'pmpromd-google-maps-javascript' );
+	if ( $enable_marker_clustering ) {
+		$maps_api_dependencies[] = 'pmpromd-google-maps-cluster';
+	}
+
+	wp_enqueue_script( 'pmpromd-google-maps', $maps_api_url, $maps_api_dependencies, PMPRO_MEMBER_DIRECTORY_VERSION, array( 'strategy' => 'defer' ) );
 
 	return "<div id='pmpromd_map' class='pmpromd_map pmpromd_map_id_" . esc_attr( $map_id ) . "' style='height: " . esc_attr( $map_height ) . "px; width: " . esc_attr( $map_width ) . "%;'>" . esc_html( $notice ) . "</div>";
 }
