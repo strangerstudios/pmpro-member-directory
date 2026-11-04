@@ -79,8 +79,19 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) : ''; // Search string.
 	$pn = isset( $_REQUEST['pn'] ) ? max( 1, intval( $_REQUEST['pn'] ) ) : 1; // Page number.
 	if ( isset( $_REQUEST['limit'] ) ) {
+		/**
+		 * Filter the maximum number of members per page that can be requested using the limit URL parameter.
+		 * If the shortcode limit is higher, the shortcode limit is used as the maximum instead.
+		 *
+		 * @since TBD
+		 *
+		 * @param int $max_limit The maximum limit. Default 100.
+		 * @param int $limit     The limit set in the shortcode attributes.
+		 */
+		$max_limit = intval( apply_filters( 'pmpromd_max_limit', 100, intval( $limit ) ) );
+
 		// Cap the limit from the URL so that the whole directory can't be pulled in one request.
-		$limit = min( intval( $_REQUEST['limit'] ), max( 100, intval( $limit ) ) );
+		$limit = min( intval( $_REQUEST['limit'] ), max( $max_limit, intval( $limit ) ) );
 	} else {
 		$limit = empty( $limit ) ? 15 : intval( $limit );
 	}
