@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, members, directory
 Requires at least: 5.2
 Tested up to: 7.1
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 
 Add a robust Member Directory and Profiles to Your Membership Site - with attributes to customize the display.
 
@@ -72,6 +72,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 2.3.4 - 2026-11-11 =
+* SECURITY: Fixed issues where users without the `edit_users` capability could still save working Directory or Profile shortcodes or blocks by adding HTML that is removed on save, nesting the shortcode in its own name, using an opening and closing block, or adding post meta. #245 (@dparker1005)
+* ENHANCEMENT: Added the `pmpromd_max_limit` filter to set the maximum number of members per page that can be requested with the `limit` URL parameter. The shortcode's own `limit` is never capped. #244 (@dparker1005)
+
 = 2.3.3 - 2026-10-28 =
 * SECURITY: The directory search now only searches member names and the fields shown in the directory, respects user field level restrictions, and matches search terms literally. #242 (@dparker1005)
 * SECURITY: Member display names and addresses are now escaped before output. #242 (@dparker1005)

@@ -85,7 +85,7 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 		 * Filter the maximum number of members per page that can be requested using the limit URL parameter.
 		 * If the shortcode limit is higher, the shortcode limit is used as the maximum instead.
 		 *
-		 * @since TBD
+		 * @since 2.3.4
 		 *
 		 * @param int $max_limit       The maximum limit. Default 100.
 		 * @param int $shortcode_limit The limit set in the shortcode attributes, or 15 if none is set.
