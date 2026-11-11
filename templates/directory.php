@@ -78,11 +78,25 @@ function pmpromd_shortcode( $atts, $content=null, $code="" ) {
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only public directory search and pagination.
 	$s = isset( $_REQUEST['ps'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) : ''; // Search string.
 	$pn = isset( $_REQUEST['pn'] ) ? max( 1, intval( $_REQUEST['pn'] ) ) : 1; // Page number.
+	// The limit from the shortcode, or the default of 15 if none is set.
+	$shortcode_limit = empty( $limit ) ? 15 : intval( $limit );
 	if ( isset( $_REQUEST['limit'] ) ) {
+		/**
+		 * Filter the maximum number of members per page that can be requested using the limit URL parameter.
+		 * If the shortcode limit is higher, the shortcode limit is used as the maximum instead.
+		 *
+		 * @since TBD
+		 *
+		 * @param int $max_limit       The maximum limit. Default 100.
+		 * @param int $shortcode_limit The limit set in the shortcode attributes, or 15 if none is set.
+		 */
+		$max_limit = intval( apply_filters( 'pmpromd_max_limit', 100, $shortcode_limit ) );
+
 		// Cap the limit from the URL so that the whole directory can't be pulled in one request.
-		$limit = min( intval( $_REQUEST['limit'] ), max( 100, intval( $limit ) ) );
+		// Never cap below the shortcode limit, since the pagination links pass that limit in the URL.
+		$limit = min( intval( $_REQUEST['limit'] ), max( $max_limit, $shortcode_limit ) );
 	} else {
-		$limit = empty( $limit ) ? 15 : intval( $limit );
+		$limit = $shortcode_limit;
 	}
 	$limit = max( 1, $limit );
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
