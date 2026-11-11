@@ -145,20 +145,23 @@ function pmpromd_maybe_strip_shortcodes( $content ) {
 
 	// Remove various blocks.
 	$blockWrapperPatterns = array(
-		"<!-- wp:pmpro-member-directory/directory /-->",
-		"<!-- wp:pmpro-member-directory/profile /-->",
-		"/<!--\s*wp:pmpro-member-directory\/directory\s*{[^}]*}\s*\/-->/",
-		"/<!--\s*wp:pmpro-member-directory\/profile\s*{[^}]*}\s*\/-->/",
+		// Any opening, closing, or void delimiter for the Directory or Profile block, whatever its attributes.
+		"/<!--\s+\/?wp:pmpro-member-directory\/(?:directory|profile)\s.*?--!?>/s",
 		"/<!-- wp:shortcode -->\s*$shortcodeRegex\s*<!-- \/wp:shortcode -->/s",
 		"/$shortcodeRegex/"
 	);
 
-	$content = preg_replace( $blockWrapperPatterns, '', $content );
+	// Repeat until nothing changes, since removing one shortcode or block can leave another behind (e.g. [pmpro_[pmpro_member_profile]member_profile]).
+	do {
+		$previous_content = $content;
+		$content = preg_replace( $blockWrapperPatterns, '', $content );
+	} while ( $content !== $previous_content );
 
 	return $content;
 }
-add_filter( 'content_save_pre', 'pmpromd_maybe_strip_shortcodes' );
-add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_shortcodes' );
+// Run last so that kses and other save filters can't rebuild a shortcode or block after it is stripped.
+add_filter( 'content_save_pre', 'pmpromd_maybe_strip_shortcodes', PHP_INT_MAX );
+add_filter( 'excerpt_save_pre', 'pmpromd_maybe_strip_shortcodes', PHP_INT_MAX );
 add_filter( 'widget_update_callback', 'pmpromd_maybe_strip_shortcodes' );
 
 /**
@@ -183,9 +186,12 @@ function pmpromd_maybe_strip_shortcodes_from_post_meta( $meta_id, $object_id, $m
 
 	// If there was a change, save our stripped version.
 	if ( $stripped_value !== $_meta_value ) {
-		update_post_meta( $object_id, $meta_key, $stripped_value );
+		// Update only the meta row that fired the hook. Unlike update_post_meta(), this does not
+		// unslash the value again, touch other rows with the same key, or redirect revisions to the parent post.
+		update_metadata_by_mid( 'post', $meta_id, $stripped_value );
 	}
 }
+add_action( 'added_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
 add_action( 'updated_post_meta', 'pmpromd_maybe_strip_shortcodes_from_post_meta', 10, 4 );
 
 /**
