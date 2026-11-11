@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Member Directory Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.3.3\n"
+"Project-Id-Version: Paid Memberships Pro - Member Directory Add On 2.3.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-28T15:12:08+00:00\n"
+"POT-Creation-Date: 2026-11-11T15:29:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-member-directory\n"
@@ -60,19 +60,19 @@ msgstr ""
 msgid "Include the shortcode [pmpro_member_profile]."
 msgstr ""
 
-#: includes/admin.php:197
+#: includes/admin.php:203
 msgid "View Documentation"
 msgstr ""
 
-#: includes/admin.php:197
+#: includes/admin.php:203
 msgid "Docs"
 msgstr ""
 
-#: includes/admin.php:198
+#: includes/admin.php:204
 msgid "Visit Customer Support Forum"
 msgstr ""
 
-#: includes/admin.php:198
+#: includes/admin.php:204
 msgid "Support"
 msgstr ""
 
@@ -155,8 +155,8 @@ msgid "This map could not be loaded. Please ensure that you have entered your Go
 msgstr ""
 
 #: includes/google-maps/includes/functions.php:312
-#: templates/directory.php:454
-#: templates/directory.php:507
+#: templates/directory.php:468
+#: templates/directory.php:521
 #: blocks/src/directory/templates/table.js:33
 #: blocks/src/directory/templates/table.js:42
 #: blocks/src/directory/templates/table.js:51
@@ -198,17 +198,17 @@ msgstr ""
 msgid "Admin Only Alert: You must activate Paid Memberships Pro to use the Member Directory Add On."
 msgstr ""
 
-#: templates/directory.php:101
+#: templates/directory.php:115
 #: blocks/src/directory/templates/table.js:16
 msgid "Avatar"
 msgstr ""
 
-#: templates/directory.php:103
+#: templates/directory.php:117
 #: blocks/src/directory/templates/table.js:17
 msgid "Member"
 msgstr ""
 
-#: templates/directory.php:111
+#: templates/directory.php:125
 #: templates/profile.php:112
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:18
@@ -216,7 +216,7 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-#: templates/directory.php:115
+#: templates/directory.php:129
 #: templates/profile.php:116
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:20
@@ -224,7 +224,7 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: templates/directory.php:118
+#: templates/directory.php:132
 #: templates/profile.php:119
 #: blocks/dist/profile/block.build.js:1
 #: blocks/src/directory/templates/table.js:21
@@ -233,41 +233,41 @@ msgid "Start Date"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:307
+#: templates/directory.php:321
 #, php-format
 msgid "Profiles Within %s."
 msgstr ""
 
-#: templates/directory.php:309
+#: templates/directory.php:323
 msgid "Viewing All Profiles"
 msgstr ""
 
-#: templates/directory.php:316
+#: templates/directory.php:330
 msgid "Showing 1 Result"
 msgstr ""
 
 #. translators: placeholders are for result numbers
-#: templates/directory.php:319
+#: templates/directory.php:333
 #, php-format
 msgid "Showing %1$s-%2$s of %3$s Results"
 msgstr ""
 
 #. translators: placeholder is for search string entered
-#: templates/directory.php:332
+#: templates/directory.php:346
 #, php-format
 msgid "No matching profiles found within <em>%s</em>."
 msgstr ""
 
-#: templates/directory.php:337
+#: templates/directory.php:351
 #: templates/profile.php:250
 msgid "View All Members"
 msgstr ""
 
-#: templates/directory.php:341
+#: templates/directory.php:355
 msgid "No matching profiles found."
 msgstr ""
 
-#: templates/directory.php:551
+#: templates/directory.php:565
 msgid "Member Directory Pagination"
 msgstr ""
 
