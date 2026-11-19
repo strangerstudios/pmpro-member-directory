@@ -183,6 +183,10 @@ $sql_parts['GROUP'] = "GROUP BY u.ID ";
 
 // Clean up order_by to only include text, underscores and periods.
 $order_by = preg_replace('/[^a-z._]/', '', $order_by);
+// The joindate column is no longer selected. Sort by the user registration date that joindate held.
+if ( 'joindate' === $order_by ) {
+	$order_by = 'u.user_registered';
+}
 $sql_parts['ORDER'] = "ORDER BY " . esc_sql($order_by) . " " . esc_sql($order) . " ";
 
 $sql_parts['LIMIT'] = "LIMIT $start, $limit";
