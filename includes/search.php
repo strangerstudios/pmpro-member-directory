@@ -15,15 +15,17 @@ function pmpromd_search_form() {
 	// Get the directory page URL.
 	$directory_url = ! empty( $pmpro_pages['directory'] ) ? get_permalink( $pmpro_pages['directory'] ) : '';
 
-	// Get the limit for the search results.
-	$limit = ! empty( $_REQUEST['limit'] ) ? intval( $_REQUEST['limit'] ) : 10; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public search form.
+	// Get the limit for the search results. If none is set, the directory uses its own limit.
+	$limit = ! empty( $_REQUEST['limit'] ) ? intval( $_REQUEST['limit'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public search form.
 	?>
 	<form action="<?php echo esc_url( $directory_url ); ?>" method="post" role="search" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form pmpro_member_directory_search', 'pmpro_member_directory_search' ) ); ?>">
 		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
 			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text pmpro_form_field-ps', 'pmpro_form_field-ps' ) ); ?>">
 				<label for="ps" class="screen-reader-text"><?php esc_html_e('Search for:','pmpro-member-directory'); ?></label>
 				<input type="search" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" placeholder="<?php esc_attr_e( 'Search Members','pmpro-member-directory' ); ?>" name="ps" id="ps" value="<?php if(!empty($_REQUEST['ps'])) echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ps'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public search form. ?>" title="<?php esc_attr_e('Search Members','pmpro-member-directory'); ?>" />
-				<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
+				<?php if ( ! empty( $limit ) ) { ?>
+					<input type="hidden" name="limit" value="<?php echo esc_attr($limit);?>" />
+				<?php } ?>
 			</div> <!-- end pmpro_form_field-ps -->
 		</div> <!-- end pmpro_form_fields -->
 		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_submit' ) ); ?>">
