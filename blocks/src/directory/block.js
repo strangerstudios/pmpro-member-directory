@@ -339,7 +339,7 @@ export default registerBlockType(
                     { label: __( 'User Registered', 'pmpro-member-directory' ), value: 'u.user_registered' },
                     { label: __( 'Membership Level', 'pmpro-member-directory' ), value: 'mu.membership_id' },
                     { label: __( 'Membership Start Date', 'pmpro-member-directory' ), value: 'mu.startdate' },
-                    { label: __( 'Join Date', 'pmpro-member-directory' ), value: 'joindate`' },
+                    { label: __( 'Join Date', 'pmpro-member-directory' ), value: 'joindate' },
                   ]}
                 />
 
